@@ -1,9 +1,10 @@
-import { databases, APPWRITE_CONFIG } from './appwrite';
+
+import { adminDatabases, APPWRITE_CONFIG } from './appwrite';
 import { BlogPost, Category } from '@/types';
 import { ID, Models } from 'node-appwrite';
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await databases.listDocuments(
+  const response = await adminDatabases.listDocuments(
     APPWRITE_CONFIG.databaseId,
     APPWRITE_CONFIG.categoriesCollectionId
   );
@@ -11,7 +12,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getCategory(id: string): Promise<Category> {
-    const doc = await databases.getDocument(
+    const doc = await adminDatabases.getDocument(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.categoriesCollectionId,
         id
@@ -20,7 +21,7 @@ export async function getCategory(id: string): Promise<Category> {
 }
 
 export async function createCategory(name: string): Promise<Category> {
-  const response = await databases.createDocument(
+  const response = await adminDatabases.createDocument(
     APPWRITE_CONFIG.databaseId,
     APPWRITE_CONFIG.categoriesCollectionId,
     ID.unique(),
@@ -31,7 +32,7 @@ export async function createCategory(name: string): Promise<Category> {
 
 
 export async function getPosts(): Promise<BlogPost[]> {
-    const response = await databases.listDocuments(
+    const response = await adminDatabases.listDocuments(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.postsCollectionId
     );
@@ -39,7 +40,7 @@ export async function getPosts(): Promise<BlogPost[]> {
 }
 
 export async function getPost(id: string): Promise<BlogPost> {
-    const doc = await databases.getDocument(
+    const doc = await adminDatabases.getDocument(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.postsCollectionId,
         id
