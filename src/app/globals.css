@@ -6,50 +6,161 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.ql-editor {
-  min-height: 400px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  line-height: 1.75;
+.tiptap {
+  @apply min-h-[400px] rounded-md border border-input bg-background p-4 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm;
+}
+.tiptap > p:first-child {
+  margin-top: 0;
+}
+.tiptap > p:last-child {
+  margin-bottom: 0;
+}
+.tiptap:focus {
+  outline: none;
+}
+.tiptap h1, .tiptap h2, .tiptap h3 {
+  font-family: theme('fontFamily.headline');
+  font-weight: bold;
 }
 
-.ql-snow .ql-stroke {
-  stroke: hsl(var(--foreground));
+.tiptap h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.ql-snow .ql-fill {
-  fill: hsl(var(--foreground));
+.tiptap h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
-.ql-snow .ql-picker-label {
-  color: hsl(var(--foreground));
+.tiptap h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.ql-toolbar.ql-snow {
-  border-radius: 0.5rem 0.5rem 0 0;
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--card));
+.tiptap ul, .tiptap ol {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.ql-container.ql-snow {
-  border-radius: 0 0 0.5rem 0.5rem;
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+.tiptap ul {
+  list-style-type: disc;
 }
 
-.ql-snow .ql-formats {
-  margin-right: 15px;
+.tiptap ol {
+  list-style-type: decimal;
 }
 
-.ql-snow .ql-editor pre.ql-syntax {
-  background-color: #f6f8fa;
-  color: #24292e;
-  border-radius: 5px;
+.tiptap blockquote {
+  border-left: 3px solid hsl(var(--border));
+  padding-left: 1rem;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap code {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: theme('fontFamily.code');
+}
+
+.tiptap pre {
+  background: #0d1117;
+  color: #c9d1d9;
+  font-family: theme('fontFamily.code');
   padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   overflow-x: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+}
+
+.tiptap pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.9rem;
+}
+
+.tiptap a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+  color: #c9d1d9;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+  color: #ff7b72;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+  color: #79c0ff;
+}
+
+.hljs-section,
+.hljs-name {
+  color: #d2a8ff;
+}
+
+.hljs-tag {
+  color: #7ee787;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: #d2a8ff;
+}
+
+.hljs-addition {
+  color: #a6e22e;
+  background-color: #24292e;
+}
+
+.hljs-deletion {
+  color: #f92672;
+  background-color: #24292e;
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-char,
+.hljs-meta,
+.hljs-number,
+.hljs-built_in,
+.hljs-doctag {
+  color: #a5d6ff;
 }
 
 @layer base {
