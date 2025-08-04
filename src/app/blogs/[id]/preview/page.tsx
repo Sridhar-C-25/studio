@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles } from "lucide-react";
 
-import { posts, categories } from "@/lib/data";
+import { getPost, getCategory } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai/flows/evaluate-blog-effectiveness";
+import type { BlogPost, Category } from "@/types";
 
 interface PreviewPageProps {
   params: {
@@ -33,12 +34,36 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   const [loading, setLoading] = useState(false);
   const [evaluation, setEvaluation] = useState<EvaluateBlogEffectivenessOutput | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
 
-  // In a real app, you would fetch this from your database
-  const post = posts.find((p) => p.id === params.id);
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const postData = await getPost(params.id);
+        if (!postData) {
+          notFound();
+          return;
+        }
+        setPost(postData);
+        if (postData.category) {
+          // Assuming category is an ID
+           const categoryData = await getCategory(postData.category);
+           setCategory(categoryData);
+        }
+      } catch (error) {
+        notFound();
+      }
+    };
+
+    fetchPost();
+  }, [params.id]);
+
 
   if (!post) {
-    notFound();
+    return <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>;
   }
 
   const handleEvaluate = async () => {
@@ -58,7 +83,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
     }
   };
 
-  const category = categories.find((c) => c.name === post.category);
 
   return (
     <div className="bg-background min-h-screen">

@@ -1,4 +1,4 @@
-import { posts, categories } from "@/lib/data";
+import { getPost, getCategories } from "@/lib/data";
 import { BlogEditorForm } from "@/components/blog-editor-form";
 import { notFound } from "next/navigation";
 
@@ -8,8 +8,9 @@ interface EditBlogPageProps {
   };
 }
 
-export default function EditBlogPage({ params }: EditBlogPageProps) {
-  const post = posts.find((p) => p.id === params.id);
+export default async function EditBlogPage({ params }: EditBlogPageProps) {
+  const post = await getPost(params.id);
+  const categories = await getCategories();
 
   if (!post) {
     notFound();

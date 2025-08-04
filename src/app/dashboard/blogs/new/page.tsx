@@ -1,7 +1,8 @@
-import { categories } from "@/lib/data";
+import { getCategories } from "@/lib/data";
 import { BlogEditorForm } from "@/components/blog-editor-form";
 
-export default function NewBlogPage() {
+export default async function NewBlogPage() {
+  const categories = await getCategories();
   return (
     <div>
       <div className="mb-6">
