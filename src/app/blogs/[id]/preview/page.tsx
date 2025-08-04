@@ -5,7 +5,7 @@ import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles, Copy, Check } from "lucide-react";
 import parse, { domToReact, Element, HTMLReactParserOptions } from "html-react-parser";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { monokai as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { vs2015 as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { getPost } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -25,60 +25,6 @@ import { useToast } from "@/hooks/use-toast";
 import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai/flows/evaluate-blog-effectiveness";
 import type { BlogPost } from "@/types";
 
-
-function CodeBlock({ className, children }: { className?: string; children: React.ReactNode }) {
-  const { toast } = useToast();
-  const [copied, setCopied] = useState(false);
-  const language = className?.replace("language-", "") || "plaintext";
-  const code = String(children).replace(/\n$/, '');
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code).then(() => {
-      setCopied(true);
-      toast({ title: "Copied!", description: "Code copied to clipboard." });
-      setTimeout(() => setCopied(false), 2000);
-    }, (err) => {
-      toast({
-        variant: "destructive",
-        title: "Copy Failed",
-        description: "Could not copy code to clipboard.",
-      });
-    });
-  };
-
-  return (
-    <div className="relative">
-      <SyntaxHighlighter language={language} style={syntaxTheme} showLineNumbers>
-        {code}
-      </SyntaxHighlighter>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-2 right-2 h-7 w-7 text-gray-300 hover:bg-gray-700 hover:text-white"
-        onClick={handleCopy}
-      >
-        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-      </Button>
-    </div>
-  );
-}
-
-const parserOptions: HTMLReactParserOptions = {
-  replace: (domNode) => {
-    if (domNode instanceof Element && domNode.tagName === "pre") {
-      const codeNode = domNode.children.find((child) => child.type === "tag" && child.tagName === "code");
-      if (codeNode instanceof Element) {
-        const codeContent = domToReact(codeNode.children, parserOptions) as string | string[];
-        return <CodeBlock className={codeNode.attribs.class}>{Array.isArray(codeContent) ? codeContent.join('') : codeContent}</CodeBlock>;
-      }
-    }
-    if (domNode instanceof Element && domNode.tagName === "iframe") {
-      return <iframe {...domNode.attribs} className="w-full aspect-video rounded-md border" />;
-    }
-  },
-};
-
-
 interface PreviewPageProps {
   params: {
     id: string;
@@ -92,6 +38,28 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   const [evaluation, setEvaluation] = useState<EvaluateBlogEffectivenessOutput | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [post, setPost] = useState<BlogPost | null>(null);
+
+  const parserOptions: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.tagName === "pre") {
+        const codeNode = domNode.children.find((child) => child.type === "tag" && child.tagName === "code");
+
+        if (codeNode instanceof Element && codeNode.children[0]?.type === 'text') {
+          const language = codeNode.attribs.class?.replace("language-", "") || "plaintext";
+          const code = codeNode.children[0].data;
+
+          return (
+            <CodeBlockWithCopyButton language={language}>
+              {code}
+            </CodeBlockWithCopyButton>
+          )
+        }
+      }
+      if (domNode instanceof Element && domNode.tagName === "iframe") {
+        return <iframe {...domNode.attribs} className="w-full aspect-video rounded-md border" />;
+      }
+    },
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -134,6 +102,42 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       setLoading(false);
     }
   };
+
+  function CodeBlockWithCopyButton({ children, language }: { children: React.ReactNode; language?: string }) {
+    const { toast } = useToast();
+    const [copied, setCopied] = useState(false);
+    const code = String(children).replace(/\n$/, '');
+
+    const handleCopy = () => {
+      navigator.clipboard.writeText(code).then(() => {
+        setCopied(true);
+        toast({ title: "Copied!", description: "Code copied to clipboard." });
+        setTimeout(() => setCopied(false), 2000);
+      }, (err) => {
+        toast({
+          variant: "destructive",
+          title: "Copy Failed",
+          description: "Could not copy code to clipboard.",
+        });
+      });
+    };
+
+    return (
+      <div className="relative">
+        <SyntaxHighlighter language={language} style={syntaxTheme} showLineNumbers>
+          {code}
+        </SyntaxHighlighter>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 h-7 w-7 text-gray-300 hover:bg-gray-700 hover:text-white"
+          onClick={handleCopy}
+        >
+          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background min-h-screen">
