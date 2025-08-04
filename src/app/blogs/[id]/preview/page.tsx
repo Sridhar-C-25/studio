@@ -5,7 +5,7 @@ import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles, Copy, Check } from "lucide-react";
 import parse, { domToReact, Element, HTMLReactParserOptions } from "html-react-parser";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { githubGist as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { monokai as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { getPost } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,7 @@ import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai
 import type { BlogPost } from "@/types";
 
 
-function CodeBlock({ className, children }: { className?: string; children: string }) {
+function CodeBlock({ className, children }: { className?: string; children: React.ReactNode }) {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const language = className?.replace("language-", "") || "plaintext";
@@ -65,15 +65,14 @@ function CodeBlock({ className, children }: { className?: string; children: stri
 
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
-    if (domNode instanceof Element && domNode.name === "pre") {
-      const codeNode = domNode.children.find((child) => child.type === "tag" && child.name === "code");
+    if (domNode instanceof Element && domNode.tagName === "pre") {
+      const codeNode = domNode.children.find((child) => child.type === "tag" && child.tagName === "code");
       if (codeNode instanceof Element) {
-        const codeContent = domToReact(codeNode.children, parserOptions) as string;
-        return <CodeBlock className={codeNode.attribs.class}>{codeContent}</CodeBlock>;
+        const codeContent = domToReact(codeNode.children, parserOptions) as string | string[];
+        return <CodeBlock className={codeNode.attribs.class}>{Array.isArray(codeContent) ? codeContent.join('') : codeContent}</CodeBlock>;
       }
     }
-    if (domNode instanceof Element && domNode.name === "iframe") {
-      // Return the iframe with its attributes for YouTube videos
+    if (domNode instanceof Element && domNode.tagName === "iframe") {
       return <iframe {...domNode.attribs} className="w-full aspect-video rounded-md border" />;
     }
   },

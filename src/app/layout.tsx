@@ -1,6 +1,5 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import 'highlight.js/styles/github-dark.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {

@@ -193,3 +193,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
+.prose pre {
+    position: relative;
+}
