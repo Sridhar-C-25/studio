@@ -94,7 +94,6 @@ import sql from 'highlight.js/lib/languages/sql';
 import stylus from 'highlight.js/lib/languages/stylus';
 import swift from 'highlight.js/lib/languages/swift';
 import tcl from 'highlight.js/lib/languages/tcl';
-import tex from 'highlight.js/lib/languages/tex';
 import typescript from 'highlight.js/lib/languages/typescript';
 import tsx from 'highlight.js/lib/languages/typescript';
 import vbnet from 'highlight.js/lib/languages/vbnet';
@@ -174,7 +173,6 @@ lowlight.register('sql', sql);
 lowlight.register('stylus', stylus);
 lowlight.register('swift', swift);
 lowlight.register('tcl', tcl);
-lowlight.register('tex', tex);
 lowlight.register('typescript', typescript);
 lowlight.register('tsx', tsx);
 lowlight.register('vbnet', vbnet);
@@ -383,7 +381,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('stylus')}>Stylus</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('swift')}>Swift</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('tcl')}>TCL</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setCodeBlockLanguage('tex')}>TeX</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('typescript')}>TypeScript</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('tsx')}>TSX</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('vbnet')}>VB.NET</DropdownMenuItem>
