@@ -1,7 +1,8 @@
+
 "use client";
 
 import 'react-quill/dist/quill.snow.css';
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -64,6 +65,11 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
 
@@ -187,12 +193,16 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                       <FormItem>
                         <FormLabel>Content</FormLabel>
                         <FormControl>
-                          <ReactQuill
-                            theme="snow"
-                            value={field.value}
-                            onChange={field.onChange}
-                            className="h-96"
-                          />
+                          {isClient ? (
+                            <ReactQuill
+                              theme="snow"
+                              value={field.value}
+                              onChange={field.onChange}
+                              className="h-96"
+                            />
+                          ) : (
+                            <div className="h-96 w-full rounded-md border border-input bg-background"></div>
+                          )}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
