@@ -18,47 +18,47 @@ body {
 .tiptap:focus {
   outline: none;
 }
-.tiptap h1, .tiptap h2, .tiptap h3 {
+.tiptap h1, .tiptap h2, .tiptap h3, .prose h1, .prose h2, .prose h3 {
   font-family: theme('fontFamily.headline');
   font-weight: bold;
 }
 
-.tiptap h1 {
+.tiptap h1, .prose h1 {
   font-size: 2.25rem;
   line-height: 2.5rem;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.tiptap h2 {
+.tiptap h2, .prose h2 {
   font-size: 1.875rem;
   line-height: 2.25rem;
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
 }
 
-.tiptap h3 {
+.tiptap h3, .prose h3 {
   font-size: 1.5rem;
   line-height: 2rem;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 
-.tiptap ul, .tiptap ol {
+.tiptap ul, .tiptap ol, .prose ul, .prose ol {
   padding-left: 1.5rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.tiptap ul {
+.tiptap ul, .prose ul {
   list-style-type: disc;
 }
 
-.tiptap ol {
+.tiptap ol, .prose ol {
   list-style-type: decimal;
 }
 
-.tiptap blockquote {
+.tiptap blockquote, .prose blockquote {
   border-left: 3px solid hsl(var(--border));
   padding-left: 1rem;
   font-style: italic;
@@ -67,7 +67,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.tiptap code {
+.tiptap code, .prose code {
   background-color: hsl(var(--muted));
   color: hsl(var(--muted-foreground));
   padding: 0.2rem 0.4rem;
@@ -75,8 +75,8 @@ body {
   font-family: theme('fontFamily.code');
 }
 
-.tiptap pre, .prose .tiptap pre {
-  background: #0d1117;
+.tiptap pre, .prose pre {
+  background: #2d2d2d !important;
   color: #c9d1d9;
   font-family: theme('fontFamily.code');
   padding: 1rem;
@@ -85,20 +85,19 @@ body {
   margin-bottom: 1rem;
   overflow-x: auto;
 }
-
-.tiptap pre code, .prose .tiptap pre code {
+.tiptap pre code, .prose pre code {
   color: inherit;
-  padding: 0;
-  background: none;
+  background: none !important;
   font-size: 0.9rem;
+  padding: 0;
 }
 
-.tiptap a {
+.tiptap a, .prose a {
   color: hsl(var(--primary));
   text-decoration: underline;
 }
 
-.tiptap img {
+.tiptap img, .prose img {
   max-width: 100%;
   height: auto;
   display: block;
@@ -107,7 +106,7 @@ body {
   border-radius: 0.5rem;
 }
 
-.tiptap iframe {
+.tiptap iframe, .prose iframe {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 0.5rem;

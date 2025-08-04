@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
-import { ArrowLeft, BrainCircuit, Loader2, Sparkles } from "lucide-react";
+import { ArrowLeft, BrainCircuit, Loader2, Sparkles, Copy, Check } from "lucide-react";
+import parse, { domToReact, Element, HTMLReactParserOptions } from "html-react-parser";
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import { githubGist as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { getPost } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +24,61 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai/flows/evaluate-blog-effectiveness";
 import type { BlogPost } from "@/types";
+
+
+function CodeBlock({ className, children }: { className?: string; children: string }) {
+  const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
+  const language = className?.replace("language-", "") || "plaintext";
+  const code = String(children).replace(/\n$/, '');
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true);
+      toast({ title: "Copied!", description: "Code copied to clipboard." });
+      setTimeout(() => setCopied(false), 2000);
+    }, (err) => {
+      toast({
+        variant: "destructive",
+        title: "Copy Failed",
+        description: "Could not copy code to clipboard.",
+      });
+    });
+  };
+
+  return (
+    <div className="relative">
+      <SyntaxHighlighter language={language} style={syntaxTheme} showLineNumbers>
+        {code}
+      </SyntaxHighlighter>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-2 right-2 h-7 w-7 text-gray-300 hover:bg-gray-700 hover:text-white"
+        onClick={handleCopy}
+      >
+        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+      </Button>
+    </div>
+  );
+}
+
+const parserOptions: HTMLReactParserOptions = {
+  replace: (domNode) => {
+    if (domNode instanceof Element && domNode.name === "pre") {
+      const codeNode = domNode.children.find((child) => child.type === "tag" && child.name === "code");
+      if (codeNode instanceof Element) {
+        const codeContent = domToReact(codeNode.children, parserOptions) as string;
+        return <CodeBlock className={codeNode.attribs.class}>{codeContent}</CodeBlock>;
+      }
+    }
+    if (domNode instanceof Element && domNode.name === "iframe") {
+      // Return the iframe with its attributes for YouTube videos
+      return <iframe {...domNode.attribs} className="w-full aspect-video rounded-md border" />;
+    }
+  },
+};
+
 
 interface PreviewPageProps {
   params: {
@@ -53,52 +111,12 @@ export default function PreviewPage({ params }: PreviewPageProps) {
     fetchPost();
   }, [params.id]);
 
-  useEffect(() => {
-    if (!post) return;
-
-    const codeBlocks = document.querySelectorAll('.tiptap pre');
-    codeBlocks.forEach(pre => {
-      if (pre.querySelector('.copy-code-button')) return;
-
-      const code = pre.querySelector('code');
-      if (!code) return;
-      
-      const copyButton = document.createElement('button');
-      const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>`;
-      const copiedIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-
-      copyButton.className = 'copy-code-button absolute top-2 right-2 p-1.5 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors';
-      copyButton.innerHTML = copyIcon;
-      copyButton.title = 'Copy code';
-      
-      pre.style.position = 'relative';
-      pre.appendChild(copyButton);
-
-      copyButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        navigator.clipboard.writeText(code.innerText).then(() => {
-          copyButton.innerHTML = copiedIcon;
-          setTimeout(() => {
-            copyButton.innerHTML = copyIcon;
-          }, 2000);
-          toast({ title: "Copied!", description: "Code copied to clipboard." });
-        }, (err) => {
-          toast({
-            variant: "destructive",
-            title: "Copy Failed",
-            description: "Could not copy code to clipboard.",
-          });
-        });
-      });
-    });
-
-  }, [post, toast]);
-
-
   if (!post) {
-    return <div className="flex items-center justify-center min-h-screen">
-      <Loader2 className="h-8 w-8 animate-spin" />
-    </div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   const handleEvaluate = async () => {
@@ -117,7 +135,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="bg-background min-h-screen">
@@ -141,27 +158,36 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       </header>
 
       <main className="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
-        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm tiptap">
+        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
           {post.category && (
             <Badge variant="outline" className="mb-4">
               {post.category.name}
             </Badge>
           )}
           <div className="mb-4 text-sm text-muted-foreground">
-            Published on {new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
+            Published on{" "}
+            {new Date(post.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </div>
-          <div
+          <h1
             className="font-headline text-4xl font-bold !leading-tight tracking-tight md:text-5xl"
-            dangerouslySetInnerHTML={{ __html: post.title }}
-          />
+          >{post.title}</h1>
+          
           <Separator className="my-8" />
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+
+          <div>{parse(post.content, parserOptions)}</div>
+          
           {post.adsenseTag && (
-             <div className="mt-8 rounded-md border border-dashed p-4">
-                <h3 className="mb-2 text-sm font-semibold text-muted-foreground">AdSense Tag Preview</h3>
-                <pre className="whitespace-pre-wrap rounded-md bg-muted p-4 font-code text-xs">
-                  <code>{post.adsenseTag}</code>
-                </pre>
+            <div className="mt-8 rounded-md border border-dashed p-4">
+              <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
+                AdSense Tag Preview
+              </h3>
+              <pre className="whitespace-pre-wrap rounded-md bg-muted p-4 font-code text-xs">
+                <code>{post.adsenseTag}</code>
+              </pre>
             </div>
           )}
         </article>
@@ -190,7 +216,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
                   <h3 className="mb-2 text-lg font-semibold">SEO Score: {evaluation.seoScore}/100</h3>
                   <Progress value={evaluation.seoScore} className="w-full" />
                 </div>
-                
+
                 <div>
                   <h3 className="text-lg font-semibold">Suggestions for Improvement</h3>
                   <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
