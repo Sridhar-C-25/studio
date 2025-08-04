@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import 'react-quill/dist/quill.snow.css';
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { BrainCircuit, Loader2, Wand2 } from "lucide-react";
+import dynamic from 'next/dynamic';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -38,6 +39,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { BlogPost, Category } from "@/types";
 import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
+import { Textarea } from './ui/textarea';
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -62,6 +64,8 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
+
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
@@ -183,10 +187,11 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                       <FormItem>
                         <FormLabel>Content</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="Write your amazing blog post here. Use markdown for formatting..."
-                            {...field}
-                            className="min-h-[400px] font-mono text-sm"
+                          <ReactQuill
+                            theme="snow"
+                            value={field.value}
+                            onChange={field.onChange}
+                            className="h-96"
                           />
                         </FormControl>
                         <FormMessage />
