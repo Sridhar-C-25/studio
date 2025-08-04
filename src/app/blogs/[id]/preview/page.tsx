@@ -64,18 +64,22 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
     const codeBlocks = document.querySelectorAll('.tiptap pre');
     codeBlocks.forEach(pre => {
+      // Prevent adding duplicate buttons
+      if (pre.querySelector('.copy-code-button')) return;
+
       const code = pre.querySelector('code');
       if (!code) return;
 
       const copyButton = document.createElement('button');
-      copyButton.className = 'absolute top-2 right-2 p-1.5 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors';
+      copyButton.className = 'copy-code-button absolute top-2 right-2 p-1.5 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors';
       copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>`;
       copyButton.title = 'Copy code';
       
       pre.style.position = 'relative';
       pre.appendChild(copyButton);
 
-      copyButton.addEventListener('click', () => {
+      copyButton.addEventListener('click', (e) => {
+        e.stopPropagation();
         navigator.clipboard.writeText(code.innerText).then(() => {
           toast({ title: "Copied!", description: "Code copied to clipboard." });
         }, (err) => {
