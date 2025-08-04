@@ -15,7 +15,7 @@ import {
   Code2,
 } from "lucide-react";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { lowlight } from 'lowlight';
+import { createLowlight } from 'lowlight';
 import javascript from 'highlight.js/lib/languages/javascript';
 import typescript from 'highlight.js/lib/languages/typescript';
 import css from 'highlight.js/lib/languages/css';
@@ -26,6 +26,7 @@ import 'highlight.js/styles/github-dark.css';
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
 
+const lowlight = createLowlight();
 lowlight.registerLanguage('javascript', javascript);
 lowlight.registerLanguage('typescript', typescript);
 lowlight.registerLanguage('css', css);
