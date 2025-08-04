@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles, Copy, Check } from "lucide-react";
 import parse, { domToReact, Element, HTMLReactParserOptions } from "html-react-parser";
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import SyntaxHighlighter  from "react-syntax-highlighter";
 import { vs2015 as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { getPost } from "@/lib/data";
@@ -50,7 +50,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
           return (
             <CodeBlockWithCopyButton language={language}>
-              {code}
+              {JSON.stringify(codeNode.attribs) + code }
             </CodeBlockWithCopyButton>
           )
         }
@@ -124,6 +124,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
     return (
       <div className="relative">
+        {language}
         <SyntaxHighlighter language={language} style={syntaxTheme} showLineNumbers>
           {code}
         </SyntaxHighlighter>

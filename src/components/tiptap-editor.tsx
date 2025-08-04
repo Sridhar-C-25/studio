@@ -30,6 +30,8 @@ import 'highlight.js/styles/github-dark.css';
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
+import { Button } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 const lowlight = createLowlight({
   javascript,
@@ -71,6 +73,10 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
         src: url,
       });
     }
+  };
+
+  const setCodeBlockLanguage = (language: string) => {
+    editor.chain().focus().toggleCodeBlock({ language }).run();
   };
 
   return (
@@ -158,13 +164,19 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
       >
         <Quote className="h-4 w-4" />
       </Toggle>
-       <Toggle
-        size="sm"
-        pressed={editor.isActive("codeBlock")}
-        onPressedChange={() => editor.chain().focus().toggleCodeBlock().run()}
-      >
-        <Code2 className="h-4 w-4" />
-      </Toggle>
+       <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="h-9 px-2.5 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground">
+            <Code2 className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={() => setCodeBlockLanguage('javascript')}>JavaScript</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setCodeBlockLanguage('typescript')}>TypeScript</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setCodeBlockLanguage('xml')}>HTML/XML</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setCodeBlockLanguage('css')}>CSS</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <Separator orientation="vertical" className="h-8" />
       
