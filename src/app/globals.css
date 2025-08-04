@@ -75,7 +75,7 @@ body {
   font-family: theme('fontFamily.code');
 }
 
-.tiptap pre {
+.tiptap pre, .prose .tiptap pre {
   background: #0d1117;
   color: #c9d1d9;
   font-family: theme('fontFamily.code');
@@ -86,7 +86,7 @@ body {
   overflow-x: auto;
 }
 
-.tiptap pre code {
+.tiptap pre code, .prose .tiptap pre code {
   color: inherit;
   padding: 0;
   background: none;
@@ -111,21 +111,6 @@ body {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 0.5rem;
-}
-
-/* Overriding the prose styles for code blocks */
-.prose .tiptap pre {
-  background: #0d1117;
-  color: #c9d1d9;
-  font-family: theme('fontFamily.code');
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-
-.prose .tiptap pre code {
-    color: inherit;
-    background: none;
-    padding: 0;
 }
 
 
