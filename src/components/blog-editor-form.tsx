@@ -40,6 +40,7 @@ import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
 import { Textarea } from './ui/textarea';
 import { TiptapEditor } from "./tiptap-editor";
+import { createPost, updatePost } from "@/lib/data";
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -70,6 +71,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     defaultValues: initialData || {
       title: "",
       content: "",
+      category: "",
       adsenseTag: "",
     },
   });
@@ -77,17 +79,33 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   const contentValue = form.watch('content');
   const titleValue = form.watch('title');
 
-  const onSubmit = (data: BlogEditorFormValues) => {
+  const onSubmit = async (data: BlogEditorFormValues) => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: initialData ? "Post updated!" : "Post created!",
-        description: `Your post "${data.title}" has been saved.`,
-      });
+    try {
+      if (initialData) {
+        await updatePost(initialData.id, data);
+        toast({
+          title: "Post updated!",
+          description: `Your post "${data.title}" has been saved.`,
+        });
+      } else {
+        await createPost(data);
+        toast({
+          title: "Post created!",
+          description: `Your post "${data.title}" has been saved as a draft.`,
+        });
+      }
       router.push("/dashboard/blogs");
-    }, 1000);
+      router.refresh();
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Something went wrong',
+        description: error.message || "Could not save the post. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSuggestTitles = async () => {
