@@ -77,14 +77,12 @@ import matlab from 'highlight.js/lib/languages/matlab';
 import nginx from 'highlight.js/lib/languages/nginx';
 import objectivec from 'highlight.js/lib/languages/objectivec';
 import ocaml from 'highlight.js/lib/languages/ocaml';
-import pascal from 'highlight.js/lib/languages/pascal';
 import perl from 'highlight.js/lib/languages/perl';
 import php from 'highlight.js/lib/languages/php';
 import powershell from 'highlight.js/lib/languages/powershell';
 import prolog from 'highlight.js/lib/languages/prolog';
 import properties from 'highlight.js/lib/languages/properties';
 import protobuf from 'highlight.js/lib/languages/protobuf';
-import pug from 'highlight.js/lib/languages/pug';
 import python from 'highlight.js/lib/languages/python';
 import r from 'highlight.js/lib/languages/r';
 import ruby from 'highlight.js/lib/languages/ruby';
@@ -158,14 +156,13 @@ lowlight.register('matlab', matlab);
 lowlight.register('nginx', nginx);
 lowlight.register('objectivec', objectivec);
 lowlight.register('ocaml', ocaml);
-lowlight.register('pascal', pascal);
+lowlight.register('pascal', delphi);
 lowlight.register('perl', perl);
 lowlight.register('php', php);
 lowlight.register('powershell', powershell);
 lowlight.register('prolog', prolog);
 lowlight.register('properties', properties);
 lowlight.register('protobuf', protobuf);
-lowlight.register('pug', pug);
 lowlight.register('python', python);
 lowlight.register('r', r);
 lowlight.register('react', jsx);
@@ -376,7 +373,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('prolog')}>Prolog</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('properties')}>Properties</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('protobuf')}>Protobuf</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setCodeBlockLanguage('pug')}>Pug</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('python')}>Python</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('r')}>R</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('react')}>React</DropdownMenuItem>
