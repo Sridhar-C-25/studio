@@ -9,7 +9,7 @@ export default async function BlogsPage() {
     const category = categories.find(c => c.id === post.category);
     return {
         ...post,
-        categoryName: category?.name || "Uncategorized",
+        categoryName: category ? category.name : "Uncategorized",
     }
   });
 
