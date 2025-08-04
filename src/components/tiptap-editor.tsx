@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
@@ -87,12 +86,10 @@ import python from 'highlight.js/lib/languages/python';
 import r from 'highlight.js/lib/languages/r';
 import ruby from 'highlight.js/lib/languages/ruby';
 import rust from 'highlight.js/lib/languages/rust';
-import sass from 'highlight.js/lib/languages/sass';
 import scala from 'highlight.js/lib/languages/scala';
 import scheme from 'highlight.js/lib/languages/scheme';
 import scss from 'highlight.js/lib/languages/scss';
 import shell from 'highlight.js/lib/languages/shell';
-import sparql from 'highlight.js/lib/languages/sparql';
 import sql from 'highlight.js/lib/languages/sql';
 import stylus from 'highlight.js/lib/languages/stylus';
 import swift from 'highlight.js/lib/languages/swift';
@@ -168,12 +165,11 @@ lowlight.register('r', r);
 lowlight.register('react', jsx);
 lowlight.register('ruby', ruby);
 lowlight.register('rust', rust);
-lowlight.register('sass', sass);
+lowlight.register('sass', scss);
 lowlight.register('scala', scala);
 lowlight.register('scheme', scheme);
 lowlight.register('scss', scss);
 lowlight.register('shell', shell);
-lowlight.register('sparql', sparql);
 lowlight.register('sql', sql);
 lowlight.register('stylus', stylus);
 lowlight.register('swift', swift);
@@ -383,7 +379,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('scheme')}>Scheme</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('scss')}>SCSS</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('shell')}>Shell</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setCodeBlockLanguage('sparql')}>SPARQL</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('sql')}>SQL</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('stylus')}>Stylus</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('swift')}>Swift</DropdownMenuItem>
