@@ -16,6 +16,7 @@ export const columns: ColumnDef<BlogPost & { categoryName: string }>[] = [
   {
     accessorKey: "categoryName",
     header: "Category",
+    cell: ({ row }) => row.original.categoryName,
   },
   {
     accessorKey: "status",
