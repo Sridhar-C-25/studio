@@ -50,7 +50,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
           return (
             <CodeBlockWithCopyButton language={language}>
-              {JSON.stringify(codeNode.attribs) + code }
+              {code }
             </CodeBlockWithCopyButton>
           )
         }
@@ -124,7 +124,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
     return (
       <div className="relative">
-        {language}
         <SyntaxHighlighter language={language} style={syntaxTheme} showLineNumbers>
           {code}
         </SyntaxHighlighter>
