@@ -15,8 +15,8 @@ const getDatabases = () => {
 export async function getCategories(): Promise<Category[]> {
   const databases = getDatabases();
   const response = await databases.listDocuments(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
+    process.env.APPWRITE_DATABASE_ID!,
+    process.env.APPWRITE_CATEGORIES_COLLECTION_ID!
   );
   return response.documents.map(doc => mapDocumentToCategory(doc));
 }
@@ -25,8 +25,8 @@ export async function getCategory(id: string): Promise<Category | null> {
     try {
         const databases = getDatabases();
         const doc = await databases.getDocument(
-            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-            process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+            process.env.APPWRITE_DATABASE_ID!,
+            process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
             id
         );
         return mapDocumentToCategory(doc);
@@ -39,8 +39,8 @@ export async function getCategory(id: string): Promise<Category | null> {
 export async function createCategory(name: string): Promise<Category> {
   const databases = getDatabases();
   const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+    process.env.APPWRITE_DATABASE_ID!,
+    process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
     ID.unique(),
     { name }
   );
@@ -50,8 +50,8 @@ export async function createCategory(name: string): Promise<Category> {
 export async function updateCategory(id: string, name: string): Promise<Category> {
     const databases = getDatabases();
     const response = await databases.updateDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
         id,
         { name }
     );
@@ -61,8 +61,8 @@ export async function updateCategory(id: string, name: string): Promise<Category
 export async function deleteCategory(id: string): Promise<void> {
     const databases = getDatabases();
     await databases.deleteDocument(
-         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+         process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
         id
     );
 }
@@ -71,8 +71,8 @@ export async function deleteCategory(id: string): Promise<void> {
 export async function getPosts(): Promise<BlogPost[]> {
     const databases = getDatabases();
     const response = await databases.listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_POSTS_COLLECTION_ID!
     );
     return response.documents.map(doc => mapDocumentToBlogPost(doc));
 }
@@ -81,8 +81,8 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     try {
         const databases = getDatabases();
         const doc = await databases.getDocument(
-            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-            process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+            process.env.APPWRITE_DATABASE_ID!,
+            process.env.APPWRITE_POSTS_COLLECTION_ID!,
             id
         );
         return mapDocumentToBlogPost(doc);
@@ -96,8 +96,8 @@ type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status'> & { status?: 'Pub
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
   const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+    process.env.APPWRITE_DATABASE_ID!,
+    process.env.APPWRITE_POSTS_COLLECTION_ID!,
     ID.unique(),
     { ...data, status: 'Draft' }
   );
@@ -107,8 +107,8 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
 export async function updatePost(id: string, data: Partial<PostInput>): Promise<BlogPost> {
     const databases = getDatabases();
     const response = await databases.updateDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_POSTS_COLLECTION_ID!,
         id,
         data
     );
@@ -118,8 +118,8 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
 export async function deletePost(id: string): Promise<void> {
     const databases = getDatabases();
     await databases.deleteDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_POSTS_COLLECTION_ID!,
         id
     );
 }
