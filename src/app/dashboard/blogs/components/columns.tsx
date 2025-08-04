@@ -29,7 +29,7 @@ export const columns: ColumnDef<BlogPost & { categoryName: string }>[] = [
   {
     accessorKey: "createdAt",
     header: "Date",
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }),
   },
   {
     id: "actions",
