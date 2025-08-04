@@ -91,7 +91,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status'> & { status?: 'Published' | 'Draft' };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status' | 'category'> & { status?: 'Published' | 'Draft', category: string };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();

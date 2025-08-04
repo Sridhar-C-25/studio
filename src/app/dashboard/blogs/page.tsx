@@ -1,15 +1,14 @@
-import { getPosts, getCategories } from "@/lib/data";
+import { getPosts } from "@/lib/data";
 import ClientPage from "./components/client";
+import type { BlogPost } from "@/types";
 
 export default async function BlogsPage() {
-  const posts = await getPosts();
-  const categories = await getCategories();
+  const posts: BlogPost[] = await getPosts();
   
   const formattedPosts = posts.map(post => {
-    const category = categories.find(c => c.id === post.category);
     return {
         ...post,
-        categoryName: category ? category.name : "Uncategorized",
+        categoryName: post.category ? post.category.name : "Uncategorized",
     }
   });
 

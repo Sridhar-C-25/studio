@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles } from "lucide-react";
 
-import { getPost, getCategory } from "@/lib/data";
+import { getPost } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai/flows/evaluate-blog-effectiveness";
-import type { BlogPost, Category } from "@/types";
+import type { BlogPost } from "@/types";
 
 interface PreviewPageProps {
   params: {
@@ -35,7 +35,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   const [evaluation, setEvaluation] = useState<EvaluateBlogEffectivenessOutput | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [post, setPost] = useState<BlogPost | null>(null);
-  const [category, setCategory] = useState<Category | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -46,11 +45,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
           return;
         }
         setPost(postData);
-        if (postData.category) {
-          // Assuming category is an ID
-           const categoryData = await getCategory(postData.category);
-           setCategory(categoryData);
-        }
       } catch (error) {
         notFound();
       }
@@ -148,9 +142,9 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
       <main className="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm tiptap">
-          {category && (
+          {post.category && (
             <Badge variant="outline" className="mb-4">
-              {category.name}
+              {post.category.name}
             </Badge>
           )}
           <div className="mb-4 text-sm text-muted-foreground">
