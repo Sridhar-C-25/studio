@@ -130,7 +130,8 @@ body {
 
 .tiptap pre .hljs-keyword,
 .tiptap pre .hljs-selector-tag,
-.tiptap pre .hljs-type {
+.tiptap pre .hljs-type,
+.tiptap pre .hljs-meta-keyword {
   color: #ff7b72;
 }
 
@@ -160,7 +161,8 @@ body {
 .tiptap pre .hljs-section,
 .tiptap pre .hljs-name,
 .tiptap pre .hljs-selector-id,
-.tiptap pre .hljs-selector-class {
+.tiptap pre .hljs-selector-class,
+.tiptap pre .hljs-function .hljs-title {
   color: #d2a8ff;
 }
 
@@ -222,8 +224,8 @@ body {
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 231 48% 52%;
