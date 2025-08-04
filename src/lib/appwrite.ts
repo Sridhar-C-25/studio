@@ -1,12 +1,18 @@
 
-import { Client, Databases, Account } from 'appwrite';
+import { Client, Databases, Account } from 'node-appwrite';
 
-const client = new Client()
-    .setEndpoint(process.env.APPWRITE_ENDPOINT || '')
-    .setProject(process.env.APPWRITE_PROJECT_ID || '');
+const client = new Client();
 
-if (typeof window === 'undefined' && process.env.APPWRITE_API_KEY) {
-  client.setKey(process.env.APPWRITE_API_KEY);
+if (process.env.APPWRITE_ENDPOINT && process.env.APPWRITE_PROJECT_ID && process.env.APPWRITE_API_KEY) {
+    client
+        .setEndpoint(process.env.APPWRITE_ENDPOINT)
+        .setProject(process.env.APPWRITE_PROJECT_ID)
+        .setKey(process.env.APPWRITE_API_KEY);
+} else {
+    // For client-side, we don't use the API key
+    client
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '');
 }
 
 export const account = new Account(client);
