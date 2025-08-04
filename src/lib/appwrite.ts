@@ -1,15 +1,13 @@
+
 import { Client, Databases, Account } from 'appwrite';
 
-const client = new Client();
-
-client
+const client = new Client()
     .setEndpoint(process.env.APPWRITE_ENDPOINT || '')
     .setProject(process.env.APPWRITE_PROJECT_ID || '');
 
-if (process.env.APPWRITE_API_KEY) {
+if (typeof window === 'undefined' && process.env.APPWRITE_API_KEY) {
   client.setKey(process.env.APPWRITE_API_KEY);
 }
-
 
 export const account = new Account(client);
 export const databases = new Databases(client);
