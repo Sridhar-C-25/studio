@@ -26,11 +26,13 @@ import 'highlight.js/styles/github-dark.css';
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
 
-const lowlight = createLowlight();
-lowlight.registerLanguage('javascript', javascript);
-lowlight.registerLanguage('typescript', typescript);
-lowlight.registerLanguage('css', css);
-lowlight.registerLanguage('xml', xml); // For HTML
+const lowlight = createLowlight({
+  javascript,
+  typescript,
+  css,
+  xml,
+});
+
 
 interface TiptapEditorProps {
   content: string;
