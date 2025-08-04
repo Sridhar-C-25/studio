@@ -1,6 +1,6 @@
 import { databases, APPWRITE_CONFIG } from './appwrite';
 import { BlogPost, Category } from '@/types';
-import { Models } from 'appwrite';
+import { ID, Models } from 'node-appwrite';
 
 export async function getCategories(): Promise<Category[]> {
   const response = await databases.listDocuments(
@@ -17,6 +17,16 @@ export async function getCategory(id: string): Promise<Category> {
         id
     );
     return mapDocumentToCategory(doc);
+}
+
+export async function createCategory(name: string): Promise<Category> {
+  const response = await databases.createDocument(
+    APPWRITE_CONFIG.databaseId,
+    APPWRITE_CONFIG.categoriesCollectionId,
+    ID.unique(),
+    { name }
+  );
+  return mapDocumentToCategory(response);
 }
 
 
@@ -51,7 +61,7 @@ function mapDocumentToBlogPost(doc: Models.Document): BlogPost {
         title: doc.title,
         content: doc.content,
         category: doc.category,
-        createdAt: doc.createdAt,
+        createdAt: doc.$createdAt,
         status: doc.status,
         adsenseTag: doc.adsenseTag,
     };

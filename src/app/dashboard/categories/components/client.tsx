@@ -1,6 +1,8 @@
+
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -22,6 +24,7 @@ import { DataTable } from "../../blogs/components/data-table"; // Reusing the da
 import { columns } from "./columns";
 import type { Category } from "@/types";
 import { Loader2 } from "lucide-react";
+import { createCategory } from "@/lib/data";
 
 const formSchema = z.object({
   name: z.string().min(2, "Category name must be at least 2 characters."),
@@ -34,6 +37,7 @@ interface CategoryClientProps {
 }
 
 export function CategoryClient({ data }: CategoryClientProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -42,18 +46,25 @@ export function CategoryClient({ data }: CategoryClientProps) {
     defaultValues: { name: "" },
   });
 
-  const onSubmit = (values: CategoryFormValues) => {
+  const onSubmit = async (values: CategoryFormValues) => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await createCategory(values.name);
       form.reset();
+      router.refresh();
       toast({
         title: "Category Created",
         description: `Category "${values.name}" has been added.`,
       });
-      // In a real app, you would refetch data here
-    }, 1000);
+    } catch (error) {
+       toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "Could not create the category. Please try again.",
+      });
+    } finally {
+        setLoading(false);
+    }
   };
 
   return (
