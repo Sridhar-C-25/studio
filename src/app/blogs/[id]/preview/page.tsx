@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
-import { ArrowLeft, BrainCircuit, Loader2, Sparkles, Copy } from "lucide-react";
+import { ArrowLeft, BrainCircuit, Loader2, Sparkles } from "lucide-react";
 
 import { getPost, getCategory } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -64,15 +64,17 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
     const codeBlocks = document.querySelectorAll('.tiptap pre');
     codeBlocks.forEach(pre => {
-      // Prevent adding duplicate buttons
       if (pre.querySelector('.copy-code-button')) return;
 
       const code = pre.querySelector('code');
       if (!code) return;
-
+      
       const copyButton = document.createElement('button');
+      const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>`;
+      const copiedIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
       copyButton.className = 'copy-code-button absolute top-2 right-2 p-1.5 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors';
-      copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>`;
+      copyButton.innerHTML = copyIcon;
       copyButton.title = 'Copy code';
       
       pre.style.position = 'relative';
@@ -81,6 +83,10 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       copyButton.addEventListener('click', (e) => {
         e.stopPropagation();
         navigator.clipboard.writeText(code.innerText).then(() => {
+          copyButton.innerHTML = copiedIcon;
+          setTimeout(() => {
+            copyButton.innerHTML = copyIcon;
+          }, 2000);
           toast({ title: "Copied!", description: "Code copied to clipboard." });
         }, (err) => {
           toast({

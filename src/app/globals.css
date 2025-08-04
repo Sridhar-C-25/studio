@@ -113,71 +113,75 @@ body {
   border-radius: 0.5rem;
 }
 
+/* GitHub Dark Theme for Highlight.js */
+.tiptap pre .hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+  background: #0d1117;
+  color: #c9d1d9;
+}
 
-.hljs-comment,
-.hljs-quote {
+.tiptap pre .hljs-comment,
+.tiptap pre .hljs-quote {
   color: #8b949e;
   font-style: italic;
 }
 
-.hljs-variable,
-.hljs-template-variable,
-.hljs-strong,
-.hljs-emphasis,
-.hljs-quote {
-  color: #c9d1d9;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-type {
+.tiptap pre .hljs-keyword,
+.tiptap pre .hljs-selector-tag,
+.tiptap pre .hljs-type {
   color: #ff7b72;
 }
 
-.hljs-literal,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-attribute {
+.tiptap pre .hljs-string,
+.tiptap pre .hljs-regexp,
+.tiptap pre .hljs-char,
+.tiptap pre .hljs-meta,
+.tiptap pre .hljs-number,
+.tiptap pre .hljs-built_in,
+.tiptap pre .hljs-doctag {
+  color: #a5d6ff;
+}
+
+.tiptap pre .hljs-literal,
+.tiptap pre .hljs-symbol,
+.tiptap pre .hljs-bullet,
+.tiptap pre .hljs-attribute {
   color: #79c0ff;
 }
 
-.hljs-section,
-.hljs-name {
+.tiptap pre .hljs-variable,
+.tiptap pre .hljs-template-variable {
+  color: #ffa657;
+}
+
+.tiptap pre .hljs-title,
+.tiptap pre .hljs-section,
+.tiptap pre .hljs-name,
+.tiptap pre .hljs-selector-id,
+.tiptap pre .hljs-selector-class {
   color: #d2a8ff;
 }
 
-.hljs-tag {
+.tiptap pre .hljs-addition {
   color: #7ee787;
+  background-color: rgba(16, 185, 129, 0.15);
 }
 
-.hljs-title,
-.hljs-attr,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-selector-attr,
-.hljs-selector-pseudo {
-  color: #d2a8ff;
+.tiptap pre .hljs-deletion {
+  color: #ff7b72;
+  background-color: rgba(244, 63, 94, 0.15);
 }
 
-.hljs-addition {
-  color: #a6e22e;
-  background-color: #24292e;
+.tiptap pre .hljs-emphasis {
+  font-style: italic;
 }
 
-.hljs-deletion {
-  color: #f92672;
-  background-color: #24292e;
+.tiptap pre .hljs-strong {
+  font-weight: bold;
 }
 
-.hljs-string,
-.hljs-regexp,
-.hljs-char,
-.hljs-meta,
-.hljs-number,
-.hljs-built_in,
-.hljs-doctag {
-  color: #a5d6ff;
-}
 
 @layer base {
   :root {

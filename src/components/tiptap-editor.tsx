@@ -204,7 +204,7 @@ export const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        codeBlock: false,
+        codeBlock: false, // We are using CodeBlockLowlight instead
       }),
       Image,
       YoutubeExtension.configure({
