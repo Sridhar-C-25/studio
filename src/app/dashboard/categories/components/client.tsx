@@ -56,11 +56,11 @@ export function CategoryClient({ data }: CategoryClientProps) {
         title: "Category Created",
         description: `Category "${values.name}" has been added.`,
       });
-    } catch (error) {
+    } catch (error: any) {
        toast({
         variant: "destructive",
         title: "Something went wrong",
-        description: "Could not create the category. Please try again.",
+        description: error.message || "Could not create the category. Please try again.",
       });
     } finally {
         setLoading(false);
