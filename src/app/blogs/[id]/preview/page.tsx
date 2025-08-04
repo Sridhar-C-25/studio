@@ -106,7 +106,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       </header>
 
       <main className="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
-        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
+        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm tiptap">
           {category && (
             <Badge variant="outline" className="mb-4">
               {category.name}
