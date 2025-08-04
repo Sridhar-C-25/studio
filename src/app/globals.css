@@ -113,81 +113,25 @@ body {
   border-radius: 0.5rem;
 }
 
-/* GitHub Dark Theme for Highlight.js */
-.tiptap pre .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 1em;
+/* Overriding the prose styles for code blocks */
+.prose .tiptap pre {
   background: #0d1117;
   color: #c9d1d9;
+  font-family: theme('fontFamily.code');
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
-.tiptap pre .hljs-comment,
-.tiptap pre .hljs-quote {
-  color: #8b949e;
-  font-style: italic;
-}
-
-.tiptap pre .hljs-keyword,
-.tiptap pre .hljs-selector-tag,
-.tiptap pre .hljs-type,
-.tiptap pre .hljs-meta-keyword {
-  color: #ff7b72;
-}
-
-.tiptap pre .hljs-string,
-.tiptap pre .hljs-regexp,
-.tiptap pre .hljs-char,
-.tiptap pre .hljs-meta,
-.tiptap pre .hljs-number,
-.tiptap pre .hljs-built_in,
-.tiptap pre .hljs-doctag {
-  color: #a5d6ff;
-}
-
-.tiptap pre .hljs-literal,
-.tiptap pre .hljs-symbol,
-.tiptap pre .hljs-bullet,
-.tiptap pre .hljs-attribute {
-  color: #79c0ff;
-}
-
-.tiptap pre .hljs-variable,
-.tiptap pre .hljs-template-variable {
-  color: #ffa657;
-}
-
-.tiptap pre .hljs-title,
-.tiptap pre .hljs-section,
-.tiptap pre .hljs-name,
-.tiptap pre .hljs-selector-id,
-.tiptap pre .hljs-selector-class,
-.tiptap pre .hljs-function .hljs-title {
-  color: #d2a8ff;
-}
-
-.tiptap pre .hljs-addition {
-  color: #7ee787;
-  background-color: rgba(16, 185, 129, 0.15);
-}
-
-.tiptap pre .hljs-deletion {
-  color: #ff7b72;
-  background-color: rgba(244, 63, 94, 0.15);
-}
-
-.tiptap pre .hljs-emphasis {
-  font-style: italic;
-}
-
-.tiptap pre .hljs-strong {
-  font-weight: bold;
+.prose .tiptap pre code {
+    color: inherit;
+    background: none;
+    padding: 0;
 }
 
 
 @layer base {
   :root {
-    --background: 200 16% 93%;
+    --background: 210 20% 98%;
     --foreground: 224 71% 4%;
     --card: 0 0% 100%;
     --card-foreground: 224 71% 4%;
