@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
@@ -13,8 +14,12 @@ import {
   Quote,
   Minus,
   Code2,
+  Image as ImageIcon,
+  Youtube,
 } from "lucide-react";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Image from "@tiptap/extension-image";
+import YoutubeExtension from "@tiptap/extension-youtube";
 import { createLowlight } from 'lowlight';
 import javascript from 'highlight.js/lib/languages/javascript';
 import typescript from 'highlight.js/lib/languages/typescript';
@@ -22,9 +27,9 @@ import css from 'highlight.js/lib/languages/css';
 import xml from 'highlight.js/lib/languages/xml'; // For HTML
 import 'highlight.js/styles/github-dark.css';
 
-
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
+import React from "react";
 
 const lowlight = createLowlight({
   javascript,
@@ -40,7 +45,33 @@ interface TiptapEditorProps {
 }
 
 const Toolbar = ({ editor }: { editor: Editor | null }) => {
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  
   if (!editor) return null;
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const src = e.target?.result as string;
+        if (src) {
+          editor.chain().focus().setImage({ src }).run();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addYoutubeVideo = () => {
+    const url = prompt("Enter YouTube URL");
+
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+      });
+    }
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-1 rounded-t-md border border-input bg-card p-2">
@@ -136,6 +167,27 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
       </Toggle>
 
       <Separator orientation="vertical" className="h-8" />
+      
+      <input
+        type="file"
+        ref={imageInputRef}
+        onChange={handleImageUpload}
+        className="hidden"
+        accept="image/*"
+      />
+      <Toggle
+        size="sm"
+        onPressedChange={() => imageInputRef.current?.click()}
+      >
+        <ImageIcon className="h-4 w-4" />
+      </Toggle>
+
+      <Toggle
+        size="sm"
+        onPressedChange={addYoutubeVideo}
+      >
+        <Youtube className="h-4 w-4" />
+      </Toggle>
 
        <Toggle
         size="sm"
@@ -153,6 +205,10 @@ export const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
     extensions: [
       StarterKit.configure({
         codeBlock: false,
+      }),
+      Image,
+      YoutubeExtension.configure({
+        nocookie: true,
       }),
       CodeBlockLowlight.configure({
         lowlight,

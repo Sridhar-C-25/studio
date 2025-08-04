@@ -98,6 +98,22 @@ body {
   text-decoration: underline;
 }
 
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0.5rem;
+}
+
+.tiptap iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.5rem;
+}
+
+
 .hljs-comment,
 .hljs-quote {
   color: #8b949e;
