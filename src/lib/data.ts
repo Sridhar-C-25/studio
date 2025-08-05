@@ -93,7 +93,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status' | 'category'> & { status?: 'Published' | 'Draft', category: string };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status' | 'category'> & { status?: 'Published' | 'Draft', category: string[] };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
@@ -139,7 +139,7 @@ function mapDocumentToBlogPost(doc: Models.Document): BlogPost {
         id: doc.$id,
         title: doc.title,
         content: doc.content,
-        category: doc.category,
+        category: doc.category.map(mapDocumentToCategory), // Category is now an array of documents
         createdAt: doc.$createdAt,
         status: doc.status,
         adsenseTag: doc.adsenseTag

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -162,10 +163,14 @@ export default function PreviewPage({ params }: PreviewPageProps) {
 
       <main className="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
-          {post.category && (
-            <Badge variant="outline" className="mb-4">
-              {post.category.name}
-            </Badge>
+          {post.category && post.category.length > 0 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {post.category.map((cat) => (
+                <Badge key={cat.id} variant="outline">
+                  {cat.name}
+                </Badge>
+              ))}
+            </div>
           )}
           <div className="mb-4 text-sm text-muted-foreground">
             Published on{" "}

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Wand2 } from "lucide-react";
+import { BrainCircuit, Loader2, Wand2, Check, ChevronsUpDown, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,13 +26,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogPost, Category } from "@/types";
@@ -41,18 +36,19 @@ import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
 import { Textarea } from './ui/textarea';
 import { TiptapEditor } from "./tiptap-editor";
 import { createPost, updatePost } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
   content: z.string().min(100, "Content must be at least 100 characters long."),
-  category: z.string({ required_error: "Please select a category." }),
+  category: z.array(z.string()).min(1, "Please select at least one category."),
   adsenseTag: z.string().optional(),
 });
 
 type BlogEditorFormValues = z.infer<typeof formSchema>;
 
 interface BlogEditorFormProps {
-  initialData?: BlogPost;
+  initialData?: BlogPost & { category: string[] };
   categories: Category[];
 }
 
@@ -65,19 +61,21 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
+  const [open, setOpen] = useState(false)
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       title: "",
       content: "",
-      category: "",
+      category: [],
       adsenseTag: "",
     },
   });
   
   const contentValue = form.watch('content');
   const titleValue = form.watch('title');
+  const selectedCategories = form.watch('category');
 
   const onSubmit = async (data: BlogEditorFormValues) => {
     setLoading(true);
@@ -170,6 +168,15 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     }
   }
 
+  const handleCategorySelect = (categoryId: string) => {
+    const currentCategories = form.getValues('category');
+    if (currentCategories.includes(categoryId)) {
+      form.setValue('category', currentCategories.filter(id => id !== categoryId));
+    } else {
+      form.setValue('category', [...currentCategories, categoryId]);
+    }
+  };
+
 
   return (
     <Form {...form}>
@@ -229,25 +236,57 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                   control={form.control}
                   name="category"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Categories</FormLabel>
+                       <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-full justify-between"
+                          >
+                             <span className="truncate">
+                              {selectedCategories.length > 0
+                                ? categories
+                                    .filter(cat => selectedCategories.includes(cat.id))
+                                    .map(cat => cat.name)
+                                    .join(", ")
+                                : "Select categories..."}
+                            </span>
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                           <Command>
+                            <CommandInput placeholder="Search categories..." />
+                            <CommandList>
+                              <CommandEmpty>No categories found.</CommandEmpty>
+                              <CommandGroup>
+                                {categories.map((category) => (
+                                  <CommandItem
+                                    key={category.id}
+                                    value={category.name}
+                                    onSelect={() => {
+                                      handleCategorySelect(category.id);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        selectedCategories.includes(category.id)
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {category.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -8,7 +8,7 @@ export type BlogPost = {
   id: string;
   title: string;
   content: string;
-  category: any;
+  category: Category[];
   createdAt: string;
   status: 'Published' | 'Draft';
   adsenseTag?: string;

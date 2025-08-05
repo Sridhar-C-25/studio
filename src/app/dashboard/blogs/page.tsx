@@ -1,3 +1,4 @@
+
 import { getPosts } from "@/lib/data";
 import ClientPage from "./components/client";
 import type { BlogPost } from "@/types";
@@ -8,7 +9,7 @@ export default async function BlogsPage() {
   const formattedPosts = posts.map(post => {
     return {
         ...post,
-        categoryName: post.category ? post.category.name : "Uncategorized",
+        categoryName: post.category ? post.category.map(cat => cat.name).join(", ") : "Uncategorized",
     }
   });
 
