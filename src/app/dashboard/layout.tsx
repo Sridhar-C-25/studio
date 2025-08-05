@@ -58,7 +58,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       </Sidebar>
       <SidebarInset>
         <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
-          <SidebarTrigger className="md:hidden" />
+          <SidebarTrigger className="lg:hidden" />
           <div className="ml-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
