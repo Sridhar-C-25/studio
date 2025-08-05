@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BookText, LayoutGrid } from "lucide-react";
+import { BookText, LayoutGrid, FileCheck, FileText } from "lucide-react";
 
 export default async function OverviewPage() {
   const posts = await getPosts();
@@ -14,6 +14,8 @@ export default async function OverviewPage() {
 
   const totalPosts = posts.length;
   const totalCategories = categories.length;
+  const publishedCount = posts.filter(post => post.status === 'Published').length;
+  const draftCount = posts.filter(post => post.status === 'Draft').length;
 
   return (
     <div>
@@ -30,6 +32,28 @@ export default async function OverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalPosts}</div>
+          </CardContent>
+        </Card>
+         <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Published Posts
+            </CardTitle>
+            <FileCheck className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{publishedCount}</div>
+          </CardContent>
+        </Card>
+         <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Draft Posts
+            </CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{draftCount}</div>
           </CardContent>
         </Card>
         <Card>
