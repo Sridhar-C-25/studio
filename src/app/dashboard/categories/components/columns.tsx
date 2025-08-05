@@ -6,6 +6,10 @@ import { CellAction } from "./cell-action";
 
 export const columns: ColumnDef<Category>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "name",
     header: "Name",
   },
