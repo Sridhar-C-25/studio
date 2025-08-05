@@ -309,16 +309,16 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                     )}
                   />
               </CardContent>
-              <CardFooter className="flex justify-between">
-                 <Button variant="outline" type="button" onClick={onPreview}>Preview</Button>
-                 <div className="flex items-center gap-2">
-                  <Button type="submit" variant="secondary" disabled={loading}>
+              <CardFooter className="flex flex-col justify-between">
+                 <Button variant="outline" className="w-full" type="button" onClick={onPreview}>Preview</Button>
+                 <div className="flex flex-col items-center gap-2 w-full mt-2">
+                  <Button type="submit" className="w-full" variant="secondary" disabled={loading}>
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     Save Draft
                   </Button>
-                  <Button type="submit" disabled={loading}>
+                  <Button type="submit" className="w-full" disabled={loading}>
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
