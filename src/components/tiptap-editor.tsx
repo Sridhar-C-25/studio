@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react"
+import React from "react";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -18,112 +18,52 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
-// Language configuration with aliases
-const languageConfig = [
-  { value: 'javascript', label: 'JavaScript', aliases: ['js'] },
-  { value: 'typescript', label: 'TypeScript', aliases: ['ts'] },
-  { value: 'python', label: 'Python', aliases: ['py'] },
-  { value: 'html', label: 'HTML', aliases: [] },
-  { value: 'css', label: 'CSS', aliases: [] },
-  { value: 'json', label: 'JSON', aliases: [] },
-  { value: 'bash', label: 'Bash', aliases: ['sh', 'shell'] },
-  { value: 'sql', label: 'SQL', aliases: [] },
-  { value: 'java', label: 'Java', aliases: [] },
-  { value: 'csharp', label: 'C#', aliases: ['cs'] },
-  { value: 'cpp', label: 'C++', aliases: ['c++'] },
-  { value: 'c', label: 'C', aliases: [] },
-  { value: 'php', label: 'PHP', aliases: [] },
-  { value: 'ruby', label: 'Ruby', aliases: ['rb'] },
-  { value: 'go', label: 'Go', aliases: ['golang'] },
-  { value: 'rust', label: 'Rust', aliases: ['rs'] },
-  { value: 'kotlin', label: 'Kotlin', aliases: ['kt'] },
-  { value: 'swift', label: 'Swift', aliases: [] },
-  { value: 'dart', label: 'Dart', aliases: [] },
-  { value: 'scala', label: 'Scala', aliases: [] },
-  { value: 'r', label: 'R', aliases: [] },
-  { value: 'matlab', label: 'Matlab', aliases: [] },
-  { value: 'yaml', label: 'YAML', aliases: ['yml'] },
-  { value: 'xml', label: 'XML', aliases: [] },
-  { value: 'markdown', label: 'Markdown', aliases: ['md'] },
-  { value: 'dockerfile', label: 'Dockerfile', aliases: ['docker'] },
-  { value: 'nginx', label: 'Nginx', aliases: [] },
-  { value: 'makefile', label: 'Makefile', aliases: ['make'] },
-  { value: 'ini', label: 'INI', aliases: [] },
-  { value: 'properties', label: 'Properties', aliases: [] },
-  { value: 'diff', label: 'Diff', aliases: [] },
-  { value: 'jsx', label: 'JSX', aliases: ['react'] },
-  { value: 'tsx', label: 'TSX', aliases: [] },
-  { value: 'scss', label: 'SCSS', aliases: ['sass'] },
-  { value: 'less', label: 'Less', aliases: [] },
-  { value: 'stylus', label: 'Stylus', aliases: ['styl'] },
-  { value: 'lua', label: 'Lua', aliases: [] },
-  { value: 'perl', label: 'Perl', aliases: ['pl'] },
-  { value: 'powershell', label: 'PowerShell', aliases: ['ps'] },
-  { value: 'groovy', label: 'Groovy', aliases: [] },
-  { value: 'haskell', label: 'Haskell', aliases: ['hs'] },
-  { value: 'elixir', label: 'Elixir', aliases: ['ex'] },
-  { value: 'erlang', label: 'Erlang', aliases: ['erl'] },
-  { value: 'clojure', label: 'Clojure', aliases: ['clj'] },
-  { value: 'julia', label: 'Julia', aliases: ['jl'] },
-  { value: 'lisp', label: 'Lisp', aliases: [] },
-  { value: 'scheme', label: 'Scheme', aliases: ['scm'] },
-  { value: 'prolog', label: 'Prolog', aliases: ['pl'] },
-  { value: 'fortran', label: 'Fortran', aliases: ['f90', 'f95'] },
-  { value: 'objectivec', label: 'Objective-C', aliases: ['objc'] },
-  { value: 'delphi', label: 'Delphi', aliases: ['pascal'] },
-  { value: 'vbnet', label: 'VB.NET', aliases: ['vb'] },
-  { value: 'arduino', label: 'Arduino', aliases: [] },
-  { value: 'verilog', label: 'Verilog', aliases: ['v'] },
-  { value: 'vhdl', label: 'VHDL', aliases: [] },
-  { value: 'coffeescript', label: 'CoffeeScript', aliases: ['coffee'] },
-  { value: 'ocaml', label: 'OCaml', aliases: ['ml'] },
-  { value: 'cmake', label: 'CMake', aliases: [] },
-  { value: 'protobuf', label: 'Protobuf', aliases: ['proto'] },
-  { value: 'abnf', label: 'ABNF', aliases: [] },
-  { value: 'actionscript', label: 'ActionScript', aliases: ['as'] },
-  { value: 'ada', label: 'Ada', aliases: [] },
-  { value: 'apache', label: 'Apache', aliases: ['apacheconf'] },
-  { value: 'applescript', label: 'AppleScript', aliases: [] },
-  { value: 'basic', label: 'BASIC', aliases: [] },
-  { value: 'brainfuck', label: 'Brainfuck', aliases: ['bf'] },
-  { value: 'dart', label: 'Dart', aliases: [] },
-  { value: 'elm', label: 'Elm', aliases: [] },
-  { value: 'gams', label: 'GAMS', aliases: [] },
-  { value: 'http', label: 'HTTP', aliases: ['https'] },
-  { value: 'tcl', label: 'TCL', aliases: [] },
-  { value: '1c', label: '1C', aliases: [] },
-];
+// Import all the languages statically
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import python from 'highlight.js/lib/languages/python';
+import html from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
+import json from 'highlight.js/lib/languages/json';
+import bash from 'highlight.js/lib/languages/bash';
+import sql from 'highlight.js/lib/languages/sql';
+import java from 'highlight.js/lib/languages/java';
+import csharp from 'highlight.js/lib/languages/csharp';
+import cpp from 'highlight.js/lib/languages/cpp';
+import c from 'highlight.js/lib/languages/c';
 
-// Initialize lowlight
+// Initialize lowlight with the languages
 const lowlight = createLowlight();
 
-// Dynamically import and register languages
-const registerLanguages = async () => {
-  for (const lang of languageConfig) {
-    try {
-      const langModule = await import(`highlight.js/lib/languages/${lang.value}`);
-      lowlight.register(lang.value, langModule.default);
-      
-      // Register all aliases
-      lang.aliases.forEach(alias => {
-        lowlight.register(alias, langModule.default);
-      });
-    } catch (err) {
-      console.error(`Failed to load language ${lang.value}:`, err);
-    }
-  }
-  
-  // Special cases
-  try {
-    const xmlModule = await import('highlight.js/lib/languages/xml');
-    lowlight.register('html', xmlModule.default);
-  } catch (err) {
-    console.error('Failed to load HTML language:', err);
-  }
-};
+// Register languages
+lowlight.register('javascript', javascript);
+lowlight.register('typescript', typescript);
+lowlight.register('python', python);
+lowlight.register('html', html);
+lowlight.register('css', css);
+lowlight.register('json', json);
+lowlight.register('bash', bash);
+lowlight.register('sql', sql);
+lowlight.register('java', java);
+lowlight.register('csharp', csharp);
+lowlight.register('cpp', cpp);
+lowlight.register('c', c);
 
-// Register languages on first use
-registerLanguages();
+// Common language options
+const languageOptions = [
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'html', label: 'HTML' },
+  { value: 'css', label: 'CSS' },
+  { value: 'json', label: 'JSON' },
+  { value: 'bash', label: 'Bash' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'java', label: 'Java' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'c', label: 'C' },
+];
 
 interface TiptapEditorProps {
   content: string;
@@ -209,7 +149,7 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-h-[60vh] w-48 overflow-y-auto">
-          {languageConfig.map((lang) => (
+          {languageOptions.map((lang) => (
             <DropdownMenuItem 
               key={lang.value}
               onClick={() => setCodeBlockLanguage(lang.value)}

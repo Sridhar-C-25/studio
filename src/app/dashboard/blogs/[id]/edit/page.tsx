@@ -17,7 +17,10 @@ export default async function EditBlogPage({ params }: EditBlogPageProps) {
     notFound();
   }
   
-  const postForForm = { ...post, category: post.category?.$id };
+  const postForForm = { 
+    ...post, 
+    category: post.category?.map(cat => cat.id) || [] 
+  };
 
   return (
     <div>
