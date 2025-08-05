@@ -38,6 +38,14 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
+              <Link href="/dashboard/overview" className="w-full">
+                <SidebarMenuButton tooltip="Overview">
+                  <LayoutGrid />
+                  Overview
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
               <Link href="/dashboard/blogs" className="w-full">
                 <SidebarMenuButton tooltip="Blogs">
                   <BookText />
