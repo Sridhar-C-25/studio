@@ -1,12 +1,12 @@
-
 import { getPosts, getCategories } from "@/lib/data";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BookText, LayoutGrid, FileCheck, FileText } from "lucide-react";
+import { BookText, LayoutGrid } from "lucide-react";
 
 export default async function OverviewPage() {
   const posts = await getPosts();
@@ -32,28 +32,9 @@ export default async function OverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalPosts}</div>
-          </CardContent>
-        </Card>
-         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Published Posts
-            </CardTitle>
-            <FileCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{publishedCount}</div>
-          </CardContent>
-        </Card>
-         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Draft Posts
-            </CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{draftCount}</div>
+            <p className="text-xs text-muted-foreground">
+              {publishedCount} published, {draftCount} drafts
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -65,6 +46,7 @@ export default async function OverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalCategories}</div>
+             <p className="text-xs text-muted-foreground invisible">.</p>
           </CardContent>
         </Card>
       </div>
