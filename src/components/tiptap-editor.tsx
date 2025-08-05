@@ -311,7 +311,7 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
             <Code2 className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="max-h-60 overflow-y-auto">
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('1c')}>1C</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('abnf')}>ABNF</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setCodeBlockLanguage('actionscript')}>ActionScript</DropdownMenuItem>
