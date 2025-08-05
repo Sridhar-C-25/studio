@@ -1,3 +1,4 @@
+
 import { getPosts, getCategories } from "@/lib/data";
 import {
   Card,
@@ -7,15 +8,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BookText, LayoutGrid } from "lucide-react";
+import { CategoryChart } from "./components/category-chart";
+import { Category } from "@/types";
 
 export default async function OverviewPage() {
   const posts = await getPosts();
-  const categories = await getCategories();
+  const categories: Category[] = await getCategories();
 
   const totalPosts = posts.length;
   const totalCategories = categories.length;
   const publishedCount = posts.filter(post => post.status === 'Published').length;
   const draftCount = posts.filter(post => post.status === 'Draft').length;
+
+  const categoryPostCounts = categories.map(category => {
+    const count = posts.filter(post => post.category?.some(cat => cat.id === category.id)).length;
+    return { name: category.name, postCount: count, fill: `hsl(var(--chart-${(categories.indexOf(category) % 5) + 1}))` };
+  }).filter(cat => cat.postCount > 0);
+
 
   return (
     <div>
@@ -50,6 +59,24 @@ export default async function OverviewPage() {
           </CardContent>
         </Card>
       </div>
+
+       <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Post Distribution by Category</CardTitle>
+              <CardDescription>A breakdown of your posts by category.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {categoryPostCounts.length > 0 ? (
+                <CategoryChart data={categoryPostCounts} />
+              ) : (
+                <div className="flex h-[300px] items-center justify-center text-muted-foreground">
+                  No posts with categories to display.
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
     </div>
   );
 }
