@@ -299,7 +299,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                         <FormLabel>Google AdSense Tag</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="<script>...</script>"
+                            placeholder="&lt;script&gt;...&lt;/script&gt;"
                             {...field}
                             className="font-code text-xs"
                           />
@@ -310,13 +310,21 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                   />
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button variant="outline" type="button" onClick={onPreview}>Preview</Button>
-                <Button type="submit" disabled={loading}>
-                  {loading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {initialData ? "Update Post" : "Create Post"}
-                </Button>
+                 <Button variant="outline" type="button" onClick={onPreview}>Preview</Button>
+                 <div className="flex items-center gap-2">
+                  <Button type="submit" variant="secondary" disabled={loading}>
+                    {loading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Save Draft
+                  </Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {initialData ? "Update & Publish" : "Publish"}
+                  </Button>
+                 </div>
               </CardFooter>
             </Card>
             
@@ -379,3 +387,5 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     </Form>
   );
 }
+
+    
