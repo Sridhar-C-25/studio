@@ -4,7 +4,7 @@ import type { Category } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Category & { postCount: number }>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -12,6 +12,10 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "name",
     header: "Name",
+  },
+  {
+    accessorKey: "postCount",
+    header: "Post Count",
   },
   {
     id: "actions",

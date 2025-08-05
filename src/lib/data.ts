@@ -1,7 +1,7 @@
 
 'use server';
 
-import { Client, Databases, ID, Models } from 'node-appwrite';
+import { Client, Databases, ID, Models, Query } from 'node-appwrite';
 import type { BlogPost, Category } from '@/types';
 
 const getDatabases = () => {
@@ -68,11 +68,13 @@ export async function deleteCategory(id: string): Promise<void> {
 }
 
 
-export async function getPosts(): Promise<BlogPost[]> {
+export async function getPosts(categoryId?: string): Promise<BlogPost[]> {
     const databases = getDatabases();
+    const queries = categoryId ? [Query.equal('category', categoryId)] : [];
     const response = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_POSTS_COLLECTION_ID!
+        process.env.APPWRITE_POSTS_COLLECTION_ID!,
+        queries,
     );
     return response.documents.map(doc => mapDocumentToBlogPost(doc));
 }

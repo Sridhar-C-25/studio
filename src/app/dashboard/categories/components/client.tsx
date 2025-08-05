@@ -9,7 +9,7 @@ import { columns } from "./columns";
 import type { Category } from "@/types";
 
 interface CategoryClientProps {
-  data: Category[];
+  data: (Category & { postCount: number })[];
 }
 
 export function CategoryClient({ data }: CategoryClientProps) {
