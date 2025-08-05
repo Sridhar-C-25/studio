@@ -61,7 +61,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
@@ -77,20 +77,21 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   const titleValue = form.watch('title');
   const selectedCategories = form.watch('category');
 
-  const onSubmit = async (data: BlogEditorFormValues) => {
+  const onSubmit = async (data: BlogEditorFormValues, status: 'Draft' | 'Published') => {
     setLoading(true);
     try {
+      const postData = { ...data, status };
       if (initialData) {
-        await updatePost(initialData.id, data);
+        await updatePost(initialData.id, postData);
         toast({
           title: "Post updated!",
           description: `Your post "${data.title}" has been saved.`,
         });
       } else {
-        await createPost(data);
+        await createPost(postData);
         toast({
-          title: "Post created!",
-          description: `Your post "${data.title}" has been saved as a draft.`,
+          title: `Post ${status === 'Published' ? 'published' : 'saved as draft'}!`,
+          description: `Your post "${data.title}" has been saved.`,
         });
       }
       router.push("/dashboard/blogs");
@@ -180,7 +181,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Card>
@@ -247,7 +248,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                             className="w-full justify-between"
                           >
                              <span className="truncate">
-                              {selectedCategories.length > 0
+                              {selectedCategories && selectedCategories.length > 0
                                 ? categories
                                     .filter(cat => selectedCategories.includes(cat.id))
                                     .map(cat => cat.name)
@@ -274,7 +275,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        selectedCategories.includes(category.id)
+                                        selectedCategories && selectedCategories.includes(category.id)
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
@@ -312,17 +313,17 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
               <CardFooter className="flex flex-col justify-between">
                  <Button variant="outline" className="w-full" type="button" onClick={onPreview}>Preview</Button>
                  <div className="flex flex-col items-center gap-2 w-full mt-2">
-                  <Button type="submit" className="w-full" variant="secondary" disabled={loading}>
+                  <Button onClick={form.handleSubmit((data) => onSubmit(data, 'Draft'))} className="w-full" variant="secondary" disabled={loading}>
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     Save Draft
                   </Button>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button onClick={form.handleSubmit((data) => onSubmit(data, 'Published'))} className="w-full" disabled={loading}>
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {initialData ? "Update & Publish" : "Publish"}
+                    {initialData?.status === 'Published' ? 'Update & Publish' : 'Publish'}
                   </Button>
                  </div>
               </CardFooter>
@@ -387,5 +388,3 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     </Form>
   );
 }
-
-    

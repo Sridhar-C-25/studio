@@ -93,7 +93,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'status' | 'category'> & { status?: 'Published' | 'Draft', category: string[] };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category'> & { status: 'Published' | 'Draft', category: string[] };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
@@ -101,7 +101,7 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
     process.env.APPWRITE_DATABASE_ID!,
     process.env.APPWRITE_POSTS_COLLECTION_ID!,
     ID.unique(),
-    { ...data, status: 'Draft' }
+    data
   );
   return mapDocumentToBlogPost(response);
 }
