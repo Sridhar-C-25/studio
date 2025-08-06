@@ -1,12 +1,13 @@
+
 import { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import Footer from "./components/Footer";
 import Nav from "./components/Nav";
 
 export const metadata: Metadata = {
-  title: "Code A Program | Web Dev Templates & Components",
+  title: "Code A Program: Your Hub for Modern Web Dev",
   description:
-    "Browse production-ready web development templates, components, and source code built with Next.js, Tailwind CSS, React js, Vue js, Html, Css, Javascript, Shadcn UI and more.",
+    "Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.",
   keywords: [
     "React js & Tailwind CSS",
     "Tailwind components",
@@ -23,9 +24,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://codeaprogram.tech"),
   authors: [{ name: "Code A Program", url: "https://codeaprogram.com" }],
   openGraph: {
-    title: "Code A Program | Web Dev Templates & Components",
+    title: "Code A Program: Your Hub for Modern Web Dev",
     description:
-      "Browse production-ready web development templates, components, and source code built with Next.js, Tailwind CSS, React js, Vue js, Html, Css, Javascript, Shadcn UI and more.",
+      "Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.",
     url: "https://codeaprogram.tech",
     siteName: "Code A Program",
     locale: "en_US",
