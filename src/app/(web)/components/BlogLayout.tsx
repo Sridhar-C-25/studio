@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -224,17 +225,18 @@ export default async function BlogLayout() {
             <CardContent>
               <div className="space-y-2">
                 {categoriesWithCount.map((category) => (
-                  <div
-                    key={category.name}
-                    className="flex justify-between items-center py-1"
+                  <Link
+                    href={`/blogs/category/${category.id}`}
+                    key={category.id}
+                    className="flex justify-between items-center py-1 group"
                   >
-                    <span className="text-sm hover:text-primary cursor-pointer transition-colors">
+                    <span className="text-sm group-hover:text-primary cursor-pointer transition-colors">
                       {category.name}
                     </span>
                     <Badge variant="secondary" className="text-xs">
                       {category.postCount}
                     </Badge>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </CardContent>
