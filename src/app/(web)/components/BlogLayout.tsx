@@ -7,161 +7,7 @@ import {
   YouTubeFilledIcon,
 } from "./icon";
 import Link from "next/link";
-
-// Mock data for blog posts based on YouTube videos
-const recentPosts = [
-  {
-    id: 1,
-    title:
-      "Tailwind css RESPONSIVE NAVBAR How to make a responsive navbar with tailwind css",
-    image: "/blog/post1.jpg",
-    date: "12/4/2022",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 2,
-    title:
-      "Responsive Navbar With tailwind css How to make a responsive navbar with tailwind css",
-    image: "/blog/post2.jpg",
-    date: "12/11/2021",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 3,
-    title: "Responsive Sidebar with React js and tailwind css",
-    image: "/blog/post3.jpg",
-    date: "3/9/2022",
-    category: "React",
-  },
-  {
-    id: 4,
-    title:
-      "Responsive Navbar With React & tailwind css How to make a responsive navbar with react js and tailwind",
-    image: "/blog/post4.jpg",
-    date: "12/23/2021",
-    category: "React",
-  },
-  {
-    id: 5,
-    title:
-      "Responsive Sidebar With tailwind css How to make a responsive sidebar with tailwind css",
-    image: "/blog/post5.jpg",
-    date: "1/5/2022",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 6,
-    title: "Responsive Sidebar with React React js and tailwind",
-    image: "/blog/post6.jpg",
-    date: "8/12/2022",
-    category: "React",
-  },
-  {
-    id: 7,
-    title: "Dynamic Stepper React js form stepper | React and tailwind",
-    image: "/blog/post7.jpg",
-    date: "9/6/2022",
-    category: "React",
-  },
-  {
-    id: 8,
-    title: "React js dropdown menu close functionality | React js tips",
-    image: "/blog/post8.jpg",
-    date: "10/3/2022",
-    category: "React",
-  },
-  {
-    id: 9,
-    title:
-      "Responsive Navbar With vue & tailwind How to make a responsive navbar with vue js and tailwind",
-    image: "/blog/post9.jpg",
-    date: "1/7/2022",
-    category: "Vue.js",
-  },
-  {
-    id: 10,
-    title:
-      "Custom Selector React js & tailwind css Custom Dropdown Select Menu With Reactjs and tailwind",
-    image: "/blog/post10.jpg",
-    date: "9/9/2022",
-    category: "React",
-  },
-  {
-    id: 11,
-    title: "Themes TAILWIND REACT Tailwind CSS Dark/Light/System Base themes",
-    image: "/blog/post11.jpg",
-    date: "11/1/2022",
-    category: "React",
-  },
-  {
-    id: 12,
-    title:
-      "Responsive Footer With React & tailwind How to make a responsive footer with react js and tailwind",
-    image: "/blog/post12.jpg",
-    date: "2/3/2022",
-    category: "React",
-  },
-  {
-    id: 13,
-    title:
-      "Navigation Menu With React & tailwind Magic Navigation Menu Indicator using React js and tailwind",
-    image: "/blog/post13.jpg",
-    date: "5/22/2022",
-    category: "React",
-  },
-  {
-    id: 14,
-    title: "How to Add Syntax Highlighting to Code on Your Website",
-    image: "/blog/post14.jpg",
-    date: "1/21/2023",
-    category: "Web Development",
-  },
-  {
-    id: 15,
-    title: "Tailwind CSS Only Awesome Testimonials Section Card Hover Effect",
-    image: "/blog/post15.jpg",
-    date: "10/10/2022",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 16,
-    title:
-      "React Filterable Selectors ( Country, State, City) Using React js and tailwind",
-    image: "/blog/post16.jpg",
-    date: "1/18/2023",
-    category: "React",
-  },
-  {
-    id: 17,
-    title: "Animated website design using tailwind css",
-    image: "/blog/post17.jpg",
-    date: "2/11/2022",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 18,
-    title:
-      "Animated 3D Flip Card Animated 3D Flip Card Design Using Tailwind CSS",
-    image: "/blog/post18.jpg",
-    date: "3/7/2022",
-    category: "Tailwind CSS",
-  },
-  {
-    id: 19,
-    title: "MOON Responsive website using React js and tailwind css",
-    image: "/blog/post19.jpg",
-    date: "1/13/2022",
-    category: "React",
-  },
-  {
-    id: 20,
-    title:
-      "Dynamic Pagination With React & tailwind React js and tailwind css with pagination",
-    image: "/blog/post20.jpg",
-    date: "1/18/2023",
-    category: "React",
-  },
-];
+import { getPosts } from "@/lib/data";
 
 const popularPosts = [
   {
@@ -223,7 +69,11 @@ const categories = [
   { name: "Code Highlighting", count: 1 },
 ];
 
-export default function BlogLayout() {
+export default async function BlogLayout() {
+  const recentPosts = await getPosts();
+  const publishedPosts = recentPosts.filter(
+    (post) => post.status === "Published"
+  );
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -235,7 +85,7 @@ export default function BlogLayout() {
 
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {recentPosts.map((post) => (
+            {publishedPosts.map((post) => (
               <Card
                 key={post.id}
                 className="overflow-hidden hover:shadow-lg transition-shadow"
@@ -249,23 +99,27 @@ export default function BlogLayout() {
                 </div>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {post.category}
-                    </Badge>
+                    {post.category.map((cat) => (
+                      <Badge key={cat.id} variant="secondary" className="text-xs">
+                        {cat.name}
+                      </Badge>
+                    ))}
                     <span className="text-xs text-muted-foreground">
-                      {post.date}
+                      {new Date(post.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <h3 className="font-semibold text-sm line-clamp-2 mb-2">
                     {post.title}
                   </h3>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs p-0 h-auto"
-                  >
-                    Read More →
-                  </Button>
+                   <Link href={`/blogs/${post.id}`}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs p-0 h-auto"
+                    >
+                      Read More →
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
