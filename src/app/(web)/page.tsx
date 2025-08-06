@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import BlogLayout from "./components/BlogLayout";
 
 export default function Page() {
   return (
     <section
-    className="w-full py-20 md:py-32 lg:py-40 overflow-hidden"
-    aria-label="Hero Section"
-  >
-    <div className="container px-4 md:px-6 relative">
+      className="w-full py-20 md:py-32 lg:py-40 overflow-hidden"
+      aria-label="Hero Section"
+    >
+      <div className="container px-4 md:px-6 relative">
         <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
 
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -87,7 +88,10 @@ export default function Page() {
           <div className="absolute -bottom-6 -right-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 blur-3xl opacity-70"></div>
           <div className="absolute -top-6 -left-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-secondary/30 to-primary/30 blur-3xl opacity-70"></div>
         </div>
-      </div> 
-  </section>
+      </div>
+      <div className="container px-4 md:px-6">
+        <BlogLayout/>
+      </div>
+    </section>
   )
 }
