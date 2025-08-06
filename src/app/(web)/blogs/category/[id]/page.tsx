@@ -1,16 +1,13 @@
 
 import { getPosts, getCategory } from "@/lib/data";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -58,43 +55,48 @@ export default async function CategoryBlogPage({ params }: CategoryBlogPageProps
         Found {publishedPosts.length} posts in this category.
       </p>
       {publishedPosts.length > 0 ? (
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {publishedPosts.map((post) => (
-            <Link href={`/blogs/${post.id}`} key={post.id} className="group">
-              <Card className="h-full flex flex-col transition-all group-hover:shadow-lg group-hover:-translate-y-1">
-                <CardHeader>
-                  {post.category && post.category.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {post.category.map((cat) => (
-                        <Badge key={cat.id} variant="secondary">
-                          {cat.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                  <CardTitle className="font-headline text-2xl group-hover:text-primary transition-colors">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription>
-                    {new Date(post.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground line-clamp-3">
-                    {post.content.replace(/<[^>]+>/g, "").substring(0, 150)}...
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex items-center font-semibold text-primary">
-                    Read More <ArrowRight className="ml-2 h-4 w-4" />
+             <Card
+                key={post.id}
+                className="overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
+                   <Link href={`/blogs/${post.id}`}>
+                      <Image
+                        src="https://placehold.co/600x400.png"
+                        alt={post.title}
+                        layout="fill"
+                        objectFit="cover"
+                        data-ai-hint="blog abstract"
+                      />
+                   </Link>
+                </div>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    {post.category.map((cat) => (
+                      <Badge key={cat.id} variant="secondary" className="text-xs">
+                        <Link href={`/blogs/category/${cat.id}`}>{cat.name}</Link>
+                      </Badge>
+                    ))}
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </span>
                   </div>
-                </CardFooter>
+                  <h3 className="font-semibold text-sm line-clamp-2 mb-2">
+                    <Link href={`/blogs/${post.id}`}>{post.title}</Link>
+                  </h3>
+                   <Link href={`/blogs/${post.id}`}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs p-0 h-auto"
+                    >
+                      Read More →
+                    </Button>
+                  </Link>
+                </CardContent>
               </Card>
-            </Link>
           ))}
         </div>
       ) : (
