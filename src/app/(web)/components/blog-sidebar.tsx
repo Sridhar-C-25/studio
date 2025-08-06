@@ -124,7 +124,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
       </Card>
 
       {/* Categories */}
-      <Card>
+      <Card className="sticky top-24">
         <CardHeader>
           <h3 className="text-lg font-semibold">Categories</h3>
         </CardHeader>
