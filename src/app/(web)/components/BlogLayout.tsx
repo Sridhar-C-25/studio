@@ -11,24 +11,6 @@ import { getCategories, getPosts } from "@/lib/data";
 import { Category } from "@/types";
 import Image from "next/image";
 
-const categories = [
-  { name: "React", count: 12 },
-  { name: "Tailwind CSS", count: 8 },
-  { name: "Vue.js", count: 1 },
-  { name: "Web Development", count: 1 },
-  { name: "Navigation Bar", count: 6 },
-  { name: "Sidebar Menu", count: 4 },
-  { name: "Responsive Design", count: 15 },
-  { name: "UI Components", count: 8 },
-  { name: "Form Components", count: 3 },
-  { name: "Animation", count: 3 },
-  { name: "Themes", count: 1 },
-  { name: "Pagination", count: 1 },
-  { name: "Footer", count: 1 },
-  { name: "Testimonials", count: 1 },
-  { name: "Code Highlighting", count: 1 },
-];
-
 export default async function BlogLayout() {
   const allPosts = await getPosts();
   const publishedPosts = allPosts.filter(
