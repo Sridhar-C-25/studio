@@ -90,6 +90,7 @@ export default function Page() {
         </div>
       </div>
       <div className="container px-4 md:px-6">
+        
         <BlogLayout/>
       </div>
     </section>

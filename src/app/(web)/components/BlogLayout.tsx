@@ -7,49 +7,9 @@ import {
   YouTubeFilledIcon,
 } from "./icon";
 import Link from "next/link";
-import { getPosts } from "@/lib/data";
-
-const popularPosts = [
-  {
-    id: 1,
-    title:
-      "Tailwind css RESPONSIVE NAVBAR How to make a responsive navbar with tailwind css",
-    image: "/blog/popular1.jpg",
-    date: "12/4/2022",
-    likes: "2,304 Likes",
-  },
-  {
-    id: 2,
-    title:
-      "Responsive Navbar With tailwind css How to make a responsive navbar with tailwind css",
-    image: "/blog/popular2.jpg",
-    date: "12/11/2021",
-    likes: "1,755 Likes",
-  },
-  {
-    id: 3,
-    title: "Responsive Sidebar with React js and tailwind css",
-    image: "/blog/popular3.jpg",
-    date: "3/9/2022",
-    likes: "2,179 Likes",
-  },
-  {
-    id: 4,
-    title:
-      "Responsive Navbar With React & tailwind css How to make a responsive navbar with react js and tailwind",
-    image: "/blog/popular4.jpg",
-    date: "12/23/2021",
-    likes: "1,808 Likes",
-  },
-  {
-    id: 5,
-    title:
-      "Responsive Sidebar With tailwind css How to make a responsive sidebar with tailwind css",
-    image: "/blog/popular5.jpg",
-    date: "1/5/2022",
-    likes: "790 Likes",
-  },
-];
+import { getCategories, getPosts } from "@/lib/data";
+import { Category } from "@/types";
+import Image from "next/image";
 
 const categories = [
   { name: "React", count: 12 },
@@ -70,10 +30,23 @@ const categories = [
 ];
 
 export default async function BlogLayout() {
-  const recentPosts = await getPosts();
-  const publishedPosts = recentPosts.filter(
+  const allPosts = await getPosts();
+  const publishedPosts = allPosts.filter(
     (post) => post.status === "Published"
   );
+
+  const popularPosts = publishedPosts.slice(0, 5);
+  const categories: Category[] = await getCategories();
+
+  const categoriesWithCount = categories.map(category => {
+    const postCount = allPosts.filter(post => post.category?.some(cat => cat.id === category.id)).length;
+    return {
+      ...category,
+      postCount
+    }
+  });
+
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -91,11 +64,13 @@ export default async function BlogLayout() {
                 className="overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-gray-500 dark:text-gray-400 text-sm">
-                      Image Placeholder
-                    </div>
-                  </div>
+                   <Image
+                      src="https://placehold.co/600x400.png"
+                      alt={post.title}
+                      layout="fill"
+                      objectFit="cover"
+                      data-ai-hint="blog abstract"
+                    />
                 </div>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -105,7 +80,7 @@ export default async function BlogLayout() {
                       </Badge>
                     ))}
                     <span className="text-xs text-muted-foreground">
-                      {new Date(post.createdAt).toLocaleDateString()}
+                      {new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
                     </span>
                   </div>
                   <h3 className="font-semibold text-sm line-clamp-2 mb-2">
@@ -210,24 +185,28 @@ export default async function BlogLayout() {
             <CardContent className="space-y-4">
               {popularPosts.map((post, index) => (
                 <div key={post.id} className="flex gap-3">
-                  <div className="w-16 h-12 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded flex items-center justify-center">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                   <div className="w-16 h-12 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded flex items-center justify-center relative overflow-hidden">
+                    <Image
+                      src="https://placehold.co/100x100.png"
+                      alt={post.title}
+                      layout="fill"
+                      objectFit="cover"
+                       data-ai-hint="tech abstract"
+                    />
+                     <span className="absolute bottom-1 right-1 text-xs text-white bg-black/50 px-1 rounded">
                       {index + 1}
                     </span>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-medium line-clamp-2 mb-1">
-                      {post.title}
+                    <h4 className="text-sm font-medium line-clamp-2 mb-1 hover:text-primary">
+                      <Link href={`/blogs/${post.id}`}>{post.title}</Link>
                     </h4>
-                    <p className="text-xs text-muted-foreground">{post.date}</p>
-                    <p className="text-xs text-green-600 font-medium">
-                      {post.likes}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   </div>
                 </div>
               ))}
               <div className="flex justify-between pt-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" disabled>
                   ←
                 </Button>
                 <Button variant="outline" size="sm">
@@ -262,7 +241,7 @@ export default async function BlogLayout() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {categories.map((category) => (
+                {categoriesWithCount.map((category) => (
                   <div
                     key={category.name}
                     className="flex justify-between items-center py-1"
@@ -271,7 +250,7 @@ export default async function BlogLayout() {
                       {category.name}
                     </span>
                     <Badge variant="secondary" className="text-xs">
-                      {category.count}
+                      {category.postCount}
                     </Badge>
                   </div>
                 ))}
