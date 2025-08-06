@@ -5,16 +5,17 @@ import {
   GitHubFilledIcon,
   InstagramFilledIcon,
 } from "../components/icon";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact Us | Code A Program",
   description:
-    "Code A Program is a blog where we post blogs related to React js, Tailwind CSS, Next js, React js, Html, Css, Javascript and more. If you have any queries, please do not hesitate to contact me.",
-  keywords: ["Contact", "Code A Program Contact", "coding blogs"],
+    "Get in touch with Code A Program. We welcome your questions, feedback, and collaboration inquiries. Contact us via email or connect on social media.",
+  keywords: ["Contact", "Code A Program Contact", "coding blogs", "web development contact"],
   openGraph: {
     title: "Contact Us | Code A Program",
     description:
-      "Code A Program is a blog where we post blogs related to React js, Tailwind CSS, Next js, React js, Html, Css, Javascript and more. If you have any queries, please do not hesitate to contact me.",
+      "Get in touch with Code A Program. We welcome your questions, feedback, and collaboration inquiries. Contact us via email or connect on social media.",
     url: "https://codeaprogram.com/contact",
     siteName: "Code A Program",
   },
@@ -22,41 +23,29 @@ export const metadata: Metadata = {
 
 export default function Contact() {
   return (
-    <section className="py-10 px-4 pb-20">
-      <div className="container mx-auto px-4 space-y-4 max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="col-span-2">
-          <h2 className="text-4xl font-bold">Contact Us</h2>
-          <br />
-          <p className="text-gray-300">
-            We value your questions and feedback regarding our content. Please
-            get in touch with us directly at{" "}
-            <a
-              href="mailto:codeaprogram@gmail.com"
-              className="text-cyan-500 underline"
-            >
-              codeaprogram@gmail.com
-            </a>{" "}
-            for any inquiries or suggestions.
-          </p>
-          <br />
-          <p className="text-gray-300">
-            For freelance work, product feedback, or community contributions,
-            just send a message using the form below or via email. I usually
-            respond within 24 hours.
-          </p>
-        </div>
+    <section className="max-w-screen-lg mx-auto py-16 px-5 md:min-h-[calc(100vh-18rem)]">
+      <div className="text-center space-y-6">
+        <h1 className="text-4xl md:text-5xl font-bold">Get In Touch</h1>
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          Have a question, feedback, or a project proposal? I&apos;d love to hear from you. The best way to reach me is by email. I typically respond within 24 hours.
+        </p>
+        <a
+          href="mailto:codeaprogram@gmail.com"
+          className="inline-block bg-primary text-primary-foreground text-lg font-semibold px-8 py-4 rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          codeaprogram@gmail.com
+        </a>
       </div>
-      <div></div>
+      
       {/* Connect Section */}
-      <div className="mt-10 space-y-6">
-        <h2 className="text-2xl font-bold text-center">Connect With Us</h2>
+      <div className="mt-20 space-y-6">
+        <h2 className="text-2xl font-bold text-center">Connect With Us on Social Media</h2>
         <p className="text-md text-muted-foreground text-center max-w-2xl mx-auto">
-          Join our community and stay updated with the latest tutorials,
-          projects, and web development insights.
+          Join our growing community and stay updated with the latest tutorials, projects, and web development insights.
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">
-          <a
+          <Link
             href="https://www.youtube.com/@codeaprogram"
             target="_blank"
             rel="noopener noreferrer"
@@ -64,8 +53,8 @@ export default function Contact() {
           >
             <YouTubeFilledIcon />
             Watch Tutorials on YouTube
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://github.com/sridhar-c-25"
             target="_blank"
             rel="noopener noreferrer"
@@ -73,8 +62,8 @@ export default function Contact() {
           >
             <GitHubFilledIcon />
             View Projects on GitHub
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://www.instagram.com/codeaprogram/"
             target="_blank"
             rel="noopener noreferrer"
@@ -82,7 +71,7 @@ export default function Contact() {
           >
             <InstagramFilledIcon />
             Follow Us on Instagram
-          </a>
+          </Link>
         </div>
       </div>
     </section>
