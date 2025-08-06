@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { getCategories, getPosts } from "@/lib/data";
 import { Category } from "@/types";
 import Image from "next/image";
+import { BlogPostCard } from "./blog-post-card";
 
 export default async function BlogLayout() {
   const allPosts = await getPosts();
@@ -42,44 +44,7 @@ export default async function BlogLayout() {
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {publishedPosts.map((post) => (
-              <Card
-                key={post.id}
-                className="overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                   <Image
-                      src="https://placehold.co/600x400.png"
-                      alt={post.title}
-                      layout="fill"
-                      objectFit="cover"
-                      data-ai-hint="blog abstract"
-                    />
-                </div>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    {post.category.map((cat) => (
-                      <Badge key={cat.id} variant="secondary" className="text-xs">
-                        {cat.name}
-                      </Badge>
-                    ))}
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-sm line-clamp-2 mb-2">
-                    {post.title}
-                  </h3>
-                   <Link href={`/blogs/${post.id}`}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs p-0 h-auto"
-                    >
-                      Read More →
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+              <BlogPostCard key={post.id} post={post} />
             ))}
           </div>
 
