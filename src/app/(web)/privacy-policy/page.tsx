@@ -4,28 +4,17 @@ import Link from "next/link";
 export const metadata = {
   title: "Privacy Policy | Code A Program - Web Development Blog & Tutorials",
   description:
-    "Learn web development with Code A Program. Expert tutorials on Next.js, React.js, Vue.js, Tailwind CSS, TypeScript, and modern web technologies. Free source code and video tutorials.",
+    "Learn about the privacy policy of Code A Program. We are committed to protecting your personal information and your right to privacy.",
   keywords: [
-    "web development",
-    "Next.js tutorials",
-    "React.js tutorials",
-    "Vue.js tutorials",
-    "Tailwind CSS",
-    "TypeScript",
-    "JavaScript",
-    "Node.js",
-    "Express.js",
-    "web development blog",
-    "coding tutorials",
-    "frontend development",
-    "backend development",
-    "Code A Program Privacy Policy",
+    "privacy policy",
+    "data protection",
+    "Code A Program privacy",
     "@codeaprogram",
   ],
   openGraph: {
     title: "Privacy Policy | Code A Program - Web Development Blog & Tutorials",
     description:
-      "Learn web development with Code A Program. Expert tutorials on Next.js, React.js, Vue.js, Tailwind CSS, TypeScript, and modern web technologies. Free source code and video tutorials.",
+      "Learn about the privacy policy of Code A Program. We are committed to protecting your personal information and your right to privacy.",
     url: "https://codeaprogram.com/privacy-policy",
     siteName: "Code A Program",
     type: "website",
@@ -34,42 +23,74 @@ export const metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <section className="max-w-screen-xl md:min-h-[calc(100vh-18rem)] mx-auto py-16 px-5 grid grid-cols-1 md:grid-cols-3 gap-x-4">
-      <div className="flex flex-col gap-4 col-span-2">
-        <h2 className="text-4xl font-bold">Privacy Policy</h2>
-        <p className="text-md text-muted-foreground">
-          At Code A Program, we value the privacy of our visitors. This Privacy
-          Policy explains how we collect, use, and safeguard your information
-          when you visit our website{" "}
-          <Link
-            href="https://codeaprogram.tech"
-            className="text-cyan-500 hover:text-cyan-500/80 transition-colors"
-          >
-            (https://codeaprogram.tech)
-          </Link>
-          . By using our website, you agree to the terms of this Privacy Policy.
+    <section className="max-w-screen-md mx-auto py-16 px-5 space-y-8">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold">Privacy Policy</h1>
+        <p className="text-muted-foreground mt-2">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+
+      <div className="prose prose-lg dark:prose-invert max-w-full">
+        <p>
+          At Code A Program, accessible from{" "}
+          <Link href="/" className="text-primary hover:underline">codeaprogram.tech</Link>, 
+          one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Code A Program and how we use it.
         </p>
-        <h3 className="text-2xl font-bold">Information We Collect</h3>
-        <p className="text-md text-muted-foreground">
-          When you visit our website, we may collect the following information:
+
+        <h2 className="text-2xl font-bold">Information We Collect</h2>
+        <p>
+          The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
         </p>
-        <ul className="list-disc list-inside text-md text-muted-foreground space-y-3">
-          <li>
-            <span className="font-bold">Personal Information:</span> We may
-            collect your name, email address, and other contact information if
-            you provide it to us.
-          </li>
-          <li>
-            <span className="font-bold">Usage Information:</span> We may collect
-            information about how you use our website, such as the pages you
-            visit, the links you click, and the actions you take.
-          </li>
-          <li>
-            <span className="font-bold">Technical Information:</span> We may
-            collect information about your device, such as your IP address,
-            browser type, and operating system.
-          </li>
+        <p>
+          If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.
+        </p>
+
+        <h2 className="text-2xl font-bold">How We Use Your Information</h2>
+        <p>We use the information we collect in various ways, including to:</p>
+        <ul>
+          <li>Provide, operate, and maintain our website</li>
+          <li>Improve, personalize, and expand our website</li>
+          <li>Understand and analyze how you use our website</li>
+          <li>Develop new products, services, features, and functionality</li>
+          <li>Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes</li>
+          <li>Send you emails</li>
+          <li>Find and prevent fraud</li>
         </ul>
+
+        <h2 className="text-2xl font-bold">Log Files and Cookies</h2>
+        <p>
+          Code A Program follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.
+        </p>
+        <p>
+          Like any other website, Code A Program uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+        </p>
+
+        <h2 className="text-2xl font-bold">Third-Party Privacy Policies</h2>
+        <p>
+          Code A Program's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+        </p>
+
+        <h2 className="text-2xl font-bold">Your Privacy Rights</h2>
+        <p>
+          Under data protection laws like CCPA and GDPR, you have rights including the right to access, update, or delete the information we have on you. If you wish to exercise any of these rights, please contact us.
+        </p>
+        
+        <h2 className="text-2xl font-bold">Children's Information</h2>
+        <p>
+            Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity. Code A Program does not knowingly collect any Personal Identifiable Information from children under the age of 13.
+        </p>
+        
+        <h2 className="text-2xl font-bold">Changes to This Privacy Policy</h2>
+        <p>
+            We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.
+        </p>
+
+        <h2 className="text-2xl font-bold">Contact Us</h2>
+        <p>
+          If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at{" "}
+          <a href="mailto:codeaprogram@gmail.com" className="text-primary hover:underline">
+            codeaprogram@gmail.com
+          </a>.
+        </p>
       </div>
     </section>
   );
