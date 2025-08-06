@@ -13,7 +13,7 @@ interface Video {
 async function fetchVideos(): Promise<Video[]> {
   try {
     const res = await fetch(
-      `/api/youtube`,
+     process.env.NEXT_PUBLIC_BASE_URL +`/api/youtube`,
       {
         cache: "no-store",
       }
