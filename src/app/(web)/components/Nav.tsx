@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ThemeToggleButton } from "@/components/theme-toggle";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,44 +64,11 @@ export default function Nav() {
           </Link>
         </nav>
         <div className="hidden md:flex gap-4 items-center">
-          {/* <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-full"
-          >
-            {mounted && theme === "dark" ? (
-              <Sun className="size-[18px]" />
-            ) : (
-              <Moon className="size-[18px]" />
-            )}
-            <span className="sr-only">Toggle theme</span>
-          </Button> */}
-          {/* <Link
-            href="#"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Log in
-          </Link> */}
-          {/* <Button className="rounded-full">
-            Get Started
-            <ChevronRight className="ml-1 size-4" />
-          </Button> */}
+          <ThemeToggleButton />
         </div>
         <div className="flex items-center gap-4 md:hidden">
+          <ThemeToggleButton />
           {/* <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-full"
-          >
-            {mounted && theme === "dark" ? (
-              <Sun className="size-[18px]" />
-            ) : (
-              <Moon className="size-[18px]" />
-            )}
-          </Button>
-          <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
