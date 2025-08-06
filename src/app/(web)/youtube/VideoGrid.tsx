@@ -13,9 +13,8 @@ interface Video {
 async function fetchVideos(): Promise<Video[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/youtube`,
+      `/api/youtube`,
       {
-        // If deployed, use absolute URL; otherwise, fallback to relative
         cache: "no-store",
       }
     );
