@@ -94,8 +94,8 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
       if (data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0) {
         const imageFile = data.banner_image as File;
         const arrayBuffer = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const uploadedFile = await uploadFile(buffer, imageFile.name);
+        const base64 = Buffer.from(arrayBuffer).toString('base64');
+        const uploadedFile = await uploadFile(`data:${imageFile.type};base64,${base64}`, imageFile.name);
         const fileUrl = await getFilePreview(uploadedFile.$id);
         bannerImageUrl = fileUrl.toString();
       }
@@ -457,5 +457,3 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     </Form>
   );
 }
-
-    
