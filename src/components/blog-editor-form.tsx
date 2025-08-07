@@ -37,7 +37,7 @@ import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
 import { Textarea } from './ui/textarea';
 import { TiptapEditor } from "./tiptap-editor";
-import { createPost, updatePost, uploadFile } from "@/lib/data";
+import { createPost, updatePost, uploadFile, getFilePreview } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -72,7 +72,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...initialData,
-      banner_image: initialData?.banner_image || undefined,
+      banner_image: undefined,
     } || {
       title: "",
       content: "",
@@ -89,14 +89,15 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   const onSubmit = async (data: BlogEditorFormValues, status: 'Draft' | 'Published') => {
     setLoading(true);
     try {
-      let bannerImageId: string | undefined = initialData?.banner_image ? new URL(initialData.banner_image).pathname.split('/').pop() : undefined;
+      let bannerImageUrl: string | undefined = initialData?.banner_image;
 
       if (data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0) {
         const imageFile = data.banner_image as File;
         const arrayBuffer = await imageFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const uploadedFile = await uploadFile(buffer, imageFile.name);
-        bannerImageId = uploadedFile.$id;
+        const fileUrl = await getFilePreview(uploadedFile.$id);
+        bannerImageUrl = fileUrl.toString();
       }
       
       const postData = { 
@@ -105,7 +106,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
         category: data.category,
         adsenseTag: data.adsenseTag,
         status, 
-        banner_image: bannerImageId,
+        banner_image: bannerImageUrl,
       };
 
       if (initialData) {

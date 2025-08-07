@@ -122,7 +122,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category' | 'banner_image'> & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category' > & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
@@ -164,17 +164,16 @@ function mapDocumentToCategory(doc: Models.Document): Category {
 }
 
 async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
-    const categories: Category[] = [];
+    let categories: Category[] = [];
+
     if (doc.category && Array.isArray(doc.category)) {
-        for (const catDoc of doc.category) {
-            // Assuming category relation stores the full document or at least id and name
-            if (catDoc.$id && catDoc.name) {
-                categories.push({
-                    id: catDoc.$id,
-                    name: catDoc.name
-                });
-            }
-        }
+        categories = await Promise.all(
+            doc.category.map(async (catId: string) => {
+                const category = await getCategory(catId);
+                return category;
+            })
+        );
+        categories = categories.filter((cat): cat is Category => cat !== null);
     }
 
     const post: BlogPost = {
@@ -184,11 +183,9 @@ async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
         category: categories,
         createdAt: doc.$createdAt,
         status: doc.status,
-        adsenseTag: doc.adsenseTag
+        adsenseTag: doc.adsenseTag,
+        banner_image: doc.banner_image,
     };
 
-    if (doc.banner_image) {
-        post.banner_image = (await getFilePreview(doc.banner_image)).toString();
-    }
     return post;
 }
