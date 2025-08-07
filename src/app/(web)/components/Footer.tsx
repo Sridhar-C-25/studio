@@ -26,7 +26,7 @@ export default function Footer() {
             technologies...{" "}
             <Link
               href="/about"
-              className="text-cyan-500 hover:text-cyan-500/80 transition-colors"
+              className="text-primary underline hover:text-cyan-500/80 transition-colors"
             >
               About Us
             </Link>

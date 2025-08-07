@@ -46,7 +46,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <div className="flex items-center justify-between p-3 bg-red-600 text-white rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-red-600 text-white rounded-lg border">
               <div className="flex items-center gap-3">
                 <YouTubeFilledIcon className="w-8 h-8" />
                 <span className="text-sm">YouTube</span>
@@ -59,7 +59,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg border">
               <div className="flex items-center gap-3">
                 <InstagramFilledIcon className="w-8 h-8" />
                 <span className="text-sm">Instagram</span>
@@ -73,7 +73,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <div className="flex items-center justify-between p-3 bg-gray-800 text-white rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-800 text-white rounded-lg border">
               <div className="flex items-center gap-3">
                 <GitHubFilledIcon className="w-8 h-8" />
                 <span className="text-sm">GitHub</span>
