@@ -3,12 +3,12 @@
 
 import { Client, Databases, ID, Models, Query, Storage, AppwriteException } from 'node-appwrite';
 import type { BlogPost, Category } from '@/types';
-import { InputFile } from 'node-appwrite';
+import { InputFile } from 'node-appwrite/file';
 
 const getClient = () => {
     return new Client()
         .setEndpoint(process.env.APPWRITE_ENDPOINT!)
-        .setProject(process.env.APPWRITE_PROJECT_ID!)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
         .setKey(process.env.APPWRITE_API_KEY!);
 }
 
@@ -33,6 +33,7 @@ export async function uploadFile(base64: string, fileName: string): Promise<Mode
         InputFile.fromBuffer(buffer, fileName)
     );
 }
+
 
 export async function getFilePreview(fileId: string): Promise<URL> {
     const storage = getStorage();
@@ -106,7 +107,7 @@ export async function getPosts(): Promise<BlogPost[]> {
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
             process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
         ),
-        getDatabases().listDocuments(
+        databases.listDocuments(
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
             process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
         )
