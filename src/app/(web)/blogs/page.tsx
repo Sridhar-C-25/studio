@@ -1,3 +1,4 @@
+
 import { getPosts } from "@/lib/data";
 import { BlogPostCard } from "../components/blog-post-card";
 

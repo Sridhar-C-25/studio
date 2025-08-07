@@ -25,7 +25,7 @@ export async function uploadFile(file: Buffer, fileName: string): Promise<Models
     const storage = getStorage();
     const fileId = ID.unique();
     return await storage.createFile(
-        process.env.APPWRITE_STORAGE_BUCKET_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
         fileId,
         // @ts-ignore
         {
@@ -38,15 +38,15 @@ export async function uploadFile(file: Buffer, fileName: string): Promise<Models
 
 export async function getFilePreview(fileId: string): Promise<URL> {
     const storage = getStorage();
-    return storage.getFilePreview(process.env.APPWRITE_STORAGE_BUCKET_ID!, fileId);
+    return storage.getFilePreview(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!, fileId);
 }
 
 
 export async function getCategories(): Promise<Category[]> {
   const databases = getDatabases();
   const response = await databases.listDocuments(
-    process.env.APPWRITE_DATABASE_ID!,
-    process.env.APPWRITE_CATEGORIES_COLLECTION_ID!
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
   );
   return response.documents.map(doc => mapDocumentToCategory(doc));
 }
@@ -55,8 +55,8 @@ export async function getCategory(id: string): Promise<Category | null> {
     try {
         const databases = getDatabases();
         const doc = await databases.getDocument(
-            process.env.APPWRITE_DATABASE_ID!,
-            process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
             id
         );
         return mapDocumentToCategory(doc);
@@ -69,8 +69,8 @@ export async function getCategory(id: string): Promise<Category | null> {
 export async function createCategory(name: string): Promise<Category> {
   const databases = getDatabases();
   const response = await databases.createDocument(
-    process.env.APPWRITE_DATABASE_ID!,
-    process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
     ID.unique(),
     { name }
   );
@@ -80,8 +80,8 @@ export async function createCategory(name: string): Promise<Category> {
 export async function updateCategory(id: string, name: string): Promise<Category> {
     const databases = getDatabases();
     const response = await databases.updateDocument(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
         id,
         { name }
     );
@@ -91,31 +91,29 @@ export async function updateCategory(id: string, name: string): Promise<Category
 export async function deleteCategory(id: string): Promise<void> {
     const databases = getDatabases();
     await databases.deleteDocument(
-         process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_CATEGORIES_COLLECTION_ID!,
+         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
         id
     );
 }
 
 
-export async function getPosts(categoryId?: string): Promise<BlogPost[]> {
+export async function getPosts(): Promise<BlogPost[]> {
     const databases = getDatabases();
-    const queries = categoryId ? [Query.equal('category', categoryId)] : [];
     const response = await databases.listDocuments(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_POSTS_COLLECTION_ID!,
-        queries,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
     );
     const posts = await Promise.all(response.documents.map(async (doc) => await mapDocumentToBlogPost(doc)));
-    return posts;
+    return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 export async function getPost(id: string): Promise<BlogPost | null> {
     try {
         const databases = getDatabases();
         const doc = await databases.getDocument(
-            process.env.APPWRITE_DATABASE_ID!,
-            process.env.APPWRITE_POSTS_COLLECTION_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
             id
         );
         return await mapDocumentToBlogPost(doc);
@@ -129,8 +127,8 @@ type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category' | 'banner_image'
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
   const response = await databases.createDocument(
-    process.env.APPWRITE_DATABASE_ID!,
-    process.env.APPWRITE_POSTS_COLLECTION_ID!,
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
     ID.unique(),
     data
   );
@@ -140,8 +138,8 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
 export async function updatePost(id: string, data: Partial<PostInput>): Promise<BlogPost> {
     const databases = getDatabases();
     const response = await databases.updateDocument(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_POSTS_COLLECTION_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         id,
         data
     );
@@ -151,8 +149,8 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
 export async function deletePost(id: string): Promise<void> {
     const databases = getDatabases();
     await databases.deleteDocument(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_POSTS_COLLECTION_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         id
     );
 }
@@ -166,15 +164,29 @@ function mapDocumentToCategory(doc: Models.Document): Category {
 }
 
 async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
+    const categories: Category[] = [];
+    if (doc.category && Array.isArray(doc.category)) {
+        for (const catDoc of doc.category) {
+            // Assuming category relation stores the full document or at least id and name
+            if (catDoc.$id && catDoc.name) {
+                categories.push({
+                    id: catDoc.$id,
+                    name: catDoc.name
+                });
+            }
+        }
+    }
+
     const post: BlogPost = {
         id: doc.$id,
         title: doc.title,
         content: doc.content,
-        category: doc.category.map(mapDocumentToCategory), // Category is now an array of documents
+        category: categories,
         createdAt: doc.$createdAt,
         status: doc.status,
         adsenseTag: doc.adsenseTag
     };
+
     if (doc.banner_image) {
         post.banner_image = (await getFilePreview(doc.banner_image)).toString();
     }

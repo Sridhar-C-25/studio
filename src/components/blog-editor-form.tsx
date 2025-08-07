@@ -70,7 +70,10 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
+    defaultValues: {
+      ...initialData,
+      banner_image: initialData?.banner_image || undefined,
+    } || {
       title: "",
       content: "",
       category: [],
@@ -88,7 +91,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     try {
       let bannerImageId: string | undefined = initialData?.banner_image ? new URL(initialData.banner_image).pathname.split('/').pop() : undefined;
 
-      if (data.banner_image && data.banner_image.size > 0) {
+      if (data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0) {
         const imageFile = data.banner_image as File;
         const arrayBuffer = await imageFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);

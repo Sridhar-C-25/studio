@@ -31,7 +31,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       </div>
       <CardContent className="p-4 flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-2">
-          {post.category.map((cat) => (
+          {post.category?.map((cat) => (
             <Badge key={cat.id} variant="secondary" className="text-xs">
               <Link href={`/blogs/category/${cat.id}`}>{cat.name}</Link>
             </Badge>
