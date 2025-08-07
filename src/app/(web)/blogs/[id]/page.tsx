@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   }
 
   const plainContent = post.content.replace(/<[^>]+>/g, '').substring(0, 160);
+  const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
 
   return {
     title: `${post.title} | Blog`,
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       url: `/blogs/${post.id}`,
       images: [
         {
-          url: "https://placehold.co/1200x630.png", // Replace with dynamic image later
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       card: "summary_large_image",
       title: post.title,
       description: plainContent,
-      images: ["https://placehold.co/1200x630.png"], // Replace with dynamic image later
+      images: [imageUrl],
     },
   };
 }
