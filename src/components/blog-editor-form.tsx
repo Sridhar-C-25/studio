@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Wand2, Check, ChevronsUpDown, X } from "lucide-react";
+import { BrainCircuit, Loader2, Wand2, Check, ChevronsUpDown, Image as ImageIcon, Upload } from "lucide-react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,7 +37,7 @@ import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
 import { Textarea } from './ui/textarea';
 import { TiptapEditor } from "./tiptap-editor";
-import { createPost, updatePost } from "@/lib/data";
+import { createPost, updatePost, uploadFile } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -43,6 +45,7 @@ const formSchema = z.object({
   content: z.string().min(100, "Content must be at least 100 characters long."),
   category: z.array(z.string()).min(1, "Please select at least one category."),
   adsenseTag: z.string().optional(),
+  banner_image: z.any().optional(),
 });
 
 type BlogEditorFormValues = z.infer<typeof formSchema>;
@@ -62,6 +65,8 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.banner_image || null);
+
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
@@ -70,6 +75,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
       content: "",
       category: [],
       adsenseTag: "",
+      banner_image: undefined,
     },
   });
   
@@ -80,7 +86,25 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   const onSubmit = async (data: BlogEditorFormValues, status: 'Draft' | 'Published') => {
     setLoading(true);
     try {
-      const postData = { ...data, status };
+      let bannerImageId: string | undefined = initialData?.banner_image ? new URL(initialData.banner_image).pathname.split('/').pop() : undefined;
+
+      if (data.banner_image && data.banner_image.size > 0) {
+        const imageFile = data.banner_image as File;
+        const arrayBuffer = await imageFile.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const uploadedFile = await uploadFile(buffer, imageFile.name);
+        bannerImageId = uploadedFile.$id;
+      }
+      
+      const postData = { 
+        title: data.title,
+        content: data.content,
+        category: data.category,
+        adsenseTag: data.adsenseTag,
+        status, 
+        banner_image: bannerImageId,
+      };
+
       if (initialData) {
         await updatePost(initialData.id, postData);
         toast({
@@ -233,6 +257,47 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                 <FormField
+                    control={form.control}
+                    name="banner_image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Banner Image</FormLabel>
+                        <FormControl>
+                           <div className="flex flex-col items-center justify-center w-full">
+                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-border border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
+                                {imagePreview ? (
+                                    <div className="relative w-full h-full">
+                                        <Image src={imagePreview} alt="Preview" layout="fill" objectFit="cover" className="rounded-lg" />
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <Upload className="w-8 h-8 mb-4 text-muted-foreground" />
+                                        <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p className="text-xs text-muted-foreground">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                    </div>
+                                )}
+                                <Input 
+                                    id="dropzone-file" 
+                                    type="file" 
+                                    className="hidden" 
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            field.onChange(file);
+                                            setImagePreview(URL.createObjectURL(file));
+                                        }
+                                    }}
+                                />
+                            </label>
+                        </div> 
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 <FormField
                   control={form.control}
                   name="category"
@@ -300,7 +365,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
                         <FormLabel>Google AdSense Tag</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="&lt;script&gt;...&lt;/script&gt;"
+                            placeholder="<script>...</script>"
                             {...field}
                             className="font-code text-xs"
                           />

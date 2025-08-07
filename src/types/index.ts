@@ -12,4 +12,5 @@ export type BlogPost = {
   createdAt: string;
   status: 'Published' | 'Draft';
   adsenseTag?: string;
+  banner_image?: string;
 };

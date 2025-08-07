@@ -136,7 +136,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
         <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
            <div className="relative w-full h-72 rounded-md overflow-hidden mb-6">
             <Image 
-              src="https://placehold.co/1200x600.png"
+              src={post.banner_image || "https://placehold.co/1200x600.png"}
               alt={post.title}
               layout="fill"
               objectFit="cover"

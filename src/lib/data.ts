@@ -1,16 +1,46 @@
 
 'use server';
 
-import { Client, Databases, ID, Models, Query } from 'node-appwrite';
+import { Client, Databases, ID, Models, Query, Storage } from 'node-appwrite';
 import type { BlogPost, Category } from '@/types';
 
-const getDatabases = () => {
-    const client = new Client()
+const getClient = () => {
+    return new Client()
         .setEndpoint(process.env.APPWRITE_ENDPOINT!)
         .setProject(process.env.APPWRITE_PROJECT_ID!)
         .setKey(process.env.APPWRITE_API_KEY!);
+}
+
+const getDatabases = () => {
+    const client = getClient();
     return new Databases(client);
 }
+
+const getStorage = () => {
+    const client = getClient();
+    return new Storage(client);
+}
+
+export async function uploadFile(file: Buffer, fileName: string): Promise<Models.File> {
+    const storage = getStorage();
+    const fileId = ID.unique();
+    return await storage.createFile(
+        process.env.APPWRITE_STORAGE_BUCKET_ID!,
+        fileId,
+        // @ts-ignore
+        {
+            read: () => file,
+            path: fileName,
+            size: file.length,
+        }
+    );
+}
+
+export async function getFilePreview(fileId: string): Promise<URL> {
+    const storage = getStorage();
+    return storage.getFilePreview(process.env.APPWRITE_STORAGE_BUCKET_ID!, fileId);
+}
+
 
 export async function getCategories(): Promise<Category[]> {
   const databases = getDatabases();
@@ -76,7 +106,8 @@ export async function getPosts(categoryId?: string): Promise<BlogPost[]> {
         process.env.APPWRITE_POSTS_COLLECTION_ID!,
         queries,
     );
-    return response.documents.map(doc => mapDocumentToBlogPost(doc));
+    const posts = await Promise.all(response.documents.map(async (doc) => await mapDocumentToBlogPost(doc)));
+    return posts;
 }
 
 export async function getPost(id: string): Promise<BlogPost | null> {
@@ -87,13 +118,13 @@ export async function getPost(id: string): Promise<BlogPost | null> {
             process.env.APPWRITE_POSTS_COLLECTION_ID!,
             id
         );
-        return mapDocumentToBlogPost(doc);
+        return await mapDocumentToBlogPost(doc);
     } catch(error) {
         return null;
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category'> & { status: 'Published' | 'Draft', category: string[] };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category' | 'banner_image'> & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const databases = getDatabases();
@@ -103,7 +134,7 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
     ID.unique(),
     data
   );
-  return mapDocumentToBlogPost(response);
+  return await mapDocumentToBlogPost(response);
 }
 
 export async function updatePost(id: string, data: Partial<PostInput>): Promise<BlogPost> {
@@ -114,7 +145,7 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
         id,
         data
     );
-    return mapDocumentToBlogPost(response);
+    return await mapDocumentToBlogPost(response);
 }
 
 export async function deletePost(id: string): Promise<void> {
@@ -134,8 +165,8 @@ function mapDocumentToCategory(doc: Models.Document): Category {
     };
 }
 
-function mapDocumentToBlogPost(doc: Models.Document): BlogPost {
-    return {
+async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
+    const post: BlogPost = {
         id: doc.$id,
         title: doc.title,
         content: doc.content,
@@ -144,4 +175,8 @@ function mapDocumentToBlogPost(doc: Models.Document): BlogPost {
         status: doc.status,
         adsenseTag: doc.adsenseTag
     };
+    if (doc.banner_image) {
+        post.banner_image = (await getFilePreview(doc.banner_image)).toString();
+    }
+    return post;
 }

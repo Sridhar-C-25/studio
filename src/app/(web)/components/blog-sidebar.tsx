@@ -94,7 +94,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
             <div key={post.id} className="flex gap-3">
                <div className="w-16 h-12 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded flex items-center justify-center relative overflow-hidden">
                 <Image
-                  src="https://placehold.co/100x100.png"
+                  src={post.banner_image || "https://placehold.co/100x100.png"}
                   alt={post.title}
                   layout="fill"
                   objectFit="cover"
