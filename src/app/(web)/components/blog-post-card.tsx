@@ -8,20 +8,23 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { BlogPost } from "@/types";
+import { getFilePreview } from '@/lib/data';
 
 interface BlogPostCardProps {
   post: BlogPost;
 }
 
-export function BlogPostCard({ post }: BlogPostCardProps) {
+
+
+export async function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <Card
       className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col"
     >
-      <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
+      <div className="relative h-64 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
           <Link href={`/blogs/${post.id}`}>
             <Image
-              src={post.banner_image || "https://placehold.co/600x400.png"}
+              src={post.banner_image?.length ? post.banner_image + '&mode=admin' : "https://placehold.co/600x400.png"}
               alt={post.title}
               layout="fill"
               objectFit="cover"

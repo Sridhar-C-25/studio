@@ -90,7 +90,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     setLoading(true);
     try {
       let bannerImageUrl: string | undefined = initialData?.banner_image;
-
+console.log(data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0)
       if (data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0) {
         const imageFile = data.banner_image as File;
         const arrayBuffer = await imageFile.arrayBuffer();
@@ -99,7 +99,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
         const fileUrl = await getFilePreview(uploadedFile.$id);
         bannerImageUrl = fileUrl.toString();
       }
-      
+
       const postData = { 
         title: data.title,
         content: data.content,
@@ -108,6 +108,8 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
         status, 
         banner_image: bannerImageUrl,
       };
+
+      console.log(postData)
 
       if (initialData) {
         await updatePost(initialData.id, postData);

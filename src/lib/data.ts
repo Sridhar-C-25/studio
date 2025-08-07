@@ -16,26 +16,27 @@ const storage = new Storage(client);
 export async function uploadFile(base64: string, fileName: string): Promise<Models.File> {
     const fileId = ID.unique();
     const buffer = Buffer.from(base64.split(',')[1], 'base64');
-    
+
     return await storage.createFile(
         process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
         fileId,
         InputFile.fromBuffer(buffer, fileName)
     );
+
 }
 
 
-export async function getFilePreview(fileId: string): Promise<URL> {
-    return storage.getFilePreview(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!, fileId);
+export async function getFilePreview(fileId: string) {
+    return `https://cloud.appwrite.io/v1/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID}/files/${fileId}/preview?project=${process.env.APPWRITE_PROJECT_ID}`;
 }
 
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await databases.listDocuments(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
-  );
-  return response.documents.map(mapDocumentToCategory);
+    const response = await databases.listDocuments(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
+    );
+    return response.documents.map(mapDocumentToCategory);
 }
 
 export async function getCategory(id: string): Promise<Category | null> {
@@ -48,20 +49,20 @@ export async function getCategory(id: string): Promise<Category | null> {
         return mapDocumentToCategory(doc);
     } catch (error) {
         if (error instanceof AppwriteException && error.code === 404) {
-          return null;
+            return null;
         }
         throw error;
     }
 }
 
 export async function createCategory(name: string): Promise<Category> {
-  const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-    ID.unique(),
-    { name }
-  );
-  return mapDocumentToCategory(response);
+    const response = await databases.createDocument(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+        ID.unique(),
+        { name }
+    );
+    return mapDocumentToCategory(response);
 }
 
 export async function updateCategory(id: string, name: string): Promise<Category> {
@@ -76,7 +77,7 @@ export async function updateCategory(id: string, name: string): Promise<Category
 
 export async function deleteCategory(id: string): Promise<void> {
     await databases.deleteDocument(
-         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
         id
     );
@@ -96,7 +97,7 @@ export async function getPosts(): Promise<BlogPost[]> {
     ]);
 
     const allCategories = categoriesResponse.documents.map(mapDocumentToCategory);
-    
+
     const posts = postsResponse.documents.map(doc => {
         return mapDocumentToBlogPost(doc, allCategories);
     });
@@ -113,7 +114,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
         );
 
         const categoryIds = postDoc.category?.map((cat: any) => typeof cat === 'string' ? cat : cat.$id) || [];
-        
+
         let categories: Category[] = [];
         if (categoryIds.length > 0) {
             const categoriesResponse = await databases.listDocuments(
@@ -125,7 +126,7 @@ export async function getPost(id: string): Promise<BlogPost | null> {
         }
 
         return mapDocumentToBlogPost(postDoc, categories);
-    } catch(error) {
+    } catch (error) {
         if (error instanceof AppwriteException && error.code === 404) {
             return null;
         }
@@ -134,20 +135,20 @@ export async function getPost(id: string): Promise<BlogPost | null> {
     }
 }
 
-type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category' > & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
+type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category'> & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
-  const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-    ID.unique(),
-    {
-      ...data,
-      category: data.category, 
-    }
-  );
-  const allCategories = await getCategories();
-  return mapDocumentToBlogPost(response, allCategories);
+    const response = await databases.createDocument(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+        ID.unique(),
+        {
+            ...data,
+            category: data.category,
+        }
+    );
+    const allCategories = await getCategories();
+    return mapDocumentToBlogPost(response, allCategories);
 }
 
 export async function updatePost(id: string, data: Partial<PostInput>): Promise<BlogPost> {
@@ -156,8 +157,8 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
         process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         id,
         {
-          ...data,
-          category: data.category,
+            ...data,
+            category: data.category,
         }
     );
     const allCategories = await getCategories();
@@ -182,7 +183,7 @@ function mapDocumentToCategory(doc: Models.Document): Category {
 
 function mapDocumentToBlogPost(doc: Models.Document, allCategories: Category[]): BlogPost {
     const categoryIds = doc.category?.map((cat: any) => typeof cat === 'string' ? cat : cat.$id) || [];
-    
+
     const relatedCategories = allCategories.filter(cat => categoryIds.includes(cat.id));
 
     return {
