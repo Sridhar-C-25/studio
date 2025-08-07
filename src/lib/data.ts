@@ -100,11 +100,36 @@ export async function deleteCategory(id: string): Promise<void> {
 
 export async function getPosts(): Promise<BlogPost[]> {
     const databases = getDatabases();
-    const response = await databases.listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
-    );
-    const posts = await Promise.all(response.documents.map(async (doc) => await mapDocumentToBlogPost(doc)));
+    const [postsResponse, categoriesResponse] = await Promise.all([
+        databases.listDocuments(
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
+        ),
+        databases.listDocuments(
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
+        )
+    ]);
+
+    const allCategories = categoriesResponse.documents.map(mapDocumentToCategory);
+    const categoryMap = new Map(allCategories.map(cat => [cat.id, cat]));
+
+    const posts = postsResponse.documents.map(doc => {
+        const categoryIds = doc.category || [];
+        const categories = categoryIds.map((id: string) => categoryMap.get(id)).filter((cat: Category | undefined): cat is Category => cat !== undefined);
+
+        return {
+            id: doc.$id,
+            title: doc.title,
+            content: doc.content,
+            category: categories,
+            createdAt: doc.$createdAt,
+            status: doc.status,
+            adsenseTag: doc.adsenseTag,
+            banner_image: doc.banner_image,
+        } as BlogPost;
+    });
+
     return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
@@ -130,7 +155,10 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
     process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
     process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
     ID.unique(),
-    data
+    {
+      ...data,
+      category: data.category, 
+    }
   );
   return await mapDocumentToBlogPost(response);
 }
@@ -141,7 +169,10 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         id,
-        data
+        {
+          ...data,
+          category: data.category,
+        }
     );
     return await mapDocumentToBlogPost(response);
 }
@@ -164,19 +195,12 @@ function mapDocumentToCategory(doc: Models.Document): Category {
 }
 
 async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
-    let categories: Category[] = [];
+    const categoryIds = doc.category || [];
+    const categories = (await Promise.all(
+        categoryIds.map((id: string) => getCategory(id))
+    )).filter((cat): cat is Category => cat !== null);
 
-    if (doc.category && Array.isArray(doc.category)) {
-        categories = await Promise.all(
-            doc.category.map(async (catId: string) => {
-                const category = await getCategory(catId);
-                return category;
-            })
-        );
-        categories = categories.filter((cat): cat is Category => cat !== null);
-    }
-
-    const post: BlogPost = {
+    return {
         id: doc.$id,
         title: doc.title,
         content: doc.content,
@@ -186,6 +210,4 @@ async function mapDocumentToBlogPost(doc: Models.Document): Promise<BlogPost> {
         adsenseTag: doc.adsenseTag,
         banner_image: doc.banner_image,
     };
-
-    return post;
 }

@@ -198,7 +198,7 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
   }
 
   const handleCategorySelect = (categoryId: string) => {
-    const currentCategories = form.getValues('category');
+    const currentCategories = form.getValues('category') || [];
     if (currentCategories.includes(categoryId)) {
       form.setValue('category', currentCategories.filter(id => id !== categoryId));
     } else {
@@ -457,3 +457,5 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
     </Form>
   );
 }
+
+    
