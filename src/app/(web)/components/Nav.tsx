@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { Menu, X, ChevronRight } from "lucide-react";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,9 +41,6 @@ export default function Nav() {
             height={40}
             className="rounded-full border"
           />
-          {/* <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-            C
-          </div> */}
           <span>Code A Program</span>
         </Link>
         <nav className="hidden md:flex gap-8">
@@ -73,7 +71,7 @@ export default function Nav() {
         </div>
         <div className="flex items-center gap-4 md:hidden">
           <ThemeToggleButton />
-          {/* <Button
+          <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -84,7 +82,7 @@ export default function Nav() {
               <Menu className="size-5" />
             )}
             <span className="sr-only">Toggle menu</span>
-          </Button> */}
+          </Button>
         </div>
       </div>
       {/* Mobile menu */}
@@ -92,32 +90,25 @@ export default function Nav() {
         <div className="md:hidden absolute top-16 inset-x-0 bg-background/95 backdrop-blur-lg border-b">
           <div className="container py-4 flex flex-col gap-4">
             <Link
-              href="#features"
+              href="/"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
+              Home
             </Link>
             <Link
-              href="#testimonials"
+              href="/youtube"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Testimonials
+              Videos
             </Link>
             <Link
-              href="#pricing"
+              href="/contact"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Pricing
-            </Link>
-            <Link
-              href="#faq"
-              className="py-2 text-sm font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              FAQ
+              Contact Us
             </Link>
             <div className="flex flex-col gap-2 pt-2 border-t">
               <Link
@@ -127,10 +118,6 @@ export default function Nav() {
               >
                 Sign In
               </Link>
-              {/* <Button className="rounded-full">
-                Get Started
-                <ChevronRight className="ml-1 size-4" />
-              </Button> */}
             </div>
           </div>
         </div>
