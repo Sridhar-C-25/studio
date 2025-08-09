@@ -39,11 +39,12 @@ export default function Nav() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+
   
   const handleLogout = async () => {
     await logout();
-    router.push("/");
-    router.refresh();
+    window.location.reload();
   };
 
   const renderAuthSection = () => {
@@ -58,24 +59,17 @@ export default function Nav() {
     if (user) {
       return (
         <DropdownMenu>
+        {/* {JSON.stringify(user)} */}
           <DropdownMenuTrigger asChild>
             <Avatar className="h-9 w-9 cursor-pointer">
-              <AvatarImage src={`https://cloud.appwrite.io/v1/avatars/initials?name=${user.name}&width=36&height=36`} alt={user.name} />
-              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={`https://cloud.appwrite.io/v1/avatars/initials?name=${user?.email}&width=36&height=36`} alt={user.name} />
+              <AvatarFallback>{user?.email.charAt(0)}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+            <DropdownMenuLabel>{user?.email?.length >= 25 ? user?.email?.slice(0,25) + "..." : user?.email}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-             <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-              <LayoutGrid className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <UserIcon className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
@@ -196,9 +190,7 @@ export default function Nav() {
                 </div>
               ) : user ? (
                  <div className="flex flex-col gap-2">
-                   <Link href="/dashboard">
-                    <Button variant="outline" className="w-full justify-start">Dashboard</Button>
-                   </Link>
+                   <p>{user?.email?.length >= 30 ? user?.email?.slice(0,30) + "..." : user?.email}</p>
                    <Button variant="ghost" className="w-full justify-start text-destructive" onClick={handleLogout}>Log Out</Button>
                 </div>
               ) : (
