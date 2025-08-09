@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -61,7 +62,7 @@ export default function SignInPage() {
             description: "Welcome back!",
           });
           router.push("/dashboard");
-          router.refresh(); 
+          window.location.reload(); 
         } else {
           setError("Invalid email or password. Please try again.");
         }
