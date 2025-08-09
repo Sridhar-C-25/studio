@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -11,7 +10,9 @@ import { Button } from "@/components/ui/button";
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying");
+  const [status, setStatus] = useState<"verifying" | "success" | "error">(
+    "verifying"
+  );
   const [message, setMessage] = useState("Verifying your email address...");
   const [isPending, startTransition] = useTransition();
 
@@ -27,19 +28,24 @@ export default function VerifyEmailPage() {
 
     startTransition(async () => {
       const result = await updateEmailVerificationStatus(userId, secret);
+      console.log(result, "result-----------", secret, userId);
       if (result.success) {
         setStatus("success");
-        setMessage("Your email has been successfully verified! You can now access all features.");
+        setMessage(
+          "Your email has been successfully verified! You can now access all features."
+        );
       } else {
         setStatus("error");
-        setMessage("Failed to verify your email. The link may have expired or is invalid.");
+        setMessage(
+          "Failed to verify your email. The link may have expired or is invalid."
+        );
       }
     });
   }, [userId, secret]);
-  
+
   const handleRedirect = () => {
-    router.push('/dashboard');
-  }
+    router.push("/dashboard");
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
@@ -67,7 +73,11 @@ export default function VerifyEmailPage() {
             <div className="flex flex-col items-center gap-4">
               <XCircle className="h-12 w-12 text-destructive" />
               <p className="text-destructive">{message}</p>
-                 <Button onClick={() => router.push('/sign-in')} className="mt-4" variant="outline">
+              <Button
+                onClick={() => router.push("/sign-in")}
+                className="mt-4"
+                variant="outline"
+              >
                 Back to Sign In
               </Button>
             </div>

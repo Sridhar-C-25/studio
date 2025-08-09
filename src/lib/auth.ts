@@ -1,4 +1,3 @@
-
 "use server";
 
 import { cookies } from "next/headers";
@@ -11,18 +10,18 @@ export async function login(email: string, password: string) {
     const { account } = await getAdminClient();
     const session = await account.createEmailPasswordSession(email, password);
 
-   (await cookies()).set("appwrite-session", session.secret, {
+    (await cookies()).set("appwrite-session", session.secret, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
       expires: new Date(session.expire),
     });
 
     return { success: true };
-  } catch(e) {
+  } catch (e) {
     console.error(e);
-    return { success: false }
+    return { success: false };
   }
 }
 
@@ -53,28 +52,29 @@ export async function signUp(email: string, password: string, name: string) {
     await users.create(ID.unique(), email, null, password, name);
 
     // Create a session for the new user to send the verification email
-    const session = await adminAccount.createEmailPasswordSession(email, password);
+    const session = await adminAccount.createEmailPasswordSession(
+      email,
+      password
+    );
 
     // Create a new client with the user's session to send the verification email
     const userClient = new Client()
       .setEndpoint(process.env.APPWRITE_ENDPOINT!)
       .setProject(process.env.APPWRITE_PROJECT_ID!)
       .setSession(session.secret);
-    
-    const userAccount = new Account(userClient);
-    
-    // Send verification email using the new user's session
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
-    await userAccount.createVerification(url);
 
+    const userAccount = new Account(userClient);
     // Now, set the session cookie for the browser
     (await cookies()).set("appwrite-session", session.secret, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
       expires: new Date(session.expire),
     });
+    // Send verification email using the new user's session
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
+    await userAccount.createVerification(url);
 
     return { success: true };
   } catch (error) {
@@ -83,14 +83,20 @@ export async function signUp(email: string, password: string, name: string) {
   }
 }
 
-
-export async function updateEmailVerificationStatus(userId: string, secret: string) {
-    try {
-        const { account } = await getAdminClient();
-        await account.updateVerification(userId, secret);
-        return { success: true }
-    } catch(e) {
-        console.error(e)
-        return { success: false }
-    }
+export async function updateEmailVerificationStatus(
+  userId: string,
+  secret: string
+) {
+  try {
+    // Create a new client with the user's session to send the verification email
+    const userClient = new Client()
+      .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+      .setProject(process.env.APPWRITE_PROJECT_ID!);
+    const userAccount = new Account(userClient);
+    await userAccount.updateVerification(userId, secret);
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { success: false };
+  }
 }
