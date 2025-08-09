@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState, useTransition } from "react";
+import type { Models } from "node-appwrite";
 
 import {
   Card,
@@ -26,9 +27,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { login } from "@/lib/authActions";
+import { login, getCurrentUser } from "@/lib/auth";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useAuth } from "@/context/auth-context";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -40,6 +42,7 @@ type SignInFormValues = z.infer<typeof formSchema>;
 export default function SignInPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const { setUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -57,12 +60,13 @@ export default function SignInPage() {
       try {
         const result = await login(values.email, values.password);
         if (result.success) {
+          const user = await getCurrentUser();
+          setUser(user as Models.User<Models.Preferences> | null);
           toast({
             title: "Login Successful",
             description: "Welcome back!",
           });
           router.push("/dashboard");
-          window.location.reload(); 
         } else {
           setError("Invalid email or password. Please try again.");
         }

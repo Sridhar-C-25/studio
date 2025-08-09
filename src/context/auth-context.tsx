@@ -1,18 +1,20 @@
 
 "use client";
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { getCurrentUser } from '@/lib/auth';
 import type { Models } from 'node-appwrite';
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
   loading: boolean;
+  setUser: Dispatch<SetStateAction<Models.User<Models.Preferences> | null>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  setUser: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, setUser }}>
       {children}
     </AuthContext.Provider>
   );
