@@ -1,6 +1,6 @@
 'use server';
 
-import { Client, Databases, ID, Models, Query, Storage, AppwriteException } from 'node-appwrite';
+import { Client,Account, Databases, ID, Models, Query, Storage, AppwriteException } from 'node-appwrite';
 import type { BlogPost, Category } from '@/types';
 import { InputFile } from 'node-appwrite/file';
 
@@ -8,6 +8,7 @@ const client = new Client()
     .setEndpoint(process.env.APPWRITE_ENDPOINT!)
     .setProject(process.env.APPWRITE_PROJECT_ID!)
     .setKey(process.env.APPWRITE_API_KEY!);
+const account = new Account(client);
 
 const databases = new Databases(client);
 const storage = new Storage(client);

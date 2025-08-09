@@ -1,8 +1,10 @@
+
 "use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,6 +67,9 @@ export default function Nav() {
         </nav>
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
+          <Link href="/dashboard">
+            <Button variant="outline">Sign In</Button>
+          </Link>
         </div>
         <div className="flex items-center gap-4 md:hidden">
           <ThemeToggleButton />
@@ -116,11 +121,11 @@ export default function Nav() {
             </Link>
             <div className="flex flex-col gap-2 pt-2 border-t">
               <Link
-                href="#"
+                href="/dashboard"
                 className="py-2 text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Log in
+                Sign In
               </Link>
               {/* <Button className="rounded-full">
                 Get Started
