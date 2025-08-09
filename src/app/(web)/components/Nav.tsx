@@ -52,10 +52,10 @@ export default function Nav() {
             Home
           </Link>
            <Link
-            href="/blogs"
+            href="/youtube"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            Blogs
+            Video
           </Link>
           <Link
             href="/about"
@@ -104,11 +104,11 @@ export default function Nav() {
               Home
             </Link>
             <Link
-              href="/blogs"
+              href="/youtube"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Blogs
+              Videos
             </Link>
             <Link
               href="/about"
