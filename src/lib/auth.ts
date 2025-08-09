@@ -47,13 +47,24 @@ export async function getCurrentUser(): Promise<Models.User<Models.Preferences> 
 
 export async function signUp(email: string, password: string, name: string) {
   try {
-    const { account , users} = await getAdminClient();
+    const { account: adminAccount, users } = await getAdminClient();
+    
+    // Create the user with admin privileges
     const user = await users.create(ID.unique(), email, null, password, name);
     
-    // Send verification email
-    const session = await account.createEmailPasswordSession(email, password);
+    // Create a session for the new user to send the verification email
+    const session = await adminAccount.createEmailPasswordSession(email, password);
+
+    const client = await getSessionClient();
+    
+    // Send verification email using the new user's session
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
-    await account.createVerification(url);
+    await client.account.createVerification(url);
+
+    // Now, log the user out so they have to verify first, but keep their session cookie
+    // so the browser knows who they are. The middleware will handle access control.
+    // Or, we can just set the cookie and let them proceed to a "please verify" state.
+    
     (await cookies()).set("appwrite-session", session.secret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
