@@ -61,7 +61,7 @@ export default function SignInPage() {
             description: "Welcome back!",
           });
           router.push("/dashboard");
-          router.refresh(); // Refresh the page to update auth state
+          router.refresh(); 
         } else {
           setError("Invalid email or password. Please try again.");
         }
