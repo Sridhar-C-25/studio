@@ -9,12 +9,14 @@ interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
   loading: boolean;
   setUser: Dispatch<SetStateAction<Models.User<Models.Preferences> | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   setUser: () => {},
+  setLoading: () => {}
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -36,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, setUser }}>
+    <AuthContext.Provider value={{ user, loading, setUser, setLoading }}>
       {children}
     </AuthContext.Provider>
   );
