@@ -1,11 +1,10 @@
-
 "use client";
-import Image from "next/image";
+import { Code2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,6 +22,7 @@ export default function Nav() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
   return (
     <header
       className={`sticky top-0 z-50 w-full backdrop-blur-lg transition-all duration-300 ${
@@ -34,14 +34,10 @@ export default function Nav() {
           href="/"
           className="flex items-center gap-2 font-bold hover:text-foreground transition-colors"
         >
-          <Image
-            src="/logo.png"
-            alt="Code A Program"
-            width={40}
-            height={40}
-            className="rounded-full border"
-          />
-          <span>Code A Program</span>
+          <div className="size-8 grid place-items-center rounded-full bg-foreground text-background">
+             <Code2 className="size-5" />
+          </div>
+          <span className="hidden sm:inline-block">Code A Program</span>
         </Link>
         <nav className="hidden md:flex gap-8">
           <Link
@@ -50,11 +46,17 @@ export default function Nav() {
           >
             Home
           </Link>
-          <Link
-            href="/youtube"
+           <Link
+            href="/blogs"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            Videos
+            Blogs
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            About
           </Link>
           <Link
             href="/contact"
@@ -97,11 +99,18 @@ export default function Nav() {
               Home
             </Link>
             <Link
-              href="/youtube"
+              href="/blogs"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Videos
+              Blogs
+            </Link>
+            <Link
+              href="/about"
+              className="py-2 text-sm font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About
             </Link>
             <Link
               href="/contact"
