@@ -1,19 +1,14 @@
+
 'use server';
 
-import { Client, Databases, ID, Models, Query, Storage, AppwriteException } from 'node-appwrite';
+import { Models, Query, AppwriteException, ID } from 'node-appwrite';
 import type { BlogPost, Category } from '@/types';
+import { getAdminClient } from './appwrite';
 import { InputFile } from 'node-appwrite/file';
-
-const client = new Client()
-    .setEndpoint(process.env.APPWRITE_ENDPOINT!)
-    .setProject(process.env.APPWRITE_PROJECT_ID!)
-    .setKey(process.env.APPWRITE_API_KEY!);
-
-const databases = new Databases(client);
-const storage = new Storage(client);
 
 
 export async function uploadFile(base64: string, fileName: string): Promise<Models.File> {
+    const { storage } = await getAdminClient();
     const fileId = ID.unique();
     const buffer = Buffer.from(base64.split(',')[1], 'base64');
 
@@ -22,16 +17,19 @@ export async function uploadFile(base64: string, fileName: string): Promise<Mode
         fileId,
         InputFile.fromBuffer(buffer, fileName)
     );
-
 }
-
 
 export async function getFilePreview(fileId: string) {
-    return `https://cloud.appwrite.io/v1/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID}/files/${fileId}/preview?project=${process.env.APPWRITE_PROJECT_ID}`;
+    const { storage } = await getAdminClient();
+    const result = storage.getFilePreview(
+        process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
+        fileId
+    );
+    return result.href;
 }
 
-
 export async function getCategories(): Promise<Category[]> {
+    const { databases } = await getAdminClient();
     const response = await databases.listDocuments(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
@@ -40,6 +38,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getCategory(id: string): Promise<Category | null> {
+    const { databases } = await getAdminClient();
     try {
         const doc = await databases.getDocument(
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -56,6 +55,7 @@ export async function getCategory(id: string): Promise<Category | null> {
 }
 
 export async function createCategory(name: string): Promise<Category> {
+    const { databases } = await getAdminClient();
     const response = await databases.createDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
@@ -66,6 +66,7 @@ export async function createCategory(name: string): Promise<Category> {
 }
 
 export async function updateCategory(id: string, name: string): Promise<Category> {
+    const { databases } = await getAdminClient();
     const response = await databases.updateDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
@@ -76,6 +77,7 @@ export async function updateCategory(id: string, name: string): Promise<Category
 }
 
 export async function deleteCategory(id: string): Promise<void> {
+    const { databases } = await getAdminClient();
     await databases.deleteDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
@@ -83,8 +85,8 @@ export async function deleteCategory(id: string): Promise<void> {
     );
 }
 
-
 export async function getPosts(): Promise<BlogPost[]> {
+    const { databases } = await getAdminClient();
     const [postsResponse, categoriesResponse] = await Promise.all([
         databases.listDocuments(
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -98,14 +100,15 @@ export async function getPosts(): Promise<BlogPost[]> {
 
     const allCategories = categoriesResponse.documents.map(mapDocumentToCategory);
 
-    const posts = postsResponse.documents.map(doc => {
-        return mapDocumentToBlogPost(doc, allCategories);
-    });
+    const posts = await Promise.all(
+      postsResponse.documents.map(doc => mapDocumentToBlogPost(doc, allCategories))
+    );
 
     return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 export async function getPost(id: string): Promise<BlogPost | null> {
+    const { databases } = await getAdminClient();
     try {
         const postDoc = await databases.getDocument(
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -113,19 +116,9 @@ export async function getPost(id: string): Promise<BlogPost | null> {
             id
         );
 
-        const categoryIds = postDoc.category?.map((cat: any) => typeof cat === 'string' ? cat : cat.$id) || [];
+        const allCategories = await getCategories();
+        return await mapDocumentToBlogPost(postDoc, allCategories);
 
-        let categories: Category[] = [];
-        if (categoryIds.length > 0) {
-            const categoriesResponse = await databases.listDocuments(
-                process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-                process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-                [Query.equal('$id', categoryIds)]
-            );
-            categories = categoriesResponse.documents.map(mapDocumentToCategory);
-        }
-
-        return mapDocumentToBlogPost(postDoc, categories);
     } catch (error) {
         if (error instanceof AppwriteException && error.code === 404) {
             return null;
@@ -138,20 +131,23 @@ export async function getPost(id: string): Promise<BlogPost | null> {
 type PostInput = Omit<BlogPost, 'id' | 'createdAt' | 'category'> & { status: 'Published' | 'Draft', category: string[], banner_image?: string };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
+    const { databases } = await getAdminClient();
     const response = await databases.createDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         ID.unique(),
         {
             ...data,
+            banner_image: data.banner_image || null,
             category: data.category,
         }
     );
     const allCategories = await getCategories();
-    return mapDocumentToBlogPost(response, allCategories);
+    return await mapDocumentToBlogPost(response, allCategories);
 }
 
 export async function updatePost(id: string, data: Partial<PostInput>): Promise<BlogPost> {
+    const { databases } = await getAdminClient();
     const response = await databases.updateDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
@@ -162,17 +158,17 @@ export async function updatePost(id: string, data: Partial<PostInput>): Promise<
         }
     );
     const allCategories = await getCategories();
-    return mapDocumentToBlogPost(response, allCategories);
+    return await mapDocumentToBlogPost(response, allCategories);
 }
 
 export async function deletePost(id: string): Promise<void> {
+    const { databases } = await getAdminClient();
     await databases.deleteDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
         id
     );
 }
-
 
 function mapDocumentToCategory(doc: Models.Document): Category {
     return {
@@ -181,10 +177,22 @@ function mapDocumentToCategory(doc: Models.Document): Category {
     };
 }
 
-function mapDocumentToBlogPost(doc: Models.Document, allCategories: Category[]): BlogPost {
+async function mapDocumentToBlogPost(doc: Models.Document, allCategories: Category[]): Promise<BlogPost> {
     const categoryIds = doc.category?.map((cat: any) => typeof cat === 'string' ? cat : cat.$id) || [];
-
     const relatedCategories = allCategories.filter(cat => categoryIds.includes(cat.id));
+    
+    let bannerImageUrl: string | undefined;
+
+    if (doc.banner_image) {
+        try {
+            bannerImageUrl = (await getFilePreview(doc.banner_image)).toString();
+        } catch (e) {
+            console.error(`Failed to get file preview for ${doc.banner_image}`, e);
+            bannerImageUrl = "https://placehold.co/1200x600.png";
+        }
+    } else {
+        bannerImageUrl = "https://placehold.co/1200x600.png";
+    }
 
     return {
         id: doc.$id,
@@ -194,6 +202,6 @@ function mapDocumentToBlogPost(doc: Models.Document, allCategories: Category[]):
         createdAt: doc.$createdAt,
         status: doc.status,
         adsenseTag: doc.adsenseTag,
-        banner_image: doc.banner_image,
+        banner_image: bannerImageUrl,
     };
 }
