@@ -1,3 +1,4 @@
+
 "use server";
 
 import { cookies } from "next/headers";
@@ -8,6 +9,10 @@ import type { Models } from "node-appwrite";
 export async function login(email: string, password: string) {
   try {
     const { account } = await getAdminClient();
+    const user = await account.get();
+     if (!user.emailVerification) {
+      return { success: false, error: "Please verify your email before logging in." };
+    }
     const session = await account.createEmailPasswordSession(email, password);
 
     (await cookies()).set("appwrite-session", session.secret, {
@@ -19,9 +24,46 @@ export async function login(email: string, password: string) {
     });
 
     return { success: true };
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    return { success: false };
+     if (e.message.includes("Invalid credentials")) {
+      return { success: false, error: "Invalid email or password." };
+    }
+    if (e.message.includes("User not found")) {
+      return { success: false, error: "Invalid email or password." };
+    }
+    return { success: false, error: "An unexpected error occurred." };
+  }
+}
+
+export async function resendVerificationEmail(email: string) {
+  try {
+    const { users } = await getAdminClient();
+    const user = await users.list(
+      [
+        Query.equal("email", email)
+      ]
+    )
+
+    if (user.users.length === 0) {
+      return { success: false, error: "User not found." };
+    }
+
+    const userId = user.users[0].$id;
+
+    // Create a new client with the user's session to send the verification email
+    const userClient = new Client()
+      .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+      .setProject(process.env.APPWRITE_PROJECT_ID!);
+    const userAccount = new Account(userClient);
+    
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
+    await userAccount.createVerification(url);
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to resend verification email", error);
+    return { success: false, error: (error as Error).message };
   }
 }
 
@@ -64,14 +106,7 @@ export async function signUp(email: string, password: string, name: string) {
       .setSession(session.secret);
 
     const userAccount = new Account(userClient);
-    // Now, set the session cookie for the browser
-    (await cookies()).set("appwrite-session", session.secret, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      expires: new Date(session.expire),
-    });
+    
     // Send verification email using the new user's session
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
     await userAccount.createVerification(url);
@@ -82,6 +117,7 @@ export async function signUp(email: string, password: string, name: string) {
     return { success: false, error: (error as Error).message };
   }
 }
+
 
 export async function updateEmailVerificationStatus(
   userId: string,

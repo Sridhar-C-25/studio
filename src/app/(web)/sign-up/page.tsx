@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { signUp, getCurrentUser } from "@/lib/auth";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/context/auth-context";
 
@@ -62,6 +62,7 @@ export default function SignUpPage() {
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSignUpSuccessful, setIsSignUpSuccessful] = useState(false);
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(formSchema),
@@ -79,13 +80,7 @@ export default function SignUpPage() {
       setAuthLoading(true);
       const result = await signUp(values.email, values.password, values.name);
       if (result.success) {
-        const user = await getCurrentUser();
-        setUser(user as Models.User<Models.Preferences> | null);
-        toast({
-          title: "Account Created!",
-          description: "Welcome! You have been successfully signed up.",
-        });
-        router.push("/dashboard");
+        setIsSignUpSuccessful(true);
       } else {
         if (result.error?.includes("A user with the same id, email, or phone already exists")) {
           setError("A user with this email address already exists. Please try signing in.");
@@ -96,6 +91,27 @@ export default function SignUpPage() {
       setAuthLoading(false);
     });
   };
+  
+  if (isSignUpSuccessful) {
+    return (
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="mx-auto max-w-sm w-full text-center">
+          <CardHeader>
+            <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
+            <CardTitle className="text-2xl mt-4">Verification Email Sent!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              A verification link has been sent to your email address. Please check your inbox and follow the link to complete your registration.
+            </p>
+            <Button asChild className="mt-6 w-full">
+              <Link href="/sign-in">Back to Sign In</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -227,4 +243,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-
