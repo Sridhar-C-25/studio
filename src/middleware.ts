@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
       const memberships = await teams.list();
 
       const isAdmin = memberships.teams.some(
-        (team) => team.name.toLowerCase() === "super users"
+        (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
       );
 
       if (!isAdmin) {
