@@ -1,5 +1,5 @@
 "use client";
-import { Code2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/theme-toggle";
@@ -34,9 +34,13 @@ export default function Nav() {
           href="/"
           className="flex items-center gap-2 font-bold hover:text-foreground transition-colors"
         >
-          <div className="size-8 grid place-items-center rounded-full bg-foreground text-background">
-             <Code2 className="size-5" />
-          </div>
+          <Image
+            src="/logo.png"
+            alt="Code A Program"
+            width={40}
+            height={40}
+            className="rounded-full border"
+          />
           <span className="hidden sm:inline-block">Code A Program</span>
         </Link>
         <nav className="hidden md:flex gap-8">
@@ -46,17 +50,11 @@ export default function Nav() {
           >
             Home
           </Link>
-           <Link
-            href="/blogs"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Blogs
-          </Link>
           <Link
-            href="/about"
+            href="/youtube"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            About
+            Videos
           </Link>
           <Link
             href="/contact"
@@ -65,15 +63,15 @@ export default function Nav() {
             Contact Us
           </Link>
         </nav>
-        <div className="hidden md:flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <ThemeToggleButton />
           <Link href="/dashboard">
-            <Button variant="outline">Sign In</Button>
+            <Button>Sign In</Button>
           </Link>
         </div>
         <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggleButton />
-          <Button
+           <ThemeToggleButton />
+           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -99,18 +97,11 @@ export default function Nav() {
               Home
             </Link>
             <Link
-              href="/blogs"
+              href="/youtube"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Blogs
-            </Link>
-            <Link
-              href="/about"
-              className="py-2 text-sm font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
+              Videos
             </Link>
             <Link
               href="/contact"
@@ -120,7 +111,7 @@ export default function Nav() {
               Contact Us
             </Link>
             <div className="flex flex-col gap-2 pt-2 border-t">
-              <Link
+               <Link
                 href="/dashboard"
                 className="py-2 text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
