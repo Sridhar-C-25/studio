@@ -73,12 +73,12 @@ export default function Nav() {
         </nav>
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
-          <Link href="/dashboard">
+          <Link href="/sign-in">
             <Button variant="outline">Sign In</Button>
           </Link>
         </div>
         <div className="flex items-center gap-2 md:hidden">
-          <Link href="/dashboard">
+          <Link href="/sign-in">
               <Button variant="outline" size="sm">Sign In</Button>
           </Link>
           <Button
