@@ -88,7 +88,7 @@ export default function SignUpPage() {
         router.push("/dashboard");
       } else {
         if (result.error?.includes("user_already_exists")) {
-          setError("An account with this email address already exists.");
+          setError("A user with this email address already exists. Please try signing in.");
         } else {
           setError(result.error || "An unexpected error occurred.");
         }
