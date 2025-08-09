@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { getAdminClient, getSessionClient } from "./appwrite";
 
-// Login
+// Login-
 export async function login(email: string, password: string) {
   const { account } = await getAdminClient();
   const session = await account.createEmailPasswordSession(email, password);
