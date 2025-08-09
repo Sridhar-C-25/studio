@@ -1,10 +1,11 @@
 "use client";
-import Image from "next/image";
+import { Code2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,7 +35,7 @@ export default function Nav() {
           href="/"
           className="flex items-center gap-2 font-bold hover:text-foreground transition-colors"
         >
-          <Image
+        <Image
             src="/logo.png"
             alt="Code A Program"
             width={40}
@@ -50,11 +51,17 @@ export default function Nav() {
           >
             Home
           </Link>
-          <Link
-            href="/youtube"
+           <Link
+            href="/blogs"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            Videos
+            Blogs
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            About
           </Link>
           <Link
             href="/contact"
@@ -63,15 +70,15 @@ export default function Nav() {
             Contact Us
           </Link>
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
           <Link href="/dashboard">
-            <Button>Sign In</Button>
+            <Button variant="outline">Sign In</Button>
           </Link>
         </div>
         <div className="flex items-center gap-4 md:hidden">
-           <ThemeToggleButton />
-           <Button
+          <ThemeToggleButton />
+          <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -97,11 +104,18 @@ export default function Nav() {
               Home
             </Link>
             <Link
-              href="/youtube"
+              href="/blogs"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Videos
+              Blogs
+            </Link>
+            <Link
+              href="/about"
+              className="py-2 text-sm font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About
             </Link>
             <Link
               href="/contact"
@@ -111,7 +125,7 @@ export default function Nav() {
               Contact Us
             </Link>
             <div className="flex flex-col gap-2 pt-2 border-t">
-               <Link
+              <Link
                 href="/dashboard"
                 className="py-2 text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
