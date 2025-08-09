@@ -87,7 +87,11 @@ export default function SignUpPage() {
         });
         router.push("/dashboard");
       } else {
-        setError(result.error || "An unexpected error occurred.");
+        if (result.error?.includes("user_already_exists")) {
+          setError("An account with this email address already exists.");
+        } else {
+          setError(result.error || "An unexpected error occurred.");
+        }
       }
       setAuthLoading(false);
     });
