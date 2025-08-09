@@ -80,14 +80,14 @@ export default function SignUpPage() {
       const result = await signUp(values.email, values.password, values.name);
       if (result.success) {
         const user = await getCurrentUser();
-        setUser(user);
+        setUser(user as Models.User<Models.Preferences> | null);
         toast({
           title: "Account Created!",
           description: "Welcome! You have been successfully signed up.",
         });
         router.push("/dashboard");
       } else {
-        if (result.error?.includes("user_already_exists")) {
+        if (result.error?.includes("A user with the same id, email, or phone already exists")) {
           setError("A user with this email address already exists. Please try signing in.");
         } else {
           setError(result.error || "An unexpected error occurred.");
@@ -227,3 +227,4 @@ export default function SignUpPage() {
     </div>
   );
 }
+
