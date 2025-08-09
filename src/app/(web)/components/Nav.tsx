@@ -1,3 +1,4 @@
+
 "use client";
 import { Code2 } from "lucide-react";
 import Link from "next/link";
@@ -73,11 +74,13 @@ export default function Nav() {
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
           <Link href="/dashboard">
-            <Button variant="outline">Sign In</Button>
+            <Button>Sign In</Button>
           </Link>
         </div>
-        <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggleButton />
+        <div className="flex items-center gap-2 md:hidden">
+          <Link href="/dashboard">
+              <Button variant="outline" size="sm">Sign In</Button>
+          </Link>
           <Button
             variant="ghost"
             size="icon"
@@ -124,14 +127,9 @@ export default function Nav() {
             >
               Contact Us
             </Link>
-            <div className="flex flex-col gap-2 pt-2 border-t">
-              <Link
-                href="/dashboard"
-                className="py-2 text-sm font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Sign In
-              </Link>
+            <div className="flex items-center justify-between pt-4 border-t">
+               <span className="text-sm font-medium">Switch Theme</span>
+               <ThemeToggleButton />
             </div>
           </div>
         </div>
