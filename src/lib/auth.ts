@@ -11,7 +11,7 @@ export async function login(email: string, password: string) {
     const { account } = await getAdminClient();
     const session = await account.createEmailPasswordSession(email, password);
 
-    cookies().set("appwrite-session", session.secret, {
+   (await cookies()).set("appwrite-session", session.secret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: "strict",
@@ -30,7 +30,7 @@ export async function logout() {
   try {
     const { account } = await getSessionClient();
     await account.deleteSession("current");
-    cookies().delete("appwrite-session");
+    (await cookies()).delete("appwrite-session");
   } catch (error) {
     console.error("Failed to logout", error);
   }
@@ -47,15 +47,14 @@ export async function getCurrentUser(): Promise<Models.User<Models.Preferences> 
 
 export async function signUp(email: string, password: string, name: string) {
   try {
-    const { account } = await getAdminClient();
-    const user = await account.create(ID.unique(), email, password, name);
+    const { account , users} = await getAdminClient();
+    const user = await users.create(ID.unique(), email, null, password, name);
     
     // Send verification email
+    const session = await account.createEmailPasswordSession(email, password);
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email`;
     await account.createVerification(url);
-    
-    const session = await account.createEmailPasswordSession(email, password);
-    cookies().set("appwrite-session", session.secret, {
+    (await cookies()).set("appwrite-session", session.secret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: "strict",
