@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getSessionClient } from "@/lib/appwrite";
+import { getCurrentUser } from "./lib/authActions";
 
 export async function middleware(req: NextRequest) {
-  console.log("middleware");
+  const user = await getCurrentUser();
+
   if (req.nextUrl.pathname.startsWith("/dashboard")) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/sign-in", req.url));
+    }
+    
     try {
-      const { account, teams } = await getSessionClient();
+      const { teams } = await getSessionClient();
       const memberships = await teams.list();
 
       const isAdmin = memberships.teams.some(
@@ -22,9 +28,14 @@ export async function middleware(req: NextRequest) {
     }
   }
 
+  if (user && (req.nextUrl.pathname.startsWith("/sign-in") || req.nextUrl.pathname.startsWith("/sign-up"))) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/sign-in", "/sign-up"],
 };
