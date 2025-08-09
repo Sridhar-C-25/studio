@@ -74,7 +74,7 @@ export default function Nav() {
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
           <Link href="/dashboard">
-            <Button>Sign In</Button>
+            <Button variant="outline">Sign In</Button>
           </Link>
         </div>
         <div className="flex items-center gap-2 md:hidden">
