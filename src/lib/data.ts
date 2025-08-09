@@ -20,12 +20,7 @@ export async function uploadFile(base64: string, fileName: string): Promise<Mode
 }
 
 export async function getFilePreview(fileId: string) {
-    const { storage } = await getAdminClient();
-    const result = storage.getFilePreview(
-        process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
-        fileId
-    );
-    return result.href;
+    return `https://cloud.appwrite.io/v1/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID}/files/${fileId}/preview?project=${process.env.APPWRITE_PROJECT_ID}&role=admin`;
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -138,7 +133,6 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
         ID.unique(),
         {
             ...data,
-            banner_image: data.banner_image || null,
             category: data.category,
         }
     );
@@ -180,19 +174,6 @@ function mapDocumentToCategory(doc: Models.Document): Category {
 async function mapDocumentToBlogPost(doc: Models.Document, allCategories: Category[]): Promise<BlogPost> {
     const categoryIds = doc.category?.map((cat: any) => typeof cat === 'string' ? cat : cat.$id) || [];
     const relatedCategories = allCategories.filter(cat => categoryIds.includes(cat.id));
-    
-    let bannerImageUrl: string | undefined;
-
-    if (doc.banner_image) {
-        try {
-            bannerImageUrl = (await getFilePreview(doc.banner_image)).toString();
-        } catch (e) {
-            console.error(`Failed to get file preview for ${doc.banner_image}`, e);
-            bannerImageUrl = "https://placehold.co/1200x600.png";
-        }
-    } else {
-        bannerImageUrl = "https://placehold.co/1200x600.png";
-    }
 
     return {
         id: doc.$id,
@@ -202,6 +183,6 @@ async function mapDocumentToBlogPost(doc: Models.Document, allCategories: Catego
         createdAt: doc.$createdAt,
         status: doc.status,
         adsenseTag: doc.adsenseTag,
-        banner_image: bannerImageUrl,
+        banner_image: doc.banner_image,
     };
 }

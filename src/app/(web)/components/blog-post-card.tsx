@@ -23,6 +23,7 @@ export async function BlogPostCard({ post }: BlogPostCardProps) {
     >
       <div className="relative h-64 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
           <Link href={`/blogs/${post.id}`}>
+          
             <Image
               src={post.banner_image?.length ? post.banner_image + '&mode=admin' : "https://placehold.co/600x400.png"}
               alt={post.title}

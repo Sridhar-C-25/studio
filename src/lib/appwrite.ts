@@ -6,8 +6,8 @@ import { cookies } from 'next/headers';
 // Admin client (server-only, API key)
 export async function getAdminClient() {
   const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+    .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+    .setProject(process.env.APPWRITE_PROJECT_ID!)
     .setKey(process.env.APPWRITE_API_KEY!);
 
   return {
@@ -24,8 +24,8 @@ export async function getSessionClient() {
   if (!session) throw new Error("No session cookie");
 
   const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+    .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+    .setProject(process.env.APPWRITE_PROJECT_ID!)
     .setSession(session);
 
   return {

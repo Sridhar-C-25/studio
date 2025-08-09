@@ -25,6 +25,7 @@ export default async function BlogLayout() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
         {/* Main Content */}
         <div className="lg:col-span-3">
           <div className="mb-8">
@@ -33,6 +34,7 @@ export default async function BlogLayout() {
 
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
             {publishedPosts.map((post) => (
               <BlogPostCard key={post.id} post={post} />
             ))}
