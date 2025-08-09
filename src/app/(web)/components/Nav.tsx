@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading , setUser} = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -44,7 +44,8 @@ export default function Nav() {
   
   const handleLogout = async () => {
     await logout();
-    window.location.reload();
+    setUser(null)
+    // window.location.reload();
   };
 
   const renderAuthSection = () => {
