@@ -1,16 +1,31 @@
 
 "use client";
-import { Code2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Menu, X, LogOut, User as UserIcon, LayoutGrid } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/context/auth-context";
 import { ThemeToggleButton } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logout } from "@/lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +40,57 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+    router.refresh();
+  };
+
+  const renderAuthSection = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-8 w-20 rounded-md" />
+          <Skeleton className="h-9 w-9 rounded-full" />
+        </div>
+      );
+    }
+    if (user) {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="h-9 w-9 cursor-pointer">
+              <AvatarImage src={`https://cloud.appwrite.io/v1/avatars/initials?name=${user.name}&width=36&height=36`} alt={user.name} />
+              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+             <DropdownMenuItem onClick={() => router.push('/dashboard')}>
+              <LayoutGrid className="mr-2 h-4 w-4" />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserIcon className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+    return (
+       <Link href="/sign-in">
+        <Button variant="outline">Sign In</Button>
+      </Link>
+    );
+  }
+
   return (
     <header
       className={`sticky top-0 z-50 w-full backdrop-blur-lg transition-all duration-300 ${
@@ -73,14 +139,10 @@ export default function Nav() {
         </nav>
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggleButton />
-          <Link href="/sign-in">
-            <Button variant="outline">Sign In</Button>
-          </Link>
+          {renderAuthSection()}
         </div>
         <div className="flex items-center gap-2 md:hidden">
-          <Link href="/sign-in">
-              <Button variant="outline" size="sm">Sign In</Button>
-          </Link>
+          <ThemeToggleButton />
           <Button
             variant="ghost"
             size="icon"
@@ -127,9 +189,23 @@ export default function Nav() {
             >
               Contact Us
             </Link>
-            <div className="flex items-center justify-between pt-4 border-t">
-               <span className="text-sm font-medium">Switch Theme</span>
-               <ThemeToggleButton />
+            <div className="pt-4 border-t">
+              {loading ? (
+                 <div className="flex items-center gap-2">
+                  <Skeleton className="h-8 w-20 rounded-md" />
+                </div>
+              ) : user ? (
+                 <div className="flex flex-col gap-2">
+                   <Link href="/dashboard">
+                    <Button variant="outline" className="w-full justify-start">Dashboard</Button>
+                   </Link>
+                   <Button variant="ghost" className="w-full justify-start text-destructive" onClick={handleLogout}>Log Out</Button>
+                </div>
+              ) : (
+                <Link href="/sign-in" className="w-full">
+                  <Button variant="outline" className="w-full">Sign In</Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
