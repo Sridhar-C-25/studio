@@ -8,7 +8,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { BlogPost } from "@/types";
-import { getFilePreview } from '@/lib/data';
 
 interface BlogPostCardProps {
   post: BlogPost;
