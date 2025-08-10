@@ -134,6 +134,9 @@ importers:
       html-react-parser:
         specifier: ^5.1.12
         version: 5.2.6(@types/react@18.3.23)(react@18.3.1)
+      import-in-the-middle:
+        specifier: ^1.14.2
+        version: 1.14.2
       lowlight:
         specifier: ^3.1.0
         version: 3.3.0
