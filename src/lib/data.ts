@@ -10,10 +10,10 @@ function makeSlug(title: string) {
     .toString()
     .trim()
     .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9\- ]/g, '')   // remove invalid chars
-    .replace(/\s+/g, '-')           // collapse whitespace to dashes
-    .replace(/\-+/g, '-');          // collapse multiple dashes
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9\- ]/g, "") // remove invalid chars
+    .replace(/\s+/g, "-") // collapse whitespace to dashes
+    .replace(/\-+/g, "-"); // collapse multiple dashes
 }
 
 export async function uploadFile(
@@ -142,28 +142,28 @@ export async function getPost(id: string): Promise<BlogPost | null> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-    const { databases } = await getAdminClient();
-    try {
-      const response = await databases.listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-        [Query.equal("slug", slug)]
-      );
+  const { databases } = await getAdminClient();
+  try {
+    const response = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+      [Query.equal("slug", slug)]
+    );
 
-      if (response.documents.length === 0) {
-        return null;
-      }
-
-      const postDoc = response.documents[0];
-      const allCategories = await getCategories();
-      return await mapDocumentToBlogPost(postDoc, allCategories);
-    } catch (error) {
-      if (error instanceof AppwriteException && error.code === 404) {
-        return null;
-      }
-      console.error("Failed to fetch post by slug:", error);
-      throw error;
+    if (response.documents.length === 0) {
+      return null;
     }
+
+    const postDoc = response.documents[0];
+    const allCategories = await getCategories();
+    return await mapDocumentToBlogPost(postDoc, allCategories);
+  } catch (error) {
+    if (error instanceof AppwriteException && error.code === 404) {
+      return null;
+    }
+    console.error("Failed to fetch post by slug:", error);
+    throw error;
+  }
 }
 
 type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
@@ -185,6 +185,7 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
       category: data.category,
     }
   );
+
   const allCategories = await getCategories();
   return await mapDocumentToBlogPost(response, allCategories);
 }
