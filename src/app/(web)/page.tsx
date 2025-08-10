@@ -42,7 +42,7 @@ export default function Page() {
             </Button>
           </div>
         </div>
-
+        {/*  */}
         <div className="relative mx-auto max-w-5xl">
           <div className="rounded-xl overflow-hidden shadow-2xl border border-border/40 bg-gradient-to-b from-background to-muted/20"></div>
           <div className="absolute -bottom-6 -right-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 blur-3xl opacity-70"></div>
