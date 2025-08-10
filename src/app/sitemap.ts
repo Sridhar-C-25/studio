@@ -29,5 +29,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/terms-conditions`, lastModified: new Date() },
   ];
 
-  return [...staticUrls, ...postUrls, ...categoryUrls];
+  return [...staticUrls, ...postUrls];
 }
