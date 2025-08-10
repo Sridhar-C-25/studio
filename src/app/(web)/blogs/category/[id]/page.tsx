@@ -1,8 +1,7 @@
-
 import { getPosts, getCategory } from "@/lib/data";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { BlogPostCard } from "../../../components/blog-post-card";
+import { BlogPostCard } from "../../../_components/blog-post-card";
 
 interface CategoryBlogPageProps {
   params: {
@@ -10,7 +9,9 @@ interface CategoryBlogPageProps {
   };
 }
 
-export async function generateMetadata({ params }: CategoryBlogPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CategoryBlogPageProps): Promise<Metadata> {
   const category = await getCategory(params.id);
 
   if (!category) {
@@ -25,7 +26,9 @@ export async function generateMetadata({ params }: CategoryBlogPageProps): Promi
   };
 }
 
-export default async function CategoryBlogPage({ params }: CategoryBlogPageProps) {
+export default async function CategoryBlogPage({
+  params,
+}: CategoryBlogPageProps) {
   const category = await getCategory(params.id);
 
   if (!category) {
@@ -50,7 +53,7 @@ export default async function CategoryBlogPage({ params }: CategoryBlogPageProps
       {publishedPosts.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {publishedPosts.map((post) => (
-             <BlogPostCard key={post.id} post={post} />
+            <BlogPostCard key={post.id} post={post} />
           ))}
         </div>
       ) : (

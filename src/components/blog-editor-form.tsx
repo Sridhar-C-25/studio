@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -6,7 +5,15 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Wand2, Check, ChevronsUpDown, Image as ImageIcon, Upload } from "lucide-react";
+import {
+  BrainCircuit,
+  Loader2,
+  Wand2,
+  Check,
+  ChevronsUpDown,
+  Image as ImageIcon,
+  Upload,
+} from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -28,14 +35,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogPost, Category } from "@/types";
 import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
-import { Textarea } from './ui/textarea';
+import { Textarea } from "./ui/textarea";
 import { TiptapEditor } from "./tiptap-editor";
 import { createPost, updatePost, uploadFile, getFilePreview } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -55,18 +73,22 @@ interface BlogEditorFormProps {
   categories: Category[];
 }
 
-export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps) {
+export function BlogEditorForm({
+  initialData,
+  categories,
+}: BlogEditorFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [aiLoading, setAiLoading] = useState<
-    "titles" | "keywords" | "none"
-  >("none");
+  const [aiLoading, setAiLoading] = useState<"titles" | "keywords" | "none">(
+    "none"
+  );
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.banner_image || null);
-
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.banner_image || null
+  );
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
@@ -81,35 +103,49 @@ export function BlogEditorForm({ initialData, categories }: BlogEditorFormProps)
       banner_image: undefined,
     },
   });
-  
-  const contentValue = form.watch('content');
-  const titleValue = form.watch('title');
-  const selectedCategories = form.watch('category');
 
-  const onSubmit = async (data: BlogEditorFormValues, status: 'Draft' | 'Published') => {
+  const contentValue = form.watch("content");
+  const titleValue = form.watch("title");
+  const selectedCategories = form.watch("category");
+
+  const onSubmit = async (
+    data: BlogEditorFormValues,
+    status: "Draft" | "Published"
+  ) => {
     setLoading(true);
     try {
       let bannerImageUrl: string | undefined = initialData?.banner_image;
-console.log(data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0)
-      if (data.banner_image && typeof data.banner_image === 'object' && data.banner_image.size > 0) {
+      console.log(
+        data.banner_image &&
+          typeof data.banner_image === "object" &&
+          data.banner_image.size > 0
+      );
+      if (
+        data.banner_image &&
+        typeof data.banner_image === "object" &&
+        data.banner_image.size > 0
+      ) {
         const imageFile = data.banner_image as File;
         const arrayBuffer = await imageFile.arrayBuffer();
-        const base64 = Buffer.from(arrayBuffer).toString('base64');
-        const uploadedFile = await uploadFile(`data:${imageFile.type};base64,${base64}`, imageFile.name);
+        const base64 = Buffer.from(arrayBuffer).toString("base64");
+        const uploadedFile = await uploadFile(
+          `data:${imageFile.type};base64,${base64}`,
+          imageFile.name
+        );
         const fileUrl = await getFilePreview(uploadedFile.$id);
         bannerImageUrl = fileUrl.toString();
       }
 
-      const postData = { 
+      const postData = {
         title: data.title,
         content: data.content,
         category: data.category,
         adsenseTag: data.adsenseTag,
-        status, 
+        status,
         banner_image: bannerImageUrl,
       };
 
-      console.log(postData)
+      console.log(postData);
 
       if (initialData) {
         await updatePost(initialData.id, postData);
@@ -120,7 +156,9 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
       } else {
         await createPost(postData);
         toast({
-          title: `Post ${status === 'Published' ? 'published' : 'saved as draft'}!`,
+          title: `Post ${
+            status === "Published" ? "published" : "saved as draft"
+          }!`,
           description: `Your post "${data.title}" has been saved.`,
         });
       }
@@ -128,9 +166,10 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
       router.refresh();
     } catch (error: any) {
       toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message || "Could not save the post. Please try again.",
+        variant: "destructive",
+        title: "Something went wrong",
+        description:
+          error.message || "Could not save the post. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -140,22 +179,26 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
   const handleSuggestTitles = async () => {
     if (!contentValue) {
       toast({
-        variant: 'destructive',
-        title: 'Content is empty',
-        description: 'Please write some content before suggesting titles.'
+        variant: "destructive",
+        title: "Content is empty",
+        description: "Please write some content before suggesting titles.",
       });
       return;
     }
     setAiLoading("titles");
     setTitleVariants([]);
     try {
-      const result = await suggestTitleVariants({ blogContent: contentValue });
+      const result = await suggestTitleVariants({
+        blogContent: contentValue,
+        numVariants: 5,
+      });
       setTitleVariants(result.titleVariants);
     } catch (error) {
+      console.error(error);
       toast({
-        variant: 'destructive',
-        title: 'AI Error',
-        description: 'Failed to suggest titles. Please try again.'
+        variant: "destructive",
+        title: "AI Error",
+        description: "Failed to suggest titles. Please try again.",
       });
     } finally {
       setAiLoading("none");
@@ -165,22 +208,24 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
   const handleSuggestKeywords = async () => {
     if (!contentValue) {
       toast({
-        variant: 'destructive',
-        title: 'Content is empty',
-        description: 'Please write some content before suggesting keywords.'
+        variant: "destructive",
+        title: "Content is empty",
+        description: "Please write some content before suggesting keywords.",
       });
       return;
     }
     setAiLoading("keywords");
     setRelatedKeywords([]);
     try {
-      const result = await suggestRelatedKeywords({ blogContent: contentValue });
+      const result = await suggestRelatedKeywords({
+        blogContent: contentValue,
+      });
       setRelatedKeywords(result.keywords);
     } catch (error) {
-       toast({
-        variant: 'destructive',
-        title: 'AI Error',
-        description: 'Failed to suggest keywords. Please try again.'
+      toast({
+        variant: "destructive",
+        title: "AI Error",
+        description: "Failed to suggest keywords. Please try again.",
       });
     } finally {
       setAiLoading("none");
@@ -197,17 +242,19 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
         description: "Please save the post as a draft first to enable preview.",
       });
     }
-  }
-
-  const handleCategorySelect = (categoryId: string) => {
-    const currentCategories = form.getValues('category') || [];
-    if (currentCategories.includes(categoryId)) {
-      form.setValue('category', currentCategories.filter(id => id !== categoryId));
-    } else {
-      form.setValue('category', [...currentCategories, categoryId]);
-    }
   };
 
+  const handleCategorySelect = (categoryId: string) => {
+    const currentCategories = form.getValues("category") || [];
+    if (currentCategories.includes(categoryId)) {
+      form.setValue(
+        "category",
+        currentCategories.filter((id) => id !== categoryId)
+      );
+    } else {
+      form.setValue("category", [...currentCategories, categoryId]);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -263,46 +310,62 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                 <FormField
-                    control={form.control}
-                    name="banner_image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Banner Image</FormLabel>
-                        <FormControl>
-                           <div className="flex flex-col items-center justify-center w-full">
-                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-border border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
-                                {imagePreview ? (
-                                    <div className="relative w-full h-full">
-                                        <Image src={imagePreview} alt="Preview" layout="fill" objectFit="cover" className="rounded-lg" />
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <Upload className="w-8 h-8 mb-4 text-muted-foreground" />
-                                        <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                        <p className="text-xs text-muted-foreground">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                    </div>
-                                )}
-                                <Input 
-                                    id="dropzone-file" 
-                                    type="file" 
-                                    className="hidden" 
-                                    accept="image/*"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            field.onChange(file);
-                                            setImagePreview(URL.createObjectURL(file));
-                                        }
-                                    }}
+                <FormField
+                  control={form.control}
+                  name="banner_image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Banner Image</FormLabel>
+                      <FormControl>
+                        <div className="flex flex-col items-center justify-center w-full">
+                          <label
+                            htmlFor="dropzone-file"
+                            className="flex flex-col items-center justify-center w-full h-48 border-2 border-border border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted"
+                          >
+                            {imagePreview ? (
+                              <div className="relative w-full h-full">
+                                <Image
+                                  src={imagePreview}
+                                  alt="Preview"
+                                  layout="fill"
+                                  objectFit="cover"
+                                  className="rounded-lg"
                                 />
-                            </label>
-                        </div> 
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <Upload className="w-8 h-8 mb-4 text-muted-foreground" />
+                                <p className="mb-2 text-sm text-muted-foreground">
+                                  <span className="font-semibold">
+                                    Click to upload
+                                  </span>{" "}
+                                  or drag and drop
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                </p>
+                              </div>
+                            )}
+                            <Input
+                              id="dropzone-file"
+                              type="file"
+                              className="hidden"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  field.onChange(file);
+                                  setImagePreview(URL.createObjectURL(file));
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
@@ -310,7 +373,7 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Categories</FormLabel>
-                       <Popover open={open} onOpenChange={setOpen}>
+                      <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -318,11 +381,14 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                             aria-expanded={open}
                             className="w-full justify-between"
                           >
-                             <span className="truncate">
-                              {selectedCategories && selectedCategories.length > 0
+                            <span className="truncate">
+                              {selectedCategories &&
+                              selectedCategories.length > 0
                                 ? categories
-                                    .filter(cat => selectedCategories.includes(cat.id))
-                                    .map(cat => cat.name)
+                                    .filter((cat) =>
+                                      selectedCategories.includes(cat.id)
+                                    )
+                                    .map((cat) => cat.name)
                                     .join(", ")
                                 : "Select categories..."}
                             </span>
@@ -330,7 +396,7 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                           <Command>
+                          <Command>
                             <CommandInput placeholder="Search categories..." />
                             <CommandList>
                               <CommandEmpty>No categories found.</CommandEmpty>
@@ -346,7 +412,10 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        selectedCategories && selectedCategories.includes(category.id)
+                                        selectedCategories &&
+                                          selectedCategories.includes(
+                                            category.id
+                                          )
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
@@ -363,52 +432,72 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                     </FormItem>
                   )}
                 />
-                 <FormField
-                    control={form.control}
-                    name="adsenseTag"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Google AdSense Tag</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="<script>...</script>"
-                            {...field}
-                            className="font-code text-xs"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={form.control}
+                  name="adsenseTag"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Google AdSense Tag</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="<script>...</script>"
+                          {...field}
+                          className="font-code text-xs"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
               <CardFooter className="flex flex-col justify-between">
-                 <Button variant="outline" className="w-full" type="button" onClick={onPreview}>Preview</Button>
-                 <div className="flex flex-col items-center gap-2 w-full mt-2">
-                  <Button onClick={form.handleSubmit((data) => onSubmit(data, 'Draft'))} className="w-full" variant="secondary" disabled={loading}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  type="button"
+                  onClick={onPreview}
+                >
+                  Preview
+                </Button>
+                <div className="flex flex-col items-center gap-2 w-full mt-2">
+                  <Button
+                    onClick={form.handleSubmit((data) =>
+                      onSubmit(data, "Draft")
+                    )}
+                    className="w-full"
+                    variant="secondary"
+                    disabled={loading}
+                  >
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     Save Draft
                   </Button>
-                  <Button onClick={form.handleSubmit((data) => onSubmit(data, 'Published'))} className="w-full" disabled={loading}>
+                  <Button
+                    onClick={form.handleSubmit((data) =>
+                      onSubmit(data, "Published")
+                    )}
+                    className="w-full"
+                    disabled={loading}
+                  >
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {initialData?.status === 'Published' ? 'Update & Publish' : 'Publish'}
+                    {initialData?.status === "Published"
+                      ? "Update & Publish"
+                      : "Publish"}
                   </Button>
-                 </div>
+                </div>
               </CardFooter>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BrainCircuit className="h-5 w-5 text-accent" />
                   AI Content Tools
                 </CardTitle>
-                <CardDescription>
-                  Enhance your content with AI.
-                </CardDescription>
+                <CardDescription>Enhance your content with AI.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -417,36 +506,54 @@ console.log(data.banner_image && typeof data.banner_image === 'object' && data.b
                     variant="outline"
                     className="w-full"
                     onClick={handleSuggestTitles}
-                    disabled={aiLoading !== 'none'}
+                    disabled={aiLoading !== "none"}
                   >
-                    {aiLoading === 'titles' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                    {aiLoading === "titles" ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Wand2 className="mr-2 h-4 w-4" />
+                    )}
                     Suggest Title Variants
                   </Button>
                   {titleVariants.length > 0 && (
-                     <div className="space-y-2 rounded-md border p-2">
-                       {titleVariants.map((variant, i) => (
-                         <div key={i} className="cursor-pointer rounded-md p-2 text-sm hover:bg-muted" onClick={() => form.setValue('title', variant, { shouldValidate: true })}>
+                    <div className="space-y-2 rounded-md border p-2">
+                      {titleVariants.map((variant, i) => (
+                        <div
+                          key={i}
+                          className="cursor-pointer rounded-md p-2 text-sm hover:bg-muted"
+                          onClick={() =>
+                            form.setValue("title", variant, {
+                              shouldValidate: true,
+                            })
+                          }
+                        >
                           {variant}
-                         </div>
-                       ))}
-                     </div>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
                 <div className="space-y-2">
-                   <Button
+                  <Button
                     type="button"
                     variant="outline"
                     className="w-full"
                     onClick={handleSuggestKeywords}
-                    disabled={aiLoading !== 'none'}
+                    disabled={aiLoading !== "none"}
                   >
-                    {aiLoading === 'keywords' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                    {aiLoading === "keywords" ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Wand2 className="mr-2 h-4 w-4" />
+                    )}
                     Suggest Related Keywords
                   </Button>
                   {relatedKeywords.length > 0 && (
                     <div className="flex flex-wrap gap-2 rounded-md border p-2">
                       {relatedKeywords.map((keyword, i) => (
-                        <Badge key={i} variant="secondary">{keyword}</Badge>
+                        <Badge key={i} variant="secondary">
+                          {keyword}
+                        </Badge>
                       ))}
                     </div>
                   )}

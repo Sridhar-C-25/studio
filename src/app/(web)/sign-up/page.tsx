@@ -1,13 +1,10 @@
-
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState, useTransition } from "react";
-import type { Models } from "node-appwrite";
 
 import {
   Card,
@@ -26,8 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { signUp, getCurrentUser } from "@/lib/auth";
+import { signUp } from "@/lib/auth";
 import { Loader2, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/context/auth-context";
@@ -55,8 +51,6 @@ const formSchema = z
 type SignUpFormValues = z.infer<typeof formSchema>;
 
 export default function SignUpPage() {
-  const router = useRouter();
-  const { toast } = useToast();
   const { setUser, setLoading: setAuthLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -82,8 +76,14 @@ export default function SignUpPage() {
       if (result.success) {
         setIsSignUpSuccessful(true);
       } else {
-        if (result.error?.includes("A user with the same id, email, or phone already exists")) {
-          setError("A user with this email address already exists. Please try signing in.");
+        if (
+          result.error?.includes(
+            "A user with the same id, email, or phone already exists"
+          )
+        ) {
+          setError(
+            "A user with this email address already exists. Please try signing in."
+          );
         } else {
           setError(result.error || "An unexpected error occurred.");
         }
@@ -91,18 +91,22 @@ export default function SignUpPage() {
       setAuthLoading(false);
     });
   };
-  
+
   if (isSignUpSuccessful) {
     return (
       <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <Card className="mx-auto max-w-sm w-full text-center">
           <CardHeader>
             <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
-            <CardTitle className="text-2xl mt-4">Verification Email Sent!</CardTitle>
+            <CardTitle className="text-2xl mt-4">
+              Verification Email Sent!
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              A verification link has been sent to your email address. Please check your inbox and follow the link to complete your registration.
+              A verification link has been sent to your email address. Please
+              check your inbox and follow the link to complete your
+              registration.
             </p>
             <Button asChild className="mt-6 w-full">
               <Link href="/sign-in">Back to Sign In</Link>
@@ -131,7 +135,7 @@ export default function SignUpPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-               <FormField
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -189,20 +193,24 @@ export default function SignUpPage() {
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isPending}
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-               <FormField
+              <FormField
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
-                     <div className="relative">
+                    <div className="relative">
                       <FormControl>
                         <Input
                           type={showConfirmPassword ? "text" : "password"}
@@ -216,10 +224,16 @@ export default function SignUpPage() {
                         variant="ghost"
                         size="icon"
                         className="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         disabled={isPending}
                       >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                     <FormMessage />

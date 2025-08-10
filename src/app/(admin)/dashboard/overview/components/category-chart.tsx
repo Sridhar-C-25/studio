@@ -1,8 +1,7 @@
+"use client";
 
-"use client"
-
-import * as React from "react"
-import { Pie, PieChart, Cell } from "recharts"
+import * as React from "react";
+import { Pie, PieChart, Cell } from "recharts";
 
 import {
   ChartContainer,
@@ -10,33 +9,22 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
 interface CategoryChartProps {
-    data: { name: string; postCount: number, fill: string }[];
-}
-
-const chartConfig = {
-  postCount: {
-    label: "Posts",
-  },
+  data: { name: string; postCount: number; fill: string }[];
 }
 
 export function CategoryChart({ data }: CategoryChartProps) {
-
-  const chartData = data.map(item => ({...item, category: item.name}))
+  const chartData = data.map((item) => ({ ...item, category: item.name }));
 
   const config = chartData.reduce((acc, item) => {
     acc[item.name] = { label: item.name, color: item.fill };
     return acc;
-  }, {} as any)
-  
+  }, {} as any);
 
   return (
-    <ChartContainer
-      config={config}
-      className="mx-auto aspect-square h-[300px]"
-    >
+    <ChartContainer config={config} className="mx-auto aspect-square h-[300px]">
       <PieChart>
         <ChartTooltip
           cursor={false}
@@ -49,15 +37,15 @@ export function CategoryChart({ data }: CategoryChartProps) {
           innerRadius={60}
           strokeWidth={5}
         >
-           {chartData.map((entry, index) => (
-             <Cell key={`cell-${index}`} fill={entry.fill} />
-           ))}
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.fill} />
+          ))}
         </Pie>
         <ChartLegend
-            content={<ChartLegendContent nameKey="name" />}
-            className="-translate-y-[2rem] flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+          content={<ChartLegendContent nameKey="name" />}
+          className="-translate-y-[2rem] flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
         />
       </PieChart>
     </ChartContainer>
-  )
+  );
 }

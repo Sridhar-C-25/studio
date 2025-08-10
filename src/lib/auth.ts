@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { getAdminClient, getSessionClient } from "./appwrite";
-import { ID, Client, Account, Query } from "node-appwrite";
+import { ID, Client, Account } from "node-appwrite";
 import type { Models } from "node-appwrite";
 
 export async function login(email: string, password: string) {
@@ -35,7 +35,7 @@ export async function login(email: string, password: string) {
   }
 }
 
-export async function resendVerificationEmail(email: string) {
+export async function resendVerificationEmail() {
   try {
     // Create a new client with the user's session to send the verification email
     const userClient = new Client()

@@ -35,8 +35,8 @@ export default function TermsAndConditions() {
         <h2 className="text-2xl font-bold">1. Introduction</h2>
         <p>
           Welcome to Code A Program! These terms and conditions outline the
-          rules and regulations for the use of Code A Program's Website,
-          located at{" "}
+          return; rules and regulations for the use of Code A Program&apos;s
+          Website, located at{" "}
           <Link href="/" className="text-primary hover:underline">
             codeaprogram.tech
           </Link>
@@ -54,19 +54,37 @@ export default function TermsAndConditions() {
           This includes all tutorials, source code, and other materials unless
           otherwise stated.
         </p>
-        
+
         <h2 className="text-2xl font-bold">3. Restrictions</h2>
         <p>You are specifically restricted from all of the following:</p>
         <ul>
-            <li>Publishing any Website material in any other media without proper attribution.</li>
-            <li>Selling, sublicensing and/or otherwise commercializing any Website material.</li>
-            <li>Using this Website in any way that is or may be damaging to this Website.</li>
-            <li>Using this Website contrary to applicable laws and regulations, or in any way may cause harm to the Website, or to any person or business entity.</li>
+          <li>
+            Publishing any Website material in any other media without proper
+            attribution.
+          </li>
+          <li>
+            Selling, sublicensing and/or otherwise commercializing any Website
+            material.
+          </li>
+          <li>
+            Using this Website in any way that is or may be damaging to this
+            Website.
+          </li>
+          <li>
+            Using this Website contrary to applicable laws and regulations, or
+            in any way may cause harm to the Website, or to any person or
+            business entity.
+          </li>
         </ul>
 
         <h2 className="text-2xl font-bold">4. Your Content</h2>
-         <p>
-          In these Website Standard Terms and Conditions, “Your Content” shall mean any audio, video text, images or other material you choose to display on this Website. By displaying Your Content, you grant Code A Program a non-exclusive, worldwide irrevocable, sub licensable license to use, reproduce, adapt, publish, translate and distribute it in any and all media.
+        <p>
+          In these Website Standard Terms and Conditions, “Your Content” shall
+          mean any audio, video text, images or other material you choose to
+          display on this Website. By displaying Your Content, you grant Code A
+          Program a non-exclusive, worldwide irrevocable, sub licensable license
+          to use, reproduce, adapt, publish, translate and distribute it in any
+          and all media.
         </p>
 
         <h2 className="text-2xl font-bold">5. Limitation of Liability</h2>
@@ -74,17 +92,17 @@ export default function TermsAndConditions() {
           In no event shall Code A Program, nor any of its officers, directors
           and employees, be held liable for anything arising out of or in any
           way connected with your use of this Website whether such liability is
-          under contract. Code A Program, including its officers, directors
-          and employees shall not be held liable for any indirect,
-          consequential or special liability arising out of or in any way
-          related to your use of this Website.
+          under contract. Code A Program, including its officers, directors and
+          employees shall not be held liable for any indirect, consequential or
+          special liability arising out of or in any way related to your use of
+          this Website.
         </p>
 
         <h2 className="text-2xl font-bold">6. Changes to These Terms</h2>
         <p>
-          We reserve the right to revise these terms and conditions at any
-          time. By using this Website you are expected to review these terms on
-          a regular basis to ensure you understand all terms and conditions
+          We reserve the right to revise these terms and conditions at any time.
+          By using this Website you are expected to review these terms on a
+          regular basis to ensure you understand all terms and conditions
           governing use of this Website.
         </p>
 

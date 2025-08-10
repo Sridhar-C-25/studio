@@ -1,31 +1,17 @@
-
-
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  GitHubFilledIcon,
-  InstagramFilledIcon,
-  YouTubeFilledIcon,
-} from "./icon";
-import Link from "next/link";
 import { getCategories, getPosts } from "@/lib/data";
 import { Category } from "@/types";
-import Image from "next/image";
 import { BlogPostCard } from "./blog-post-card";
 import { BlogSidebar } from "./blog-sidebar";
 
 export default async function BlogLayout() {
   const allPosts = await getPosts();
   const categories: Category[] = await getCategories();
-  const publishedPosts = allPosts.filter(
-    (post) => post.status === "Published"
-  );
+  const publishedPosts = allPosts.filter((post) => post.status === "Published");
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-
         {/* Main Content */}
         <div className="lg:col-span-3">
           <div className="mb-8">
@@ -34,7 +20,6 @@ export default async function BlogLayout() {
 
           {/* Blog Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
             {publishedPosts.map((post) => (
               <BlogPostCard key={post.id} post={post} />
             ))}

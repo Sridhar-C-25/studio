@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -45,12 +44,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     try {
       await deleteCategory(data.id);
       router.refresh();
-      toast({ title: "Deleted", description: `Category "${data.name}" deleted.` });
+      toast({
+        title: "Deleted",
+        description: `Category "${data.name}" deleted.`,
+      });
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-        description: error.message || "Could not delete category. Please try again.",
+        description:
+          error.message || "Could not delete category. Please try again.",
       });
     } finally {
       setIsDeleting(false);
@@ -71,8 +74,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={onDeleteConfirm} disabled={isDeleting} className="bg-destructive hover:bg-destructive/90">
-              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            <AlertDialogAction
+              onClick={onDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {isDeleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -90,7 +99,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={onEdit}>
             <Edit className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsAlertOpen(true)} className="text-destructive focus:text-destructive">
+          <DropdownMenuItem
+            onClick={() => setIsAlertOpen(true)}
+            className="text-destructive focus:text-destructive"
+          >
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

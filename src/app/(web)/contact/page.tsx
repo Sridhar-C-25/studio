@@ -4,14 +4,19 @@ import {
   YouTubeFilledIcon,
   GitHubFilledIcon,
   InstagramFilledIcon,
-} from "../components/icon";
+} from "../_components/icon";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact Us | Code A Program",
   description:
     "Get in touch with Code A Program. We welcome your questions, feedback, and collaboration inquiries. Contact us via email or connect on social media.",
-  keywords: ["Contact", "Code A Program Contact", "coding blogs", "web development contact"],
+  keywords: [
+    "Contact",
+    "Code A Program Contact",
+    "coding blogs",
+    "web development contact",
+  ],
   openGraph: {
     title: "Contact Us | Code A Program",
     description:
@@ -27,7 +32,9 @@ export default function Contact() {
       <div className="text-center space-y-6">
         <h1 className="text-4xl md:text-5xl font-bold">Get In Touch</h1>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Have a question, feedback, or a project proposal? I&apos;d love to hear from you. The best way to reach me is by email. I typically respond within 24 hours.
+          Have a question, feedback, or a project proposal? I&apos;d love to
+          hear from you. The best way to reach me is by email. I typically
+          respond within 24 hours.
         </p>
         <a
           href="mailto:codeaprogram@gmail.com"
@@ -36,12 +43,15 @@ export default function Contact() {
           codeaprogram@gmail.com
         </a>
       </div>
-      
+
       {/* Connect Section */}
       <div className="mt-20 space-y-6">
-        <h2 className="text-2xl font-bold text-center">Connect With Us on Social Media</h2>
+        <h2 className="text-2xl font-bold text-center">
+          Connect With Us on Social Media
+        </h2>
         <p className="text-md text-muted-foreground text-center max-w-2xl mx-auto">
-          Join our growing community and stay updated with the latest tutorials, projects, and web development insights.
+          Join our growing community and stay updated with the latest tutorials,
+          projects, and web development insights.
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">

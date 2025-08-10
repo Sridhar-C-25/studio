@@ -70,26 +70,29 @@ export function CategoryEditorForm({ initialData }: CategoryEditorFormProps) {
       router.refresh();
     } catch (error: any) {
       toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message || "Could not save the category. Please try again.",
+        variant: "destructive",
+        title: "Something went wrong",
+        description:
+          error.message || "Could not save the category. Please try again.",
       });
     } finally {
       setLoading(false);
     }
   };
-  
+
   const onCancel = () => {
     router.push("/dashboard/categories");
-  }
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="max-w-xl">
-            <CardHeader>
-                <CardTitle>{initialData ? 'Edit Category' : 'Create Category'}</CardTitle>
-            </CardHeader>
+          <CardHeader>
+            <CardTitle>
+              {initialData ? "Edit Category" : "Create Category"}
+            </CardTitle>
+          </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <FormField
@@ -99,10 +102,7 @@ export function CategoryEditorForm({ initialData }: CategoryEditorFormProps) {
                   <FormItem>
                     <FormLabel>Category Name</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g., Technology"
-                        {...field}
-                      />
+                      <Input placeholder="e.g., Technology" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -110,15 +110,15 @@ export function CategoryEditorForm({ initialData }: CategoryEditorFormProps) {
               />
             </div>
           </CardContent>
-           <CardFooter className="flex justify-end gap-4">
-                <Button variant="outline" type="button" onClick={onCancel}>Cancel</Button>
-                <Button type="submit" disabled={loading}>
-                  {loading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {initialData ? "Update Category" : "Create Category"}
-                </Button>
-              </CardFooter>
+          <CardFooter className="flex justify-end gap-4">
+            <Button variant="outline" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {initialData ? "Update Category" : "Create Category"}
+            </Button>
+          </CardFooter>
         </Card>
       </form>
     </Form>

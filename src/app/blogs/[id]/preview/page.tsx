@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,7 +17,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { evaluateBlogEffectiveness, EvaluateBlogEffectivenessOutput } from "@/ai/flows/evaluate-blog-effectiveness";
+import {
+  evaluateBlogEffectiveness,
+  EvaluateBlogEffectivenessOutput,
+} from "@/ai/flows/evaluate-blog-effectiveness";
 import type { BlogPost } from "@/types";
 import { BlogContent } from "@/app/(web)/blogs/[id]/components/blog-content";
 
@@ -32,7 +34,8 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [evaluation, setEvaluation] = useState<EvaluateBlogEffectivenessOutput | null>(null);
+  const [evaluation, setEvaluation] =
+    useState<EvaluateBlogEffectivenessOutput | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [post, setPost] = useState<BlogPost | null>(null);
 
@@ -42,7 +45,6 @@ export default function PreviewPage({ params }: PreviewPageProps) {
         const postData = await getPost(params.id);
         if (!postData) {
           notFound();
-          return;
         }
         setPost(postData);
       } catch (error) {
@@ -64,7 +66,9 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   const handleEvaluate = async () => {
     setLoading(true);
     try {
-      const result = await evaluateBlogEffectiveness({ blogContent: post.content });
+      const result = await evaluateBlogEffectiveness({
+        blogContent: post.content,
+      });
       setEvaluation(result);
       setIsDialogOpen(true);
     } catch (error) {
@@ -100,7 +104,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
       </header>
 
       <BlogContent post={post} isPreview={true} />
-      
+
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent className="max-w-2xl">
           <AlertDialogHeader>
@@ -109,7 +113,8 @@ export default function PreviewPage({ params }: PreviewPageProps) {
               Blog Post Evaluation
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Here's the AI's assessment of your blog post's effectiveness.
+              Here&apos;s the AI&apos;s assessment of your blog post&apos;s
+              effectiveness.
             </AlertDialogDescription>
           </AlertDialogHeader>
           {evaluation && (
@@ -117,16 +122,22 @@ export default function PreviewPage({ params }: PreviewPageProps) {
               <div className="space-y-6 py-4">
                 <div>
                   <h3 className="text-lg font-semibold">Overall Assessment</h3>
-                  <p className="text-muted-foreground">{evaluation.overallAssessment}</p>
+                  <p className="text-muted-foreground">
+                    {evaluation.overallAssessment}
+                  </p>
                 </div>
 
                 <div>
-                  <h3 className="mb-2 text-lg font-semibold">SEO Score: {evaluation.seoScore}/100</h3>
+                  <h3 className="mb-2 text-lg font-semibold">
+                    SEO Score: {evaluation.seoScore}/100
+                  </h3>
                   <Progress value={evaluation.seoScore} className="w-full" />
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold">Suggestions for Improvement</h3>
+                  <h3 className="text-lg font-semibold">
+                    Suggestions for Improvement
+                  </h3>
                   <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
                     {evaluation.suggestions.map((suggestion, index) => (
                       <li key={index}>{suggestion}</li>

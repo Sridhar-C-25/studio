@@ -1,8 +1,7 @@
-
 import { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import Footer from "./components/Footer";
-import Nav from "./components/Nav";
+import Footer from "./_components/Footer";
+import Nav from "./_components/Nav";
 
 export const metadata: Metadata = {
   title: "Code A Program: Your Hub for Modern Web Dev",
@@ -37,11 +36,9 @@ export const metadata: Metadata = {
 export default function WebLayout({ children }: PropsWithChildren) {
   return (
     <>
-    <Nav/>
-    <main>
-      {children}
-    </main>
-    <Footer />
+      <Nav />
+      <main>{children}</main>
+      <Footer />
     </>
   );
 }

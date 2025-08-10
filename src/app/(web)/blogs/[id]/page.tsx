@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import { getPost, getPosts, getCategories } from "@/lib/data";
 import { BlogContent } from "./components/blog-content";
-import { BlogSidebar } from "../../components/blog-sidebar";
+import { BlogSidebar } from "../../_components/blog-sidebar";
 
 interface BlogPageProps {
   params: {

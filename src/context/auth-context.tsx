@@ -1,9 +1,15 @@
-
 "use client";
 
-import { createContext, useContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { getCurrentUser } from '@/lib/auth';
-import type { Models } from 'node-appwrite';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import { getCurrentUser } from "@/lib/auth";
+import type { Models } from "node-appwrite";
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
@@ -16,11 +22,13 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   setUser: () => {},
-  setLoading: () => {}
+  setLoading: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,6 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
       } catch (error) {
+        console.log("Error checking user:", error);
         setUser(null);
       } finally {
         setLoading(false);

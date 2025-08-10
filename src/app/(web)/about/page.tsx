@@ -4,7 +4,7 @@ import {
   GitHubFilledIcon,
   InstagramFilledIcon,
   ArrowRightIcon,
-} from "../components/icon";
+} from "../_components/icon";
 
 // metadata
 export const metadata = {

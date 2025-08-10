@@ -1,7 +1,5 @@
-
 import { getPosts } from "@/lib/data";
-import { BlogPostCard } from "../components/blog-post-card";
-
+import { BlogPostCard } from "../_components/blog-post-card";
 
 export default async function BlogsPage() {
   const posts = await getPosts();
@@ -19,7 +17,9 @@ export default async function BlogsPage() {
       ) : (
         <div className="text-center py-20">
           <h2 className="text-2xl font-bold mb-4">No posts yet!</h2>
-          <p className="text-muted-foreground">Check back later for new articles.</p>
+          <p className="text-muted-foreground">
+            Check back later for new articles.
+          </p>
         </div>
       )}
     </div>

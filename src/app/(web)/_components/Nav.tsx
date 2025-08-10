@@ -1,10 +1,8 @@
-
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Menu, X, LogOut, User as UserIcon, LayoutGrid } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Menu, X, LogOut } from "lucide-react";
 
 import { useAuth } from "@/context/auth-context";
 import { ThemeToggleButton } from "@/components/theme-toggle";
@@ -24,8 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, loading , setUser, setLoading} = useAuth();
-  const router = useRouter();
+  const { user, loading, setUser, setLoading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,12 +37,10 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  
   const handleLogout = async () => {
     setLoading(true);
     await logout();
-    setUser(null)
+    setUser(null);
     setLoading(false);
   };
 
@@ -61,17 +56,24 @@ export default function Nav() {
     if (user) {
       return (
         <DropdownMenu>
-        {/* {JSON.stringify(user)} */}
+          {/* {JSON.stringify(user)} */}
           <DropdownMenuTrigger asChild>
             <Avatar className="h-9 w-9 cursor-pointer">
-              <AvatarImage src={`https://cloud.appwrite.io/v1/avatars/initials?name=${user?.email}&width=36&height=36`} alt={user.name} />
+              <AvatarImage
+                src={`https://cloud.appwrite.io/v1/avatars/initials?name=${user?.email}&width=36&height=36`}
+                alt={user.name}
+              />
               <AvatarFallback>{user?.email.charAt(0)}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>{user?.email?.length >= 25 ? user?.email?.slice(0,25) + "..." : user?.email}</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {user?.email?.length >= 25
+                ? user?.email?.slice(0, 25) + "..."
+                : user?.email}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
@@ -81,11 +83,11 @@ export default function Nav() {
       );
     }
     return (
-       <Link href="/sign-in">
+      <Link href="/sign-in">
         <Button variant="outline">Sign In</Button>
       </Link>
     );
-  }
+  };
 
   return (
     <header
@@ -98,7 +100,7 @@ export default function Nav() {
           href="/"
           className="flex items-center gap-2 font-bold hover:text-foreground transition-colors"
         >
-        <Image
+          <Image
             src="/logo.png"
             alt="Code A Program"
             width={40}
@@ -114,7 +116,7 @@ export default function Nav() {
           >
             Home
           </Link>
-           <Link
+          <Link
             href="/youtube"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
@@ -187,17 +189,29 @@ export default function Nav() {
             </Link>
             <div className="pt-4 border-t">
               {loading ? (
-                 <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Skeleton className="h-8 w-20 rounded-md" />
                 </div>
               ) : user ? (
-                 <div className="flex flex-col gap-2">
-                   <p>{user?.email?.length >= 30 ? user?.email?.slice(0,30) + "..." : user?.email}</p>
-                   <Button variant="ghost" className="w-full justify-start text-destructive" onClick={handleLogout}>Log Out</Button>
+                <div className="flex flex-col gap-2">
+                  <p>
+                    {user?.email?.length >= 30
+                      ? user?.email?.slice(0, 30) + "..."
+                      : user?.email}
+                  </p>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-destructive"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </Button>
                 </div>
               ) : (
                 <Link href="/sign-in" className="w-full">
-                  <Button variant="outline" className="w-full">Sign In</Button>
+                  <Button variant="outline" className="w-full">
+                    Sign In
+                  </Button>
                 </Link>
               )}
             </div>

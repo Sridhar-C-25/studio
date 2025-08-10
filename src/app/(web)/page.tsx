@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import BlogLayout from "./components/BlogLayout";
-import { YouTubeFilledIcon } from "./components/icon";
+import BlogLayout from "./_components/BlogLayout";
+import { YouTubeFilledIcon } from "./_components/icon";
 
 export default function Page() {
   return (
@@ -18,7 +17,9 @@ export default function Page() {
             Your Hub for Modern Web Dev
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-             Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.
+            Explore expert tutorials, free source code, and video guides on
+            Next.js, React, Tailwind CSS, and more. Level up your coding skills
+            with Code A Program.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -49,9 +50,8 @@ export default function Page() {
         </div>
       </div>
       <div className="container px-4 md:px-6">
-        
-        <BlogLayout/>
+        <BlogLayout />
       </div>
     </section>
-  )
+  );
 }
