@@ -1,5 +1,3 @@
-
-
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -13,7 +11,9 @@ interface BlogPageProps {
   };
 }
 
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BlogPageProps): Promise<Metadata> {
   const post = await getPost(params.id);
 
   if (!post) {
@@ -22,16 +22,16 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     };
   }
 
-  const plainContent = post.content.replace(/<[^>]+>/g, '').substring(0, 160);
+  const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
   const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
 
   return {
-    title: `${post.title} | Blog`,
+    title: `${post.title} | Code A Program | Blog`,
     description: plainContent,
     openGraph: {
       title: post.title,
       description: plainContent,
-      type: 'article',
+      type: "article",
       publishedTime: post.createdAt,
       url: `/blogs/${post.id}`,
       images: [
@@ -55,23 +55,23 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 export default async function BlogPage({ params }: BlogPageProps) {
   const post = await getPost(params.id);
 
-  if (!post || post.status !== 'Published') {
+  if (!post || post.status !== "Published") {
     notFound();
   }
-  
+
   const allPosts = await getPosts();
   const categories = await getCategories();
 
   return (
-     <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
         <div className="lg:col-span-3">
-           <BlogContent post={post} />
+          <BlogContent post={post} />
         </div>
         <div className="lg:col-span-1">
           <BlogSidebar allPosts={allPosts} categories={categories} />
         </div>
       </div>
     </div>
-  )
+  );
 }

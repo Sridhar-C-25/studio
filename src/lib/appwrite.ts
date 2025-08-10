@@ -1,7 +1,14 @@
-'use server';
+"use server";
 
-import { Client, Account, Databases, Storage, Teams, Users } from 'node-appwrite';
-import { cookies } from 'next/headers';
+import {
+  Client,
+  Account,
+  Databases,
+  Storage,
+  Teams,
+  Users,
+} from "node-appwrite";
+import { cookies } from "next/headers";
 
 // Admin client (server-only, API key)
 export async function getAdminClient() {

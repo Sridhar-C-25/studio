@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
   }, [userId, secret]);
 
   const handleRedirect = () => {
-    router.push("/dashboard");
+    router.push("/sign-in");
   };
 
   return (
@@ -65,7 +65,7 @@ export default function VerifyEmailPage() {
               <CheckCircle2 className="h-12 w-12 text-green-500" />
               <p className="text-foreground">{message}</p>
               <Button onClick={handleRedirect} className="mt-4">
-                Go to Dashboard
+                Go to Login
               </Button>
             </div>
           )}
