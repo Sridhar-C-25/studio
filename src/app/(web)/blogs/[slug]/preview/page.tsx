@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, BrainCircuit, Loader2, Sparkles } from "lucide-react";
 
-import { getPost } from "@/lib/data";
+import { getPostBySlug } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -22,11 +22,11 @@ import {
   EvaluateBlogEffectivenessOutput,
 } from "@/ai/flows/evaluate-blog-effectiveness";
 import type { BlogPost } from "@/types";
-import { BlogContent } from "@/app/(web)/blogs/[id]/components/blog-content";
+import { BlogContent } from "@/app/(web)/blogs/[slug]/components/blog-content";
 
 interface PreviewPageProps {
   params: {
-    id: string;
+    slug: string;
   };
 }
 
@@ -42,7 +42,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postData = await getPost(params.id);
+        const postData = await getPostBySlug(params.slug);
         if (!postData) {
           notFound();
         }
@@ -53,7 +53,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
     };
 
     fetchPost();
-  }, [params.id]);
+  }, [params.slug]);
 
   if (!post) {
     return (

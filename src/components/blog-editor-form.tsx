@@ -234,7 +234,7 @@ export function BlogEditorForm({
 
   const onPreview = () => {
     if (initialData) {
-      router.push(`/blogs/${initialData.id}/preview`);
+      router.push(`/blogs/${initialData.slug}/preview`);
     } else {
       toast({
         variant: "destructive",

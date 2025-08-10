@@ -46,7 +46,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   };
   
   const onPreview = () => {
-    router.push(`/blogs/${data.id}/preview`);
+    router.push(`/blogs/${data.slug}/preview`);
   }
 
   const onDeleteConfirm = async () => {

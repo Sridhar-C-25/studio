@@ -106,7 +106,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
               </div>
               <div className="flex-1">
                 <h4 className="text-sm font-medium line-clamp-2 mb-1 hover:text-primary">
-                  <Link href={`/blogs/${post.id}`}>{post.title}</Link>
+                  <Link href={`/blogs/${post.slug}`}>{post.title}</Link>
                 </h4>
                 <p className="text-xs text-muted-foreground">{new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </div>

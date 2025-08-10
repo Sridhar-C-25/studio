@@ -7,6 +7,7 @@ export type Category = {
 export type BlogPost = {
   id: string;
   title: string;
+  slug: string;
   content: string;
   category: Category[];
   createdAt: string;

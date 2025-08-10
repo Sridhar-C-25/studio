@@ -1,9 +1,20 @@
 "use server";
 
-import { Models, AppwriteException, ID } from "node-appwrite";
+import { Models, AppwriteException, ID, Query } from "node-appwrite";
 import type { BlogPost, Category } from "@/types";
 import { getAdminClient } from "./appwrite";
 import { InputFile } from "node-appwrite/file";
+
+function makeSlug(title: string) {
+  return title
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9\- ]/g, '')   // remove invalid chars
+    .replace(/\s+/g, '-')           // collapse whitespace to dashes
+    .replace(/\-+/g, '-');          // collapse multiple dashes
+}
 
 export async function uploadFile(
   base64: string,
@@ -130,7 +141,32 @@ export async function getPost(id: string): Promise<BlogPost | null> {
   }
 }
 
-type PostInput = Omit<BlogPost, "id" | "createdAt" | "category"> & {
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+    const { databases } = await getAdminClient();
+    try {
+      const response = await databases.listDocuments(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+        [Query.equal("slug", slug)]
+      );
+
+      if (response.documents.length === 0) {
+        return null;
+      }
+
+      const postDoc = response.documents[0];
+      const allCategories = await getCategories();
+      return await mapDocumentToBlogPost(postDoc, allCategories);
+    } catch (error) {
+      if (error instanceof AppwriteException && error.code === 404) {
+        return null;
+      }
+      console.error("Failed to fetch post by slug:", error);
+      throw error;
+    }
+}
+
+type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
   status: "Published" | "Draft";
   category: string[];
   banner_image?: string;
@@ -138,12 +174,14 @@ type PostInput = Omit<BlogPost, "id" | "createdAt" | "category"> & {
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
   const { databases } = await getAdminClient();
+  const slug = makeSlug(data.title);
   const response = await databases.createDocument(
     process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
     process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
     ID.unique(),
     {
       ...data,
+      slug,
       category: data.category,
     }
   );
@@ -156,12 +194,14 @@ export async function updatePost(
   data: Partial<PostInput>
 ): Promise<BlogPost> {
   const { databases } = await getAdminClient();
+  const slug = data.title ? makeSlug(data.title) : undefined;
   const response = await databases.updateDocument(
     process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
     process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
     id,
     {
       ...data,
+      slug,
       category: data.category,
     }
   );
@@ -200,6 +240,7 @@ async function mapDocumentToBlogPost(
   return {
     id: doc.$id,
     title: doc.title,
+    slug: doc.slug,
     content: doc.content,
     category: relatedCategories,
     createdAt: doc.$createdAt,

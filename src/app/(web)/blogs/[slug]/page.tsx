@@ -2,20 +2,20 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-import { getPost, getPosts, getCategories } from "@/lib/data";
+import { getPostBySlug, getPosts, getCategories } from "@/lib/data";
 import { BlogContent } from "./components/blog-content";
 import { BlogSidebar } from "../../_components/blog-sidebar";
 
 interface BlogPageProps {
   params: {
-    id: string;
+    slug: string;
   };
 }
 
 export async function generateMetadata({
   params,
 }: BlogPageProps): Promise<Metadata> {
-  const post = await getPost(params.id);
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -34,7 +34,7 @@ export async function generateMetadata({
       description: plainContent,
       type: "article",
       publishedTime: post.createdAt,
-      url: `/blogs/${post.id}`,
+      url: `/blogs/${post.slug}`,
       images: [
         {
           url: imageUrl,
@@ -54,7 +54,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const post = await getPost(params.id);
+  const post = await getPostBySlug(params.slug);
 
   if (!post || post.status !== "Published") {
     notFound();

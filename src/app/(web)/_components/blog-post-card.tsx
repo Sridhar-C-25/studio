@@ -21,7 +21,7 @@ export async function BlogPostCard({ post }: BlogPostCardProps) {
       className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col"
     >
       <div className="relative h-64 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-          <Link href={`/blogs/${post.id}`}>
+          <Link href={`/blogs/${post.slug}`}>
           
             <Image
               src={post.banner_image?.length ? post.banner_image + '&mode=admin' : "https://placehold.co/600x400.png"}
@@ -44,9 +44,9 @@ export async function BlogPostCard({ post }: BlogPostCardProps) {
           </span>
         </div>
         <h3 className="font-semibold text-lg line-clamp-2 mb-2 flex-grow">
-          <Link href={`/blogs/${post.id}`}>{post.title}</Link>
+          <Link href={`/blogs/${post.slug}`}>{post.title}</Link>
         </h3>
-          <Link href={`/blogs/${post.id}`}>
+          <Link href={`/blogs/${post.slug}`}>
           <Button
             variant="ghost"
             size="sm"

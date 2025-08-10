@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const publishedPosts = posts.filter((post) => post.status === "Published");
 
   const postUrls = publishedPosts.map((post) => ({
-    url: `${baseUrl}/blogs/${post.id}`,
+    url: `${baseUrl}/blogs/${post.slug}`,
     lastModified: new Date(post.createdAt),
   }));
 
@@ -29,5 +29,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/terms-conditions`, lastModified: new Date() },
   ];
 
-  return [...staticUrls, ...postUrls];
+  return [...staticUrls, ...postUrls, ...categoryUrls];
 }
