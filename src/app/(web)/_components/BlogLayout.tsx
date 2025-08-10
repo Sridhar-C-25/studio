@@ -26,7 +26,7 @@ export default async function BlogLayout() {
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center items-center gap-2 mt-8">
+          {/* <div className="flex justify-center items-center gap-2 mt-8">
             <Button variant="outline" size="sm" disabled>
               ←
             </Button>
@@ -46,7 +46,7 @@ export default async function BlogLayout() {
             <Button variant="outline" size="sm">
               →
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Sidebar */}
