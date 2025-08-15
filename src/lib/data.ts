@@ -1,34 +1,33 @@
 "use server";
 
-import { Models, AppwriteException, ID, Query } from "node-appwrite";
 import type { BlogPost, Category } from "@/types";
-import { getAdminClient } from "./appwrite";
-import { InputFile } from "node-appwrite/file";
-
-function makeSlug(title: string) {
-  return title
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9\- ]/g, '')   // remove invalid chars
-    .replace(/\s+/g, '-')           // collapse whitespace to dashes
-    .replace(/\-+/g, '-');          // collapse multiple dashes
-}
 
 export async function uploadFile(
   base64: string,
   fileName: string
-): Promise<Models.File> {
-  const { storage } = await getAdminClient();
-  const fileId = ID.unique();
-  const buffer = Buffer.from(base64.split(",")[1], "base64");
-
-  return await storage.createFile(
-    process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
-    fileId,
-    InputFile.fromBuffer(buffer, fileName)
-  );
+): Promise<{
+  fileId: string;
+  fileUrl: string;
+  size: number;
+  fileName: string;
+}> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ file: base64, fileName }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to upload file");
+    return await response.json();
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
 }
 
 export async function getFilePreview(fileId: string) {
@@ -36,25 +35,33 @@ export async function getFilePreview(fileId: string) {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const { databases } = await getAdminClient();
-  const response = await databases.listDocuments(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
-  );
-  return response.documents.map(mapDocumentToCategory);
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch categories");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
 }
 
 export async function getCategory(id: string): Promise<Category | null> {
-  const { databases } = await getAdminClient();
   try {
-    const doc = await databases.getDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-      id
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/category?id=${id}`,
+      {
+        cache: "no-store",
+      }
     );
-    return mapDocumentToCategory(doc);
+    if (!response.ok) throw new Error("Failed to fetch category");
+    return await response.json();
   } catch (error) {
-    if (error instanceof AppwriteException && error.code === 404) {
+    if (error instanceof Error && error.message === "Not Found") {
       return null;
     }
     throw error;
@@ -62,108 +69,110 @@ export async function getCategory(id: string): Promise<Category | null> {
 }
 
 export async function createCategory(name: string): Promise<Category> {
-  const { databases } = await getAdminClient();
-  const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-    ID.unique(),
-    { name }
-  );
-  return mapDocumentToCategory(response);
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to create category");
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating category:", error);
+    throw error;
+  }
 }
 
 export async function updateCategory(
   id: string,
   name: string
 ): Promise<Category> {
-  const { databases } = await getAdminClient();
-  const response = await databases.updateDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-    id,
-    { name }
-  );
-  return mapDocumentToCategory(response);
-}
-
-export async function deleteCategory(id: string): Promise<void> {
-  const { databases } = await getAdminClient();
-  await databases.deleteDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-    id
-  );
-}
-
-export async function getPosts(): Promise<BlogPost[]> {
-  const { databases } = await getAdminClient();
-  const [postsResponse, categoriesResponse] = await Promise.all([
-    databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
-    ),
-    databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!
-    ),
-  ]);
-
-  const allCategories = categoriesResponse.documents.map(mapDocumentToCategory);
-
-  const posts = await Promise.all(
-    postsResponse.documents.map((doc) =>
-      mapDocumentToBlogPost(doc, allCategories)
-    )
-  );
-
-  return posts.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
-}
-
-export async function getPost(id: string): Promise<BlogPost | null> {
-  const { databases } = await getAdminClient();
   try {
-    const postDoc = await databases.getDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-      id
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, id }),
+      }
     );
-
-    const allCategories = await getCategories();
-    return await mapDocumentToBlogPost(postDoc, allCategories);
+    if (!response.ok) throw new Error("Failed to update category");
+    return await response.json();
   } catch (error) {
-    if (error instanceof AppwriteException && error.code === 404) {
-      return null;
-    }
-    console.error("Failed to fetch post:", error);
+    console.error("Error updating category:", error);
     throw error;
   }
 }
 
+export async function deleteCategory(id: string): Promise<void> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to delete category");
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    throw error;
+  }
+}
+
+export async function getPosts(): Promise<BlogPost[]> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch posts");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
+}
+
+export async function getPost(id: string): Promise<BlogPost | null> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?id=${id}`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch post");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    return null;
+  }
+}
+
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-    const { databases } = await getAdminClient();
-    try {
-      const response = await databases.listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-        [Query.equal("slug", slug)]
-      );
-
-      if (response.documents.length === 0) {
-        return null;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?slug=${slug}`,
+      {
+        cache: "no-store",
       }
-
-      const postDoc = response.documents[0];
-      const allCategories = await getCategories();
-      return await mapDocumentToBlogPost(postDoc, allCategories);
-    } catch (error) {
-      if (error instanceof AppwriteException && error.code === 404) {
-        return null;
-      }
-      console.error("Failed to fetch post by slug:", error);
-      throw error;
-    }
+    );
+    if (!response.ok) throw new Error("Failed to fetch post by slug");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching post by slug:", error);
+    return null;
+  }
 }
 
 type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
@@ -173,79 +182,60 @@ type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
 };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
-  const { databases } = await getAdminClient();
-  const slug = makeSlug(data.title);
-  const response = await databases.createDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-    ID.unique(),
-    {
-      ...data,
-      slug,
-      category: data.category,
-    }
-  );
-  const allCategories = await getCategories();
-  return await mapDocumentToBlogPost(response, allCategories);
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to create post");
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
 }
 
 export async function updatePost(
   id: string,
   data: Partial<PostInput>
 ): Promise<BlogPost> {
-  const { databases } = await getAdminClient();
-  const slug = data.title ? makeSlug(data.title) : undefined;
-  const response = await databases.updateDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-    id,
-    {
-      ...data,
-      slug,
-      category: data.category,
-    }
-  );
-  const allCategories = await getCategories();
-  return await mapDocumentToBlogPost(response, allCategories);
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, ...data }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to update post");
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating post:", error);
+    throw error;
+  }
 }
 
 export async function deletePost(id: string): Promise<void> {
-  const { databases } = await getAdminClient();
-  await databases.deleteDocument(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-    id
-  );
-}
-
-function mapDocumentToCategory(doc: Models.Document): Category {
-  return {
-    id: doc.$id,
-    name: doc.name,
-  };
-}
-
-async function mapDocumentToBlogPost(
-  doc: Models.Document,
-  allCategories: Category[]
-): Promise<BlogPost> {
-  const categoryIds =
-    doc.category?.map((cat: string | { $id: string }) =>
-      typeof cat === "string" ? cat : cat.$id
-    ) || [];
-  const relatedCategories = allCategories.filter((cat) =>
-    categoryIds.includes(cat.id)
-  );
-
-  return {
-    id: doc.$id,
-    title: doc.title,
-    slug: doc.slug,
-    content: doc.content,
-    category: relatedCategories,
-    createdAt: doc.$createdAt,
-    status: doc.status,
-    adsenseTag: doc.adsenseTag,
-    banner_image: doc.banner_image,
-  };
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to delete post");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw error;
+  }
 }

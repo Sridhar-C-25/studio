@@ -132,8 +132,8 @@ export function BlogEditorForm({
           `data:${imageFile.type};base64,${base64}`,
           imageFile.name
         );
-        const fileUrl = await getFilePreview(uploadedFile.$id);
-        bannerImageUrl = fileUrl.toString();
+        console.log("Uploaded file:", uploadedFile);
+        bannerImageUrl = uploadedFile?.fileUrl;
       }
 
       const postData = {
