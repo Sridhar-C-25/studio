@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import type { PropsWithChildren } from "react";
 import Footer from "./_components/Footer";
 import Nav from "./_components/Nav";
@@ -36,6 +37,20 @@ export const metadata: Metadata = {
 export default function WebLayout({ children }: PropsWithChildren) {
   return (
     <>
+      {/* Google tag (gtag.js) */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-22XPTRPZX4"
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-22XPTRPZX4');
+        `}
+      </Script>
       <Nav />
       <main>{children}</main>
       <Footer />
