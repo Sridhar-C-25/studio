@@ -11,9 +11,9 @@ export default async function BlogLayout() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
         {/* Main Content */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-4">
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-4">Recent Posts</h1>
           </div>
@@ -50,7 +50,7 @@ export default async function BlogLayout() {
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <BlogSidebar allPosts={allPosts} categories={categories} />
         </div>
       </div>
