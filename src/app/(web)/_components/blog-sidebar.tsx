@@ -31,7 +31,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full">
       {/* Follow Us Section */}
       <Card>
         <CardHeader>
@@ -127,29 +127,31 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
       </Card>
 
       {/* Categories */}
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold">Categories</h3>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {categoriesWithCount.map((category) => (
-              <Link
-                href={`/blogs/category/${category.id}`}
-                key={category.id}
-                className="flex justify-between items-center py-1 group"
-              >
-                <span className="text-sm group-hover:text-primary cursor-pointer transition-colors">
-                  {category.name}
-                </span>
-                <Badge variant="secondary" className="text-xs">
-                  {category.postCount}
-                </Badge>
-              </Link>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="sticky top-24">
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold">Categories</h3>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {categoriesWithCount.map((category) => (
+                <Link
+                  href={`/blogs/category/${category.id}`}
+                  key={category.id}
+                  className="flex justify-between items-center py-1 group"
+                >
+                  <span className="text-sm group-hover:text-primary cursor-pointer transition-colors">
+                    {category.name}
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    {category.postCount}
+                  </Badge>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
