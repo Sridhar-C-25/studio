@@ -336,9 +336,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             </div>
           )} */}
         </article>
-        {process.env.NODE_ENV === "development" && (
-          <DownloadSourceCard post={post} />
-        )}
+        {/* <DownloadSourceCard post={post} /> */}
       </main>
     </div>
   );
