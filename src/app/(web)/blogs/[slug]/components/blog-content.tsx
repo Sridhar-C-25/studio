@@ -14,6 +14,10 @@ import {
   Linkedin,
   Twitter,
   Link2,
+  Github,
+  Download,
+  FileCode,
+  Loader2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -22,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogPost } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BlogContentProps {
   post: BlogPost;
@@ -170,6 +175,92 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
     );
   }
 
+  const DownloadSourceCard = ({ post }: { post: BlogPost }) => {
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
+
+    const handleDownload = () => {
+      setLoading(true);
+      // You can replace this with actual download logic
+      toast({
+        title: "Download Started",
+        description: "Source code download will begin shortly.",
+      });
+      setTimeout(() => {
+        window.location.href =
+          "https://github.com/Sridhar-C-25/React_stepper/archive/refs/heads/main.zip";
+        setLoading(false);
+      }, 1000);
+    };
+
+    return (
+      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-xl">
+            <FileCode className="h-6 w-6 text-primary" />
+            Download Source Code
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground">
+            Get the complete source code for this tutorial. Includes all files,
+            components, and documentation to help you follow along.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Button
+              onClick={handleDownload}
+              className="flex items-center gap-2"
+              size="lg"
+              disabled={loading}
+            >
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="h-4 w-4" />
+              )}
+              Download ZIP
+            </Button>
+
+            <Button
+              variant="outline"
+              asChild
+              size="lg"
+              className="flex items-center gap-2"
+            >
+              <a
+                href="https://github.com/sridhar-c-25"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github className="h-4 w-4" />
+                View on GitHub
+              </a>
+            </Button>
+          </div>
+
+          <div className="bg-muted/50 rounded-lg p-4">
+            <h4 className="font-semibold mb-2 flex items-center gap-2">
+              <span>📦</span>
+              What's Included:
+            </h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Complete source code files</li>
+              <li>• All assets and resources used</li>
+              <li>• README with setup instructions</li>
+              <li>• Package.json with dependencies</li>
+            </ul>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>💡</span>
+            <span>Free to use for personal and commercial projects</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="bg-background min-h-screen">
       {!isPreview && (
@@ -186,7 +277,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
       )}
 
       <main>
-        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
+        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm mb-5">
           <div className="relative w-full aspect-video bg-gray-200 dark:bg-black rounded-md overflow-hidden mb-6 shadow-sm">
             <Image
               src={post.banner_image || "https://placehold.co/1200x600.png"}
@@ -245,6 +336,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             </div>
           )} */}
         </article>
+        <DownloadSourceCard post={post} />
       </main>
     </div>
   );
