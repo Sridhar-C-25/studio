@@ -52,13 +52,6 @@ export default function WebLayout({ children }: PropsWithChildren) {
           gtag('config', 'G-22XPTRPZX4');
         `}
       </Script>
-      <Head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330892218225177"
-          crossOrigin="anonymous"
-        ></script>
-      </Head>
       <Nav />
       <main className="md:container">{children}</main>
       <Footer />
