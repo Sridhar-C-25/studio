@@ -86,11 +86,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-          <div className="lg:col-span-3">
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-12">
+          <div className="lg:col-span-4">
             <BlogContent post={post} />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-2">
             <BlogSidebar allPosts={allPosts} categories={categories} />
           </div>
         </div>
