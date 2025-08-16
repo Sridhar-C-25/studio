@@ -336,7 +336,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             </div>
           )} */}
         </article>
-        <DownloadSourceCard post={post} />
+        {/* <DownloadSourceCard post={post} /> */}
       </main>
     </div>
   );
