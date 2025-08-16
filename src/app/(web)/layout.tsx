@@ -52,7 +52,7 @@ export default function WebLayout({ children }: PropsWithChildren) {
         `}
       </Script>
       <Nav />
-      <main>{children}</main>
+      <main className="md:container">{children}</main>
       <Footer />
     </>
   );

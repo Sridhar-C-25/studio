@@ -187,7 +187,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
 
       <main>
         <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm">
-          <div className="relative w-full h-96 bg-gray-200 dark:bg-black rounded-md overflow-hidden mb-6">
+          <div className="relative w-full aspect-video bg-gray-200 dark:bg-black rounded-md overflow-hidden mb-6">
             <Image
               src={post.banner_image || "https://placehold.co/1200x600.png"}
               alt={post.title}
@@ -230,7 +230,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             <SocialShareButtons title={post.title} url={pathname} />
           </div>
 
-          {post.adsenseTag && (
+          {/* {post.adsenseTag && (
             <div className="mt-8 rounded-md border border-dashed p-4">
               <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
                 {isPreview ? "AdSense Tag Preview" : "Advertisement"}
@@ -243,7 +243,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
                 <div>{parse(post.adsenseTag)}</div>
               )}
             </div>
-          )}
+          )} */}
         </article>
       </main>
     </div>

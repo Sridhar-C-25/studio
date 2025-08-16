@@ -1,5 +1,3 @@
-
-
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,25 +11,24 @@ import type { BlogPost, Category } from "@/types";
 import Image from "next/image";
 
 interface BlogSidebarProps {
-    allPosts: BlogPost[];
-    categories: Category[];
+  allPosts: BlogPost[];
+  categories: Category[];
 }
 
 export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
-  const publishedPosts = allPosts.filter(
-    (post) => post.status === "Published"
-  );
-  
+  const publishedPosts = allPosts.filter((post) => post.status === "Published");
+
   const popularPosts = publishedPosts.slice(0, 5);
 
-  const categoriesWithCount = categories.map(category => {
-    const postCount = allPosts.filter(post => post.category?.some(cat => cat.id === category.id)).length;
+  const categoriesWithCount = categories.map((category) => {
+    const postCount = allPosts.filter((post) =>
+      post.category?.some((cat) => cat.id === category.id)
+    ).length;
     return {
       ...category,
-      postCount
-    }
+      postCount,
+    };
   });
-
 
   return (
     <div className="space-y-6">
@@ -92,7 +89,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
         <CardContent className="space-y-4">
           {popularPosts.map((post, index) => (
             <div key={post.id} className="flex gap-3">
-               <div className="w-16 h-12 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded flex items-center justify-center relative overflow-hidden">
+              <div className="w-16 h-12 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded flex items-center justify-center relative overflow-hidden">
                 <Image
                   src={post.banner_image || "https://placehold.co/100x100.png"}
                   alt={post.title}
@@ -100,7 +97,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
                   objectFit="cover"
                   data-ai-hint="tech abstract"
                 />
-                 <span className="absolute bottom-1 right-1 text-xs text-white bg-black/50 px-1 rounded">
+                <span className="absolute bottom-1 right-1 text-xs text-white bg-black/50 px-1 rounded">
                   {index + 1}
                 </span>
               </div>
@@ -108,7 +105,13 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
                 <h4 className="text-sm font-medium line-clamp-2 mb-1 hover:text-primary">
                   <Link href={`/blogs/${post.slug}`}>{post.title}</Link>
                 </h4>
-                <p className="text-xs text-muted-foreground">{new Date(post.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p className="text-xs text-muted-foreground">
+                  {new Date(post.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
               </div>
             </div>
           ))}
@@ -124,7 +127,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
       </Card>
 
       {/* Categories */}
-      <Card className="sticky top-24">
+      <Card>
         <CardHeader>
           <h3 className="text-lg font-semibold">Categories</h3>
         </CardHeader>

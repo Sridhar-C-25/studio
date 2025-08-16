@@ -10,11 +10,11 @@ body {
   @apply min-h-[400px] rounded-md border border-input bg-background p-4 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm;
 }
 
-.tiptap>p:first-child {
+.tiptap > p:first-child {
   margin-top: 0;
 }
 
-.tiptap>p:last-child {
+.tiptap > p:last-child {
   margin-bottom: 0;
 }
 
@@ -28,7 +28,7 @@ body {
 .prose h1,
 .prose h2,
 .prose h3 {
-  font-family: theme('fontFamily.headline');
+  font-family: theme("fontFamily.headline");
   font-weight: bold;
 }
 
@@ -95,14 +95,15 @@ body {
   color: hsl(var(--muted-foreground));
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  font-family: theme('fontFamily.code');
+  font-family: theme("fontFamily.code");
 }
 
 .tiptap pre,
 .prose pre {
   background: #2d2d2d !important;
   color: #c9d1d9;
-  font-family: theme('fontFamily.code');
+  max-height: 660px;
+  font-family: theme("fontFamily.code");
   padding: 1rem;
   border-radius: 0.5rem;
   margin-top: 1rem;
@@ -140,7 +141,6 @@ body {
   aspect-ratio: 16 / 9;
   border-radius: 0.5rem;
 }
-
 
 /* @layer base {
   :root {
@@ -214,7 +214,6 @@ body {
   }
 } */
 
-
 :root {
   --background: 0 0% 99.2157%;
   --foreground: 0 0% 0%;
@@ -254,12 +253,17 @@ body {
   --radius: 1.4rem;
   --shadow-2xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.08);
   --shadow-xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.08);
-  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 1px 2px -1px hsl(0 0% 0% / 0.16);
-  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 1px 2px -1px hsl(0 0% 0% / 0.16);
-  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 2px 4px -1px hsl(0 0% 0% / 0.16);
-  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 4px 6px -1px hsl(0 0% 0% / 0.16);
-  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 8px 10px -1px hsl(0 0% 0% / 0.16);
-  --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.40);
+  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.16);
+  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.16);
+  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 2px 4px -1px hsl(0 0% 0% / 0.16);
+  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 4px 6px -1px hsl(0 0% 0% / 0.16);
+  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 8px 10px -1px hsl(0 0% 0% / 0.16);
+  --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.4);
   --tracking-normal: -0.025em;
   --spacing: 0.27rem;
 }
@@ -267,9 +271,9 @@ body {
 .dark {
   --background: 225 7.1429% 10.9804%;
   --foreground: 0 0% 94.1176%;
-  --card: 228.0000 6.8493% 14.3137%;
+  --card: 228 6.8493% 14.3137%;
   --card-foreground: 0 0% 94.1176%;
-  --popover: 228.0000 6.8493% 14.3137%;
+  --popover: 228 6.8493% 14.3137%;
   --popover-foreground: 0 0% 94.1176%;
   --primary: 257.6687 100% 68.0392%;
   --primary-foreground: 0 0% 100%;
@@ -277,12 +281,12 @@ body {
   --secondary-foreground: 0 0% 94.1176%;
   --muted: 226.6667 9.6774% 18.2353%;
   --muted-foreground: 0 0% 62.7451%;
-  --accent: 217.2414 32.5843% 17.4510%;
-  --accent-foreground: 208.2090 100.0000% 73.7255%;
-  --destructive: 0 90.6040% 70.7843%;
+  --accent: 217.2414 32.5843% 17.451%;
+  --accent-foreground: 208.209 100% 73.7255%;
+  --destructive: 0 90.604% 70.7843%;
   --destructive-foreground: 0 0% 100%;
-  --border: 222.8571 6.4220% 21.3725%;
-  --input: 222.8571 6.4220% 21.3725%;
+  --border: 222.8571 6.422% 21.3725%;
+  --input: 222.8571 6.422% 21.3725%;
   --ring: 257.6687 100% 68.0392%;
   --chart-1: 141.8919 69.1589% 58.0392%;
   --chart-2: 257.6687 100% 68.0392%;
@@ -295,7 +299,7 @@ body {
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 226.6667 9.6774% 18.2353%;
   --sidebar-accent-foreground: 257.6687 100% 68.0392%;
-  --sidebar-border: 222.8571 6.4220% 21.3725%;
+  --sidebar-border: 222.8571 6.422% 21.3725%;
   --sidebar-ring: 257.6687 100% 68.0392%;
   --font-sans: Plus Jakarta Sans, sans-serif;
   --font-serif: Lora, serif;
@@ -303,14 +307,18 @@ body {
   --radius: 1.4rem;
   --shadow-2xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.08);
   --shadow-xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.08);
-  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 1px 2px -1px hsl(0 0% 0% / 0.16);
-  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 1px 2px -1px hsl(0 0% 0% / 0.16);
-  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 2px 4px -1px hsl(0 0% 0% / 0.16);
-  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 4px 6px -1px hsl(0 0% 0% / 0.16);
-  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 8px 10px -1px hsl(0 0% 0% / 0.16);
-  --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.40);
+  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.16);
+  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.16);
+  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 2px 4px -1px hsl(0 0% 0% / 0.16);
+  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 4px 6px -1px hsl(0 0% 0% / 0.16);
+  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16),
+    0px 8px 10px -1px hsl(0 0% 0% / 0.16);
+  --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.4);
 }
-
 
 @layer base {
   * {
@@ -320,7 +328,6 @@ body {
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
-
   }
 }
 
