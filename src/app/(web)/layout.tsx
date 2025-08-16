@@ -3,7 +3,6 @@ import Script from "next/script";
 import type { PropsWithChildren } from "react";
 import Footer from "./_components/Footer";
 import Nav from "./_components/Nav";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Code A Program: Your Hub for Modern Web Dev",
