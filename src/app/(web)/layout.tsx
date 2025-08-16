@@ -3,6 +3,7 @@ import Script from "next/script";
 import type { PropsWithChildren } from "react";
 import Footer from "./_components/Footer";
 import Nav from "./_components/Nav";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Code A Program: Your Hub for Modern Web Dev",
@@ -51,11 +52,13 @@ export default function WebLayout({ children }: PropsWithChildren) {
           gtag('config', 'G-22XPTRPZX4');
         `}
       </Script>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330892218225177"
-        crossOrigin="anonymous"
-      />
+      <Head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5330892218225177"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <Nav />
       <main className="md:container">{children}</main>
       <Footer />
