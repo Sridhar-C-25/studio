@@ -41,5 +41,6 @@ export async function getSessionClient() {
     teams: new Teams(client),
     databases: new Databases(client),
     storage: new Storage(client),
+    users: new Users(client),
   };
 }
