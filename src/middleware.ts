@@ -43,37 +43,37 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (protectedRoutesWithMethods.some((route) => route.path === pathname)) {
-    const method = req.method;
-    if (
-      protectedRoutesWithMethods
-        .find((route) => route.path === pathname)
-        ?.methods.includes(method) === false
-    ) {
-      return NextResponse.next();
-    }
-    try {
-      const { teams } = await getSessionClient();
-      const memberships = await teams.list();
+  // if (protectedRoutesWithMethods.some((route) => route.path === pathname)) {
+  //   const method = req.method;
+  //   if (
+  //     protectedRoutesWithMethods
+  //       .find((route) => route.path === pathname)
+  //       ?.methods.includes(method) === false
+  //   ) {
+  //     return NextResponse.next();
+  //   }
+  //   try {
+  //     const { teams } = await getSessionClient();
+  //     const memberships = await teams.list();
 
-      const isAdmin = memberships.teams.some(
-        (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
-      );
+  //     const isAdmin = memberships.teams.some(
+  //       (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
+  //     );
 
-      if (!isAdmin) {
-        return NextResponse.json(
-          { error: "Forbidden: You are not authorized to perform this action" },
-          { status: 403 }
-        );
-      }
-    } catch (err) {
-      console.log("err", err);
-      return NextResponse.json(
-        { error: "Forbidden: You are not authorized to perform this action" },
-        { status: 403 }
-      );
-    }
-  }
+  //     if (!isAdmin) {
+  //       return NextResponse.json(
+  //         { error: "Forbidden: You are not authorized to perform this action" },
+  //         { status: 403 }
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     return NextResponse.json(
+  //       { error: "Forbidden: You are not authorized to perform this action" },
+  //       { status: 403 }
+  //     );
+  //   }
+  // }
 
   if (
     user &&
