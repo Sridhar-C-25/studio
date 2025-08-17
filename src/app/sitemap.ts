@@ -1,8 +1,7 @@
-
 import { getPosts, getCategories } from "@/lib/data";
 import { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPosts();
@@ -20,13 +19,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const staticUrls = [
-    { url: baseUrl, lastModified: new Date() },
-    { url: `${baseUrl}/blogs`, lastModified: new Date() },
-    { url: `${baseUrl}/about`, lastModified: new Date() },
-    { url: `${baseUrl}/contact`, lastModified: new Date() },
-    { url: `${baseUrl}/youtube`, lastModified: new Date() },
-    { url: `${baseUrl}/privacy-policy`, lastModified: new Date() },
-    { url: `${baseUrl}/terms-conditions`, lastModified: new Date() },
+    { url: baseUrl, lastModified: new Date(), priority: 1.0 }, // homepage gets highest priority
+    { url: `${baseUrl}/blogs`, lastModified: new Date(), priority: 0.9 },
+    { url: `${baseUrl}/about`, lastModified: new Date(), priority: 0.8 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), priority: 0.8 },
+    { url: `${baseUrl}/youtube`, lastModified: new Date(), priority: 0.7 },
+    {
+      url: `${baseUrl}/privacy-policy`,
+      lastModified: new Date(),
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/terms-conditions`,
+      lastModified: new Date(),
+      priority: 0.5,
+    },
   ];
 
   return [...staticUrls, ...postUrls, ...categoryUrls];
