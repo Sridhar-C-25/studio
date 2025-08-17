@@ -78,19 +78,27 @@ export default async function BlogPage({ params }: BlogPageProps) {
     image: post.banner_image || "https://placehold.co/1200x630.png",
     datePublished: new Date(post.createdAt).toISOString(),
     dateModified: new Date(post.createdAt).toISOString(),
-    author: [
-      {
-        "@type": "Person",
-        name: "Code A Program",
-        url: "https://codeaprogram.tech/about",
+    author: {
+      "@type": "Person",
+      name: "Sridhar Chandrasekar",
+      url: "https://codeaprogram.tech/about",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Code A Program",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://codeaprogram.tech/logo.png",
       },
-    ],
-    sameAs: [
-      "https://www.instagram.com/codeaprogram/",
-      "https://www.youtube.com/@codeaprogram",
-      "https://github.com/sridhar-c-25",
-    ],
-    description: post.content.replace(/<[^>]+>/g, "").substring(0, 160),
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://codeaprogram.tech/blog/${post?.slug}`,
+    },
+    description: post.content
+      .replace(/<[^>]+>/g, "")
+      .substring(0, 160)
+      .trim(),
   };
 
   return (
