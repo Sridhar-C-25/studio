@@ -29,7 +29,12 @@ const nextConfig: NextConfig = {
     ],
   },
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["middleware.ts"],
+          }
+        : false,
   },
   reactStrictMode: process.env.NODE_ENV !== "production",
 };
