@@ -12,7 +12,6 @@ interface EditBlogPageProps {
 export default async function EditBlogPage({ params }: EditBlogPageProps) {
   const post: BlogPost | null = await getPost(params.id);
   const categories = await getCategories();
-  console.log(post, "post");
   if (!post) {
     notFound();
   }

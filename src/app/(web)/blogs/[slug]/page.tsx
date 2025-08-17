@@ -26,7 +26,7 @@ export async function generateMetadata({
   const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
 
   return {
-    title: `${post.title} | Code A Program | Blog`,
+    title: `${post.title}`,
     description: plainContent,
     openGraph: {
       title: post.title,
@@ -49,6 +49,15 @@ export async function generateMetadata({
       description: plainContent,
       images: [imageUrl],
     },
+    alternates: {
+      canonical: `/blogs/${post.slug}`,
+    },
+    authors: [
+      {
+        name: "Code A Program",
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/about`,
+      },
+    ],
   };
 }
 
