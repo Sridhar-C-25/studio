@@ -41,12 +41,13 @@ export async function getCurrentUser() {
 }
 
 // Check if user is in a role (team)
-export async function userHasRole(roleName: string) {
+export async function userHasRole() {
   try {
     const { teams } = await getSessionClient();
     const memberships = await teams.list();
+    console.log("memberships", memberships);
     return memberships.teams.some(
-      (team) => team.name.toLowerCase() === roleName.toLowerCase()
+      (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
     );
   } catch {
     return false;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getAdminClient, getSessionClient } from "@/lib/appwrite";
-import { getCurrentUser } from "./lib/authActions";
+import { getSessionClient } from "@/lib/appwrite";
+import { getCurrentUser, userHasRole } from "./lib/authActions";
 
 const protectedRoutesWithMethods = [
   {
@@ -53,14 +53,8 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     }
     try {
-      const { teams } = await getAdminClient();
-      console.log("teams", teams);
-      const memberships = await teams.list();
-
-      const isAdmin = memberships.teams.some(
-        (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
-      );
-
+      const isAdmin = await userHasRole();
+      console.log("isAdmin", isAdmin);
       if (!isAdmin) {
         return NextResponse.json(
           { error: "Forbidden: You are not authorized to perform this action" },
