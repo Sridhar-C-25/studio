@@ -85,6 +85,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
         url: "https://codeaprogram.tech/about",
       },
     ],
+    sameAs: [
+      "https://www.instagram.com/codeaprogram/",
+      "https://www.youtube.com/@codeaprogram",
+      "https://github.com/sridhar-c-25",
+    ],
     description: post.content.replace(/<[^>]+>/g, "").substring(0, 160),
   };
 
