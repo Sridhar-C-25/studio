@@ -10,6 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const postUrls = publishedPosts.map((post) => ({
     url: `${baseUrl}/blogs/${post.slug}`,
     lastModified: new Date(post.createdAt),
+    priority: 0.9,
   }));
 
   const categories = await getCategories();
