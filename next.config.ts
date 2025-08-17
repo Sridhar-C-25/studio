@@ -198,7 +198,6 @@ const nextConfig: NextConfig = {
   compress: true,
   // Optimize page extensions
   pageExtensions: ["tsx", "ts", "jsx", "js"],
-  swcMinify: true,
 };
 
 export default nextConfig;
