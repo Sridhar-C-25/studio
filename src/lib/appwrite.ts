@@ -27,8 +27,9 @@ export async function getAdminClient() {
 }
 
 // Session client (server-only, from cookies)
-export async function getSessionClient() {
-  const session = (await cookies()).get("appwrite-session")?.value;
+export async function getSessionClient(sessionVal?: string) {
+  const session =
+    sessionVal || (await cookies()).get("appwrite-session")?.value;
   if (!session) throw new Error("No session cookie");
 
   const client = new Client()

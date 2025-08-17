@@ -45,7 +45,7 @@ export async function userHasRole() {
   try {
     const { teams } = await getSessionClient();
     const memberships = await teams.list();
-    console.log("memberships", memberships);
+    console.log("memberships-", memberships);
     return memberships.teams.some(
       (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
     );

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getSessionClient } from "@/lib/appwrite";
 import { getCurrentUser, userHasRole } from "./lib/authActions";
+import { cookies } from "next/headers";
 
 const protectedRoutesWithMethods = [
   {
@@ -52,9 +53,15 @@ export async function middleware(req: NextRequest) {
     ) {
       return NextResponse.next();
     }
+
     try {
-      const isAdmin = await userHasRole();
-      console.log("isAdmin", isAdmin);
+      const session = req.headers.get("appwrite-session")!;
+      const { teams } = await getSessionClient(session);
+      const memberships = await teams.list();
+      const isAdmin = memberships.teams.some(
+        (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
+      );
+      console.log(isAdmin, "588888");
       if (!isAdmin) {
         return NextResponse.json(
           { error: "Forbidden: You are not authorized to perform this action" },
@@ -62,6 +69,7 @@ export async function middleware(req: NextRequest) {
         );
       }
     } catch (err) {
+      console.log("54444444444444", err);
       return NextResponse.json(
         { error: "Forbidden: You are not authorized to perform this action" },
         { status: 403 }

@@ -1,6 +1,7 @@
 "use server";
 
 import type { BlogPost, Category } from "@/types";
+import { cookies } from "next/headers";
 
 export async function uploadFile(
   base64: string,
@@ -18,6 +19,8 @@ export async function uploadFile(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
         },
         body: JSON.stringify({ file: base64, fileName }),
       }
@@ -76,6 +79,8 @@ export async function createCategory(name: string): Promise<Category> {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
         },
         body: JSON.stringify({ name }),
       }
@@ -99,6 +104,8 @@ export async function updateCategory(
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
         },
         body: JSON.stringify({ name, id }),
       }
@@ -117,6 +124,11 @@ export async function deleteCategory(id: string): Promise<void> {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
       {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
+        },
         body: JSON.stringify({ id }),
       }
     );
@@ -189,6 +201,8 @@ export async function createPost(data: PostInput): Promise<BlogPost> {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
         },
         body: JSON.stringify(data),
       }
@@ -212,6 +226,8 @@ export async function updatePost(
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
         },
         body: JSON.stringify({ id, ...data }),
       }
@@ -230,6 +246,11 @@ export async function deletePost(id: string): Promise<void> {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
       {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "appwrite-session":
+            (await cookies()).get("appwrite-session")?.value || "",
+        },
         body: JSON.stringify({ id }),
       }
     );
