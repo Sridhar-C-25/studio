@@ -39,6 +39,15 @@ const nextConfig: NextConfig = {
             exclude: ["middleware.ts"],
           }
         : false,
+    reactRemoveProperties: process.env.NODE_ENV === "production",
+  },
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
   reactStrictMode: process.env.NODE_ENV !== "production",
   experimental: {
@@ -69,25 +78,54 @@ const nextConfig: NextConfig = {
     ],
   },
   // Optimize bundle size
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
     // Optimize for production
     if (!dev && !isServer) {
-      config.optimization.splitChunks = {
-        chunks: "all",
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: "vendors",
-            priority: 10,
-            reuseExistingChunk: true,
-          },
-          common: {
-            name: "common",
-            minChunks: 2,
-            priority: 5,
-            reuseExistingChunk: true,
+      config.optimization = {
+        ...config.optimization,
+        minimize: true,
+        minimizer: [
+          // Keep existing minimizers and add custom ones
+          ...config.optimization.minimizer,
+        ],
+        splitChunks: {
+          chunks: "all",
+          minSize: 20000,
+          maxSize: 244000,
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: "vendors",
+              priority: 10,
+              reuseExistingChunk: true,
+              chunks: "all",
+            },
+            common: {
+              name: "common",
+              minChunks: 2,
+              priority: 5,
+              reuseExistingChunk: true,
+              chunks: "all",
+            },
+            // Separate chunk for heavy libraries
+            syntaxHighlighter: {
+              test: /[\\/]node_modules[\\/]react-syntax-highlighter[\\/]/,
+              name: "syntax-highlighter",
+              priority: 20,
+              reuseExistingChunk: true,
+              chunks: "all",
+            },
+            radixUI: {
+              test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+              name: "radix-ui",
+              priority: 15,
+              reuseExistingChunk: true,
+              chunks: "all",
+            },
           },
         },
+        usedExports: true,
+        sideEffects: false,
       };
     }
 
@@ -96,7 +134,11 @@ const nextConfig: NextConfig = {
       ...config.resolve.alias,
       "@": require("path").resolve(__dirname, "src"),
     };
-
+    // Optimize module resolution
+    config.resolve.modules = ["node_modules"];
+    if (!dev && !isServer) {
+      config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
+    }
     return config;
   },
   // Headers for better caching and performance
@@ -156,6 +198,7 @@ const nextConfig: NextConfig = {
   compress: true,
   // Optimize page extensions
   pageExtensions: ["tsx", "ts", "jsx", "js"],
+  swcMinify: true,
 };
 
 export default nextConfig;
