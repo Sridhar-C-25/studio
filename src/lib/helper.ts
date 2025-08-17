@@ -32,6 +32,7 @@ export function mapDocumentToBlogPost(
     status: doc.status,
     adsenseTag: doc.adsenseTag,
     banner_image: doc.banner_image,
+    src_link: doc.src_link,
   };
 }
 

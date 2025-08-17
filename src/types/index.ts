@@ -11,7 +11,8 @@ export type BlogPost = {
   content: string;
   category: Category[];
   createdAt: string;
-  status: 'Published' | 'Draft';
+  status: "Published" | "Draft";
   adsenseTag?: string;
   banner_image?: string;
+  src_link?: string;
 };

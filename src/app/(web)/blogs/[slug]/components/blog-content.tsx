@@ -187,12 +187,16 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
         description: "Source code download will begin shortly.",
       });
       setTimeout(() => {
-        window.location.href =
-          "https://github.com/Sridhar-C-25/React_stepper/archive/refs/heads/main.zip";
+        window.location.href = post?.src_link!;
         setLoading(false);
       }, 1000);
     };
 
+    function getRepoUrl(archiveUrl: string) {
+      const match = archiveUrl.match(/(https:\/\/github\.com\/[^/]+\/[^/]+)/);
+      return match ? match[1] : null;
+    }
+    const repoUrl = getRepoUrl(post?.src_link!);
     return (
       <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
         <CardHeader className="pb-4">
@@ -221,18 +225,13 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
               )}
               Download ZIP
             </Button>
-
             <Button
               variant="outline"
               asChild
               size="lg"
               className="flex items-center gap-2"
             >
-              <a
-                href="https://github.com/sridhar-c-25"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={repoUrl!} target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4" />
                 View on GitHub
               </a>
@@ -336,7 +335,8 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             </div>
           )} */}
         </article>
-        {/* <DownloadSourceCard post={post} /> */}
+
+        {post.src_link && <DownloadSourceCard post={post} />}
       </main>
     </div>
   );

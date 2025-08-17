@@ -106,7 +106,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
-    const { title, content, category, status, adsenseTag, banner_image } = body;
+    const {
+      title,
+      content,
+      category,
+      status,
+      adsenseTag,
+      banner_image,
+      src_link,
+    } = body;
     if (!title || !content || !category || !status) {
       return NextResponse.json(
         { error: "Title, content, category, and status are required" },
@@ -125,6 +133,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         status,
         adsenseTag,
         banner_image,
+        src_link,
         slug: makeSlug(title),
       }
     );
@@ -158,8 +167,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
-    const { id, title, content, category, status, adsenseTag, banner_image } =
-      body;
+    const {
+      id,
+      title,
+      content,
+      category,
+      status,
+      adsenseTag,
+      banner_image,
+      src_link,
+    } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -188,6 +205,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     if (status !== undefined) updateData.status = status;
     if (adsenseTag !== undefined) updateData.adsenseTag = adsenseTag;
     if (banner_image !== undefined) updateData.banner_image = banner_image;
+    updateData.src_link = src_link;
 
     const post = await databases.updateDocument(
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,

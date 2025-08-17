@@ -64,6 +64,7 @@ const formSchema = z.object({
   category: z.array(z.string()).min(1, "Please select at least one category."),
   adsenseTag: z.string().optional(),
   banner_image: z.any().optional(),
+  src_link: z.string().optional(),
 });
 
 type BlogEditorFormValues = z.infer<typeof formSchema>;
@@ -89,7 +90,7 @@ export function BlogEditorForm({
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.banner_image || null
   );
-
+  console.log(initialData, "initialData");
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -101,6 +102,7 @@ export function BlogEditorForm({
       category: [],
       adsenseTag: "",
       banner_image: undefined,
+      src_link: null,
     },
   });
 
@@ -112,6 +114,7 @@ export function BlogEditorForm({
     data: BlogEditorFormValues,
     status: "Draft" | "Published"
   ) => {
+    console.log(data, "1117");
     setLoading(true);
     try {
       let bannerImageUrl: string | undefined = initialData?.banner_image;
@@ -143,6 +146,7 @@ export function BlogEditorForm({
         adsenseTag: data.adsenseTag,
         status,
         banner_image: bannerImageUrl,
+        src_link: data.src_link,
       };
 
       console.log(postData);
@@ -361,6 +365,26 @@ export function BlogEditorForm({
                             />
                           </label>
                         </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="src_link"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Source Link</FormLabel>
+                      <FormDescription>
+                        Add a source link for the post.{" "}
+                        <span className="text-xs">
+                          (ex:
+                          https://github.com/Sridhar-C-25/React_stepper/archive/refs/heads/main.zip)
+                        </span>
+                      </FormDescription>
+                      <FormControl>
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
