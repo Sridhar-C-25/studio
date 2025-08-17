@@ -32,6 +32,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  other: {
+    "google-site-verification": "dF-MbQKHXxO9ZJ_nq8XgWo1e62xB7OdNhwINWtVK88I",
+  },
 };
 
 export default function WebLayout({ children }: PropsWithChildren) {
