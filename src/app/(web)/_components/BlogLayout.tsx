@@ -15,7 +15,7 @@ export default async function BlogLayout() {
         {/* Main Content */}
         <div className="lg:col-span-4">
           <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-4">Recent Posts</h3>
+            <h2 className="text-3xl font-bold mb-4">Recent Posts</h2>
           </div>
 
           {/* Blog Posts Grid */}
