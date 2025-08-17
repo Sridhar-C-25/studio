@@ -1,13 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
   Sidebar,
   SidebarContent,
@@ -20,8 +12,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/icons";
-import { BookText, LayoutGrid, LogOut, Settings, User } from "lucide-react";
+import { BookText, LayoutGrid } from "lucide-react";
 import Link from "next/link";
+import AdminProfile from "./_components/AdminProfile";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   return (
@@ -54,7 +47,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <Link href="/dashboard/categories" className="w-full">
+              <Link href="/dashboard/categories" className="w-full">
                 <SidebarMenuButton tooltip="Categories">
                   <LayoutGrid />
                   Categories
@@ -68,31 +61,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
           <SidebarTrigger className="lg:hidden" />
           <div className="ml-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="h-9 w-9 cursor-pointer">
-                  <AvatarImage src="https://placehold.co/36x36.png" alt="@user" />
-                  <AvatarFallback>AD</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Admin</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <AdminProfile />
           </div>
         </header>
         <main className="flex-1 p-4 sm:p-6">{children}</main>
