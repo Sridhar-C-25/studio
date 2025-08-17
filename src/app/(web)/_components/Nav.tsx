@@ -123,6 +123,12 @@ export default function Nav() {
             Video
           </Link>
           <Link
+            href="/blogs"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Blogs
+          </Link>
+          <Link
             href="/about"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
@@ -172,6 +178,13 @@ export default function Nav() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Videos
+            </Link>
+            <Link
+              href="/blogs"
+              className="py-2 text-sm font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Blogs
             </Link>
             <Link
               href="/about"

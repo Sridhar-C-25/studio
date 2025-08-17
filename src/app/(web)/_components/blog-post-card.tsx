@@ -21,8 +21,8 @@ export async function BlogPostCard({ post }: BlogPostCardProps) {
                 : "https://placehold.co/600x400.png"
             }
             alt={post.title}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
             data-ai-hint="blog abstract"
           />
         </Link>
