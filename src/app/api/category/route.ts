@@ -1,8 +1,8 @@
 // categories handler
 import { getAdminClient } from "@/lib/appwrite";
 import { NextRequest, NextResponse } from "next/server";
-import { ID } from "node-appwrite";
-import { mapDocumentToCategory } from "@/lib/helper";
+import { ID, Query } from "node-appwrite";
+import { makeSlug, mapDocumentToCategory } from "@/lib/helper";
 
 // GET /api/category
 //   - query parameter:
@@ -17,6 +17,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const { databases } = await getAdminClient();
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get("id");
+    const slug = searchParams.get("slug");
     if (id) {
       const category = await databases.getDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const category = await databases.createDocument(
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
       process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
-      ID.unique(),
+      makeSlug(name),
       { name }
     );
     return NextResponse.json(mapDocumentToCategory(category), {
