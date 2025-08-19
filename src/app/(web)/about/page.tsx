@@ -5,6 +5,7 @@ import {
   InstagramFilledIcon,
   ArrowRightIcon,
 } from "../_components/icon";
+import robots from "@/app/robots";
 
 // metadata
 export const metadata = {
@@ -35,6 +36,13 @@ export const metadata = {
     url: "https://codeaprogram.com/about",
     siteName: "Code A Program",
     type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    "max-video-preview": -1,
+    "max-image-preview": "large",
+    "max-snippet": -1,
   },
 };
 
