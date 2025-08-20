@@ -103,7 +103,9 @@ export default function PreviewPage({ params }: PreviewPageProps) {
         </div>
       </header>
 
-      <BlogContent post={post} isPreview={true} />
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <BlogContent post={post} isPreview={true} />
+      </div>
 
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent className="max-w-2xl">
