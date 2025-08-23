@@ -13,8 +13,10 @@ export default async function BlogsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-4">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold font-headline mb-4">Our Blog</h1>
+          <div className="mb-8 px-4">
+            <h1 className="md:text-4xl text-3xl font-bold font-headline mb-4">
+              Our Blog
+            </h1>
             <p className="text-muted-foreground">
               {publishedPosts.length}{" "}
               {publishedPosts.length === 1 ? "article" : "articles"} available
