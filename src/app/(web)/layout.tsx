@@ -50,11 +50,28 @@ export default function WebLayout({ children }: PropsWithChildren) {
       />
       <Script id="gtag-init" strategy="afterInteractive">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-22XPTRPZX4');
+       window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  
+  // Initialize with send_page_view: false to control tracking manually
+  gtag('config', 'G-22XPTRPZX4', {
+    send_page_view: false
+  });
+  
+  // Custom page tracking function
+  function trackPage() {
+    const path = window.location.pathname;
+    const isDashboard = path.startsWith('/dashboard') 
+    if (!isDashboard) {
+      gtag('config', 'G-22XPTRPZX4', {
+        page_path: path,
+        page_title: document.title
+      });
+    }
+  }
+  // Track initial page
+  trackPage();
         `}
       </Script>
       <Nav />
