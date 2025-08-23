@@ -107,7 +107,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto md:px-4 px-1 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-12">
           <div className="lg:col-span-4">
             <BlogContent post={post} />

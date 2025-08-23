@@ -43,7 +43,7 @@ export default async function CategoryBlogPage({
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto md:px-4 px-1 py-8">
       <h1 className="text-4xl font-bold font-headline mb-2">
         Posts in: {category.name}
       </h1>

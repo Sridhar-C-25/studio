@@ -10,7 +10,7 @@ export default async function BlogLayout() {
   const publishedPosts = allPosts.filter((post) => post.status === "Published");
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto md:px-4 px-1 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-4">

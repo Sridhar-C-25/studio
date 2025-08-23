@@ -276,7 +276,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
       )}
 
       <main>
-        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card p-6 shadow-sm mb-5">
+        <article className="prose prose-lg dark:prose-invert max-w-full rounded-lg border bg-card md:p-6 p-3 shadow-sm mb-5">
           <div className="relative w-full aspect-video bg-gray-200 dark:bg-black rounded-md overflow-hidden mb-6 shadow-sm">
             <Image
               src={post.banner_image || "https://placehold.co/1200x600.png"}
@@ -296,7 +296,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
             })}
           </div>
 
-          <h1 className="font-headline text-4xl font-bold !leading-tight tracking-tight md:text-5xl">
+          <h1 className="font-headline  font-bold !leading-tight tracking-tight md:text-5xl">
             {post.title}
           </h1>
 
