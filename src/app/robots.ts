@@ -5,8 +5,18 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
-      disallow: ["/dashboard/*", "/sign-in", "/sign-up", "/api/*"],
+      allow: [
+        "/",
+        "/about",
+        "/contact",
+        "/blogs",
+        "/blogs/*",
+        "/blogs/category/*",
+        "/youtube",
+        "/privacy-policy",
+        "/terms-conditions",
+      ],
+      disallow: ["/dashboard/*", "/api/*"],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };
