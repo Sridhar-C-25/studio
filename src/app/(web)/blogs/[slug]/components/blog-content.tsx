@@ -18,6 +18,7 @@ import {
   Download,
   FileCode,
   Loader2,
+  Tag,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -260,6 +261,8 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
     );
   };
 
+  const postKeywords = post.keywords ? post.keywords.split(',').map(k => k.trim()) : [];
+
   return (
     <div className="bg-background min-h-screen">
       {!isPreview && (
@@ -315,25 +318,26 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           <div>{parse(post.content, parserOptions)}</div>
 
           <Separator className="my-8" />
+          
+          {postKeywords.length > 0 && (
+            <div className="mb-8">
+              <h3 className="flex items-center gap-2 font-semibold text-lg mb-4">
+                <Tag className="h-5 w-5" /> Tags
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {postKeywords.map((keyword) => (
+                  <Badge key={keyword} variant="outline">
+                    {keyword}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
 
           <div className="flex justify-between items-center">
             <SocialShareButtons title={post.title} url={pathname} />
           </div>
-
-          {/* {post.adsenseTag && (
-            <div className="mt-8 rounded-md border border-dashed p-4">
-              <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
-                {isPreview ? "AdSense Tag Preview" : "Advertisement"}
-              </h3>
-              {isPreview ? (
-                <pre className="whitespace-pre-wrap rounded-md bg-muted p-4 font-code text-xs">
-                  <code>{post.adsenseTag}</code>
-                </pre>
-              ) : (
-                <div>{parse(post.adsenseTag)}</div>
-              )}
-            </div>
-          )} */}
         </article>
 
         {post.src_link && <DownloadSourceCard post={post} />}

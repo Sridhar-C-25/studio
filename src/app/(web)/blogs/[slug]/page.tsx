@@ -24,10 +24,12 @@ export async function generateMetadata({
 
   const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
   const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
+  const postKeywords = post.keywords ? post.keywords.split(',').map(k => k.trim()) : [];
 
   return {
     title: `${post.title}`,
     description: plainContent,
+    keywords: postKeywords,
     openGraph: {
       title: post.title,
       description: plainContent,
@@ -58,6 +60,9 @@ export async function generateMetadata({
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/about`,
       },
     ],
+    other: {
+        "article:tag": postKeywords
+    }
   };
 }
 
@@ -99,6 +104,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       .replace(/<[^>]+>/g, "")
       .substring(0, 160)
       .trim(),
+    keywords: post.keywords || "",
   };
 
   return (

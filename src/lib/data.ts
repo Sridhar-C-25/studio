@@ -263,30 +263,3 @@ export async function deletePost(id: string): Promise<void> {
     throw error;
   }
 }
-
-export async function searchPosts(query: string): Promise<BlogPost[]> {
-  try {
-    const { databases } = await getAdminClient();
-    const allCategories = await getCategories();
-
-    const searchQueries = [
-      Query.search("title", query),
-      Query.search("content", query),
-      Query.search("keywords", query),
-    ];
-    const response = await databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
-      [Query.equal("status", "Published"), ...searchQueries]
-    );
-
-    const posts = response.documents.map((doc) =>
-      mapDocumentToBlogPost(doc, allCategories)
-    );
-
-    return posts;
-  } catch (error) {
-    console.error("Error searching posts:", error);
-    return [];
-  }
-}
