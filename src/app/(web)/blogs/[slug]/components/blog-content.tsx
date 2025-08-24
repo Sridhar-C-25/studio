@@ -336,7 +336,9 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           )} */}
         </article>
 
-        {post.src_link && <DownloadSourceCard post={post} />}
+        {post.src_link && post.src_link !== "null" && (
+          <DownloadSourceCard post={post} />
+        )}
       </main>
     </div>
   );
