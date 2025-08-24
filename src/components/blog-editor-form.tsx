@@ -53,6 +53,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { BlogPost, Category } from "@/types";
 import { suggestTitleVariants } from "@/ai/flows/suggest-title-variants";
 import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
+import { suggestDescription } from "@/ai/flows/suggest-description";
 import { Textarea } from "./ui/textarea";
 import { TiptapEditor } from "./tiptap-editor";
 import { createPost, updatePost, uploadFile, getFilePreview } from "@/lib/data";
@@ -61,6 +62,7 @@ import { cn } from "@/lib/utils";
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
   content: z.string().min(100, "Content must be at least 100 characters long."),
+  description: z.string().optional(),
   category: z.array(z.string()).min(1, "Please select at least one category."),
   adsenseTag: z.string().optional(),
   banner_image: z.any().optional(),
@@ -82,7 +84,7 @@ export function BlogEditorForm({
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [aiLoading, setAiLoading] = useState<"titles" | "keywords" | "none">(
+  const [aiLoading, setAiLoading] = useState<"titles" | "keywords" | "description" | "none">(
     "none"
   );
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
@@ -98,9 +100,11 @@ export function BlogEditorForm({
       ...initialData,
       banner_image: undefined,
       keywords: initialData?.keywords || "",
+      description: initialData?.description || "",
     } || {
       title: "",
       content: "",
+      description: "",
       category: [],
       adsenseTag: "",
       banner_image: undefined,
@@ -110,6 +114,7 @@ export function BlogEditorForm({
   });
 
   const contentValue = form.watch("content");
+  const titleValue = form.watch("title");
   const selectedCategories = form.watch("category");
 
   const onSubmit = async (
@@ -138,6 +143,7 @@ export function BlogEditorForm({
       const postData = {
         title: data.title,
         content: data.content,
+        description: data.description,
         category: data.category,
         adsenseTag: data.adsenseTag,
         status,
@@ -231,6 +237,33 @@ export function BlogEditorForm({
     }
   };
 
+    const handleSuggestDescription = async () => {
+    if (!contentValue || !titleValue) {
+      toast({
+        variant: "destructive",
+        title: "Content or title is empty",
+        description: "Please write title and content before suggesting a description.",
+      });
+      return;
+    }
+    setAiLoading("description");
+    try {
+      const result = await suggestDescription({
+        blogContent: contentValue,
+        title: titleValue,
+      });
+      form.setValue("description", result.description, { shouldValidate: true });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "AI Error",
+        description: "Failed to suggest a description. Please try again.",
+      });
+    } finally {
+      setAiLoading("none");
+    }
+  };
+
   const onPreview = () => {
     if (initialData) {
       router.push(`/blogs/${initialData.slug}/preview`);
@@ -282,6 +315,22 @@ export function BlogEditorForm({
                             placeholder="e.g., The Future of Artificial Intelligence"
                             {...field}
                             className="text-lg"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Meta Description</FormLabel>
+                        <FormControl>
+                           <Textarea
+                            placeholder="A short, compelling description for SEO (max 160 characters)."
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -545,6 +594,22 @@ export function BlogEditorForm({
                 <CardDescription>Enhance your content with AI.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-2">
+                   <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleSuggestDescription}
+                    disabled={aiLoading !== "none"}
+                  >
+                    {aiLoading === "description" ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Wand2 className="mr-2 h-4 w-4" />
+                    )}
+                    Suggest Description
+                  </Button>
+                </div>
                 <div className="space-y-2">
                   <Button
                     type="button"

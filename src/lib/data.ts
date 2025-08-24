@@ -194,6 +194,7 @@ type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
   category: string[];
   banner_image?: string;
   keywords?: string;
+  description?: string;
 };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {

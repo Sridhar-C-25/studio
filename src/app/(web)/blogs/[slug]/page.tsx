@@ -23,16 +23,17 @@ export async function generateMetadata({
   }
 
   const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
+  const description = post.description || plainContent;
   const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
   const postKeywords = post.keywords ? post.keywords.split(',').map(k => k.trim()) : [];
 
   return {
     title: `${post.title}`,
-    description: plainContent,
+    description: description,
     keywords: postKeywords,
     openGraph: {
       title: post.title,
-      description: plainContent,
+      description: description,
       type: "article",
       publishedTime: post.createdAt,
       url: `/blogs/${post.slug}`,
@@ -48,7 +49,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: plainContent,
+      description: description,
       images: [imageUrl],
     },
     alternates: {
@@ -75,6 +76,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   const allPosts = await getPosts();
   const categories = await getCategories();
+  
+  const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
+  const description = post.description || plainContent;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -100,10 +104,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       "@type": "WebPage",
       "@id": `https://codeaprogram.tech/blog/${post?.slug}`,
     },
-    description: post.content
-      .replace(/<[^>]+>/g, "")
-      .substring(0, 160)
-      .trim(),
+    description: description,
     keywords: post.keywords || "",
   };
 

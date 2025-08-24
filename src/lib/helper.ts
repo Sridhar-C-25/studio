@@ -30,6 +30,7 @@ export function mapDocumentToBlogPost(
     category: relatedCategories,
     createdAt: doc.$createdAt,
     status: doc.status,
+    description: doc.description,
     adsenseTag: doc.adsenseTag,
     banner_image: doc.banner_image,
     src_link: doc.src_link,
