@@ -1,7 +1,8 @@
 import { getPosts, getCategories } from "@/lib/data";
 import { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://codeaprogram.tech";
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://www.codeaprogram.tech";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {

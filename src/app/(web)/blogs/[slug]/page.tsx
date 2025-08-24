@@ -25,7 +25,9 @@ export async function generateMetadata({
   const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
   const description = post.description || plainContent;
   const imageUrl = post.banner_image || "https://placehold.co/1200x630.png";
-  const postKeywords = post.keywords ? post.keywords.split(',').map(k => k.trim()) : [];
+  const postKeywords = post.keywords
+    ? post.keywords.split(",").map((k) => k.trim())
+    : [];
 
   return {
     title: `${post.title}`,
@@ -62,8 +64,8 @@ export async function generateMetadata({
       },
     ],
     other: {
-        "article:tag": postKeywords
-    }
+      "article:tag": postKeywords,
+    },
   };
 }
 
@@ -76,7 +78,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   const allPosts = await getPosts();
   const categories = await getCategories();
-  
+
   const plainContent = post.content.replace(/<[^>]+>/g, "").substring(0, 160);
   const description = post.description || plainContent;
 
@@ -90,19 +92,19 @@ export default async function BlogPage({ params }: BlogPageProps) {
     author: {
       "@type": "Person",
       name: "Sridhar Chandrasekar",
-      url: "https://codeaprogram.tech/about",
+      url: "https://www.codeaprogram.tech/about",
     },
     publisher: {
       "@type": "Organization",
       name: "Code A Program",
       logo: {
         "@type": "ImageObject",
-        url: "https://codeaprogram.tech/logo.png",
+        url: "https://www.codeaprogram.tech/logo.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://codeaprogram.tech/blog/${post?.slug}`,
+      "@id": `https://www.codeaprogram.tech/blog/${post?.slug}`,
     },
     description: description,
     keywords: post.keywords || "",

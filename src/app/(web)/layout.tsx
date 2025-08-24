@@ -24,19 +24,19 @@ export const metadata: Metadata = {
     "Web Dev Components",
     "Web Dev Source Code",
   ],
-  metadataBase: new URL("https://codeaprogram.tech"),
+  metadataBase: new URL("https://www.codeaprogram.tech"),
   authors: [{ name: "Code A Program", url: "https://codeaprogram.com" }],
   openGraph: {
     title: "Code A Program: Your Hub for Modern Web Dev",
     description:
       "Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.",
-    url: "https://codeaprogram.tech",
+    url: "https://www.codeaprogram.tech",
     siteName: "Code A Program",
     locale: "en_US",
     type: "website",
   },
   alternates: {
-    canonical: "https://codeaprogram.tech",
+    canonical: "https://www.codeaprogram.tech",
   },
 };
 

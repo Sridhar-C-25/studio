@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "YouTube Videos | Code A Program",
     description:
       "Watch the latest YouTube videos from Code A Program. Tutorials, guides, and more for web development.",
-    url: "https://codeaprogram.tech/youtube",
+    url: "https://www.codeaprogram.tech/youtube",
     siteName: "Code A Program",
     type: "website",
   },

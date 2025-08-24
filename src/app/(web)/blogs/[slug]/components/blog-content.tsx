@@ -36,7 +36,7 @@ interface BlogContentProps {
 
 const SocialShareButtons = ({ title, url }: { title: string; url: string }) => {
   const { toast } = useToast();
-  const shareUrl = `https://codeaprogram.tech${url}`;
+  const shareUrl = `https://www.codeaprogram.tech${url}`;
 
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl);
@@ -261,7 +261,9 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
     );
   };
 
-  const postKeywords = post.keywords ? post.keywords.split(',').map(k => k.trim()) : [];
+  const postKeywords = post.keywords
+    ? post.keywords.split(",").map((k) => k.trim())
+    : [];
 
   return (
     <div className="bg-background min-h-screen">
@@ -318,7 +320,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           <div>{parse(post.content, parserOptions)}</div>
 
           <Separator className="my-8" />
-          
+
           {postKeywords.length > 0 && (
             <div className="mb-8">
               <h3 className="flex items-center gap-2 font-semibold text-lg mb-4">
@@ -333,7 +335,6 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
               </div>
             </div>
           )}
-
 
           <div className="flex justify-between items-center">
             <SocialShareButtons title={post.title} url={pathname} />
