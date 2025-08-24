@@ -5,7 +5,6 @@ import {
   InstagramFilledIcon,
   ArrowRightIcon,
 } from "../_components/icon";
-import robots from "@/app/robots";
 
 // metadata
 export const metadata = {
