@@ -15,4 +15,5 @@ export type BlogPost = {
   adsenseTag?: string;
   banner_image?: string;
   src_link?: string;
+  keywords?: string;
 };

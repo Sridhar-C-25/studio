@@ -2,6 +2,8 @@
 
 import type { BlogPost, Category } from "@/types";
 import { cookies } from "next/headers";
+import { getAdminClient } from "./appwrite";
+import { Query } from "node-appwrite";
 
 export async function uploadFile(
   base64: string,
@@ -191,6 +193,7 @@ type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
   status: "Published" | "Draft";
   category: string[];
   banner_image?: string;
+  keywords?: string;
 };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
@@ -258,5 +261,32 @@ export async function deletePost(id: string): Promise<void> {
   } catch (error) {
     console.error("Error deleting post:", error);
     throw error;
+  }
+}
+
+export async function searchPosts(query: string): Promise<BlogPost[]> {
+  try {
+    const { databases } = await getAdminClient();
+    const allCategories = await getCategories();
+
+    const searchQueries = [
+      Query.search("title", query),
+      Query.search("content", query),
+      Query.search("keywords", query),
+    ];
+    const response = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+      [Query.equal("status", "Published"), ...searchQueries]
+    );
+
+    const posts = response.documents.map((doc) =>
+      mapDocumentToBlogPost(doc, allCategories)
+    );
+
+    return posts;
+  } catch (error) {
+    console.error("Error searching posts:", error);
+    return [];
   }
 }
