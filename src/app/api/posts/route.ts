@@ -114,6 +114,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       adsenseTag,
       banner_image,
       src_link,
+      keywords,
     } = body;
     if (!title || !content || !category || !status) {
       return NextResponse.json(
@@ -135,6 +136,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         banner_image,
         src_link,
         slug: makeSlug(title),
+        keywords,
       }
     );
     const allCategoriesResponse = await databases.listDocuments(
@@ -176,6 +178,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       adsenseTag,
       banner_image,
       src_link,
+      keywords,
     } = body;
 
     if (!id) {
@@ -205,6 +208,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     if (status !== undefined) updateData.status = status;
     if (adsenseTag !== undefined) updateData.adsenseTag = adsenseTag;
     if (banner_image !== undefined) updateData.banner_image = banner_image;
+    if (keywords !== undefined) updateData.keywords = keywords;
     updateData.src_link = src_link;
 
     const post = await databases.updateDocument(

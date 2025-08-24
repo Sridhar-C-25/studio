@@ -65,6 +65,7 @@ const formSchema = z.object({
   adsenseTag: z.string().optional(),
   banner_image: z.any().optional(),
   src_link: z.string().optional(),
+  keywords: z.string().optional(),
 });
 
 type BlogEditorFormValues = z.infer<typeof formSchema>;
@@ -90,12 +91,13 @@ export function BlogEditorForm({
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.banner_image || null
   );
-  console.log(initialData, "initialData");
+
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...initialData,
       banner_image: undefined,
+      keywords: initialData?.keywords || "",
     } || {
       title: "",
       content: "",
@@ -103,26 +105,21 @@ export function BlogEditorForm({
       adsenseTag: "",
       banner_image: undefined,
       src_link: null,
+      keywords: "",
     },
   });
 
   const contentValue = form.watch("content");
-  const titleValue = form.watch("title");
   const selectedCategories = form.watch("category");
 
   const onSubmit = async (
     data: BlogEditorFormValues,
     status: "Draft" | "Published"
   ) => {
-    console.log(data, "1117");
     setLoading(true);
     try {
       let bannerImageUrl: string | undefined = initialData?.banner_image;
-      console.log(
-        data.banner_image &&
-          typeof data.banner_image === "object" &&
-          data.banner_image.size > 0
-      );
+
       if (
         data.banner_image &&
         typeof data.banner_image === "object" &&
@@ -135,7 +132,6 @@ export function BlogEditorForm({
           `data:${imageFile.type};base64,${base64}`,
           imageFile.name
         );
-        console.log("Uploaded file:", uploadedFile);
         bannerImageUrl = uploadedFile?.fileUrl;
       }
 
@@ -147,9 +143,8 @@ export function BlogEditorForm({
         status,
         banner_image: bannerImageUrl,
         src_link: data.src_link,
+        keywords: data.keywords,
       };
-
-      console.log(postData);
 
       if (initialData) {
         await updatePost(initialData.id, postData);
@@ -258,6 +253,14 @@ export function BlogEditorForm({
     } else {
       form.setValue("category", [...currentCategories, categoryId]);
     }
+  };
+
+  const handleKeywordClick = (keyword: string) => {
+    const currentKeywords = form.getValues("keywords") || "";
+    const newKeywords = currentKeywords
+      ? `${currentKeywords}, ${keyword}`
+      : keyword;
+    form.setValue("keywords", newKeywords, { shouldValidate: true });
   };
 
   return (
@@ -390,7 +393,25 @@ export function BlogEditorForm({
                     </FormItem>
                   )}
                 />
-
+                <FormField
+                  control={form.control}
+                  name="keywords"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Keywords</FormLabel>
+                      <FormDescription>
+                        Comma-separated keywords for SEO.
+                      </FormDescription>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g., nextjs, react, tailwind"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="category"
@@ -575,7 +596,12 @@ export function BlogEditorForm({
                   {relatedKeywords.length > 0 && (
                     <div className="flex flex-wrap gap-2 rounded-md border p-2">
                       {relatedKeywords.map((keyword, i) => (
-                        <Badge key={i} variant="secondary">
+                        <Badge
+                          key={i}
+                          variant="secondary"
+                          className="cursor-pointer"
+                          onClick={() => handleKeywordClick(keyword)}
+                        >
                           {keyword}
                         </Badge>
                       ))}

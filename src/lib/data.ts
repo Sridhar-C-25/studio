@@ -2,6 +2,8 @@
 
 import type { BlogPost, Category } from "@/types";
 import { cookies } from "next/headers";
+import { getAdminClient } from "./appwrite";
+import { Query } from "node-appwrite";
 
 export async function uploadFile(
   base64: string,
@@ -191,6 +193,7 @@ type PostInput = Omit<BlogPost, "id" | "createdAt" | "category" | "slug"> & {
   status: "Published" | "Draft";
   category: string[];
   banner_image?: string;
+  keywords?: string;
 };
 
 export async function createPost(data: PostInput): Promise<BlogPost> {
