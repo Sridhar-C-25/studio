@@ -7,29 +7,14 @@ import Nav from "./_components/Nav";
 export const metadata: Metadata = {
   title: "Code A Program: Your Hub for Modern Web Dev",
   description:
-    "Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.",
-  keywords: [
-    "React js & Tailwind CSS",
-    "Tailwind components",
-    "Code A Program",
-    "Next.js blog",
-    "React UI snippets",
-    "Free Web Development Source code",
-    "Next.js and Shadcn UI",
-    "Javascript",
-    "html",
-    "css",
-    "Web Dev Templates",
-    "UI components for web development",
-    "Web Dev Components",
-    "Web Dev Source Code",
-  ],
+    "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
+  // Removed keywords as they're deprecated for SEO
   metadataBase: new URL("https://www.codeaprogram.tech"),
   authors: [{ name: "Code A Program", url: "https://codeaprogram.com" }],
   openGraph: {
     title: "Code A Program: Your Hub for Modern Web Dev",
     description:
-      "Explore expert tutorials, free source code, and video guides on Next.js, React, Tailwind CSS, and more. Level up your coding skills with Code A Program.",
+      "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
     url: "https://www.codeaprogram.tech",
     siteName: "Code A Program",
     locale: "en_US",
@@ -37,6 +22,17 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://www.codeaprogram.tech",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
