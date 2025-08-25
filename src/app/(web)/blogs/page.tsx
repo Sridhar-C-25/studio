@@ -2,11 +2,25 @@ import { getPosts, getCategories } from "@/lib/data";
 import { BlogPostCard } from "../_components/blog-post-card";
 import { BlogSidebar } from "../_components/blog-sidebar";
 import type { Category } from "@/types";
+import { Pagination } from "@/components/ui/pagination";
 
-export default async function BlogsPage() {
+export default async function BlogsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
   const allPosts = await getPosts();
   const categories: Category[] = await getCategories();
   const publishedPosts = allPosts.filter((post) => post.status === "Published");
+
+  const currentPage = Number(searchParams?.page) || 1;
+  const postsPerPage = 6;
+  const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
+
+  const paginatedPosts = publishedPosts.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage
+  );
 
   return (
     <div className="container mx-auto md:px-4 px-1 py-8">
@@ -23,9 +37,9 @@ export default async function BlogsPage() {
             </p>
           </div>
 
-          {publishedPosts.length > 0 ? (
+          {paginatedPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {publishedPosts.map((post) => (
+              {paginatedPosts.map((post) => (
                 <BlogPostCard key={post.id} post={post} />
               ))}
             </div>
@@ -35,6 +49,12 @@ export default async function BlogsPage() {
               <p className="text-muted-foreground">
                 Check back later for new articles.
               </p>
+            </div>
+          )}
+
+          {totalPages > 1 && (
+            <div className="mt-12">
+              <Pagination currentPage={currentPage} totalPages={totalPages} />
             </div>
           )}
         </div>
