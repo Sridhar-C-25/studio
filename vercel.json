@@ -8,6 +8,13 @@
     "deployments": {
       "productionBranch": "master"
     }
-  }
-  
+  },
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "codeaprogram.tech" }],
+      "destination": "https://www.codeaprogram.tech/$1",
+      "permanent": true
+    }
+  ]
 }
