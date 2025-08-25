@@ -35,6 +35,123 @@ export const metadata: Metadata = {
     },
   },
 };
+// Organization JSON-LD structured data
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Code A Program",
+  alternateName: "@codeaprogram",
+  url: "https://www.codeaprogram.tech",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://www.codeaprogram.tech/logo.png",
+    width: 512,
+    height: 512,
+  },
+  image: "https://www.codeaprogram.tech/logo.png",
+  description:
+    "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
+  founder: {
+    "@type": "Person",
+    name: "Sridhar Chandrasekar",
+    url: "https://www.codeaprogram.tech/about",
+  },
+  foundingDate: "2025",
+  knowsAbout: [
+    "Web Development",
+    "Next.js",
+    "React.js",
+    "Vue.js",
+    "Tailwind CSS",
+    "TypeScript",
+    "JavaScript",
+    "Node.js",
+    "Express.js",
+    "HTML5",
+    "CSS3",
+    "Frontend Development",
+    "Backend Development",
+    "Modern Web Development Practices",
+  ],
+  sameAs: [
+    "https://www.youtube.com/@codeaprogram",
+    "https://github.com/sridhar-c-25",
+    "https://www.instagram.com/codeaprogram/",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "codeaprogram@gmail.com",
+    contactType: "Customer Service",
+    availableLanguage: "English",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "IN",
+  },
+};
+
+// Website JSON-LD structured data
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Code A Program",
+  alternateName: "Code A Program Blog",
+  url: "https://www.codeaprogram.tech",
+  description:
+    "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
+  publisher: {
+    "@type": "Organization",
+    name: "Code A Program",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.codeaprogram.tech/logo.png",
+    },
+  },
+  mainEntity: {
+    "@type": "Blog",
+    name: "Code A Program Blog",
+    description: "Modern web development tutorials and coding guides",
+    url: "https://www.codeaprogram.tech/blogs",
+    publisher: {
+      "@type": "Organization",
+      name: "Code A Program",
+    },
+  },
+  inLanguage: "en-US",
+};
+
+// Blog JSON-LD
+const blogJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Code A Program Blog",
+  url: "https://www.codeaprogram.tech/blogs",
+  description:
+    "Expert tutorials and guides on modern web development technologies including Next.js, React, Tailwind CSS, and more",
+  publisher: {
+    "@type": "Organization",
+    name: "Code A Program",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.codeaprogram.tech/logo.png",
+    },
+  },
+  author: {
+    "@type": "Person",
+    name: "Sridhar Chandrasekar",
+    url: "https://www.codeaprogram.tech/about",
+  },
+  inLanguage: "en-US",
+  about: [
+    "Web Development",
+    "Next.js",
+    "React.js",
+    "Tailwind CSS",
+    "TypeScript",
+    "JavaScript",
+    "Programming Tutorials",
+  ],
+};
 
 export default function WebLayout({ children }: PropsWithChildren) {
   return (
@@ -70,6 +187,33 @@ export default function WebLayout({ children }: PropsWithChildren) {
   trackPage();
         `}
       </Script>
+      {/* Organization JSON-LD */}
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd),
+        }}
+      />
+      {/* Website JSON-LD */}
+      <Script
+        id="website-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteJsonLd),
+        }}
+      />
+      {/* Blog JSON-LD */}
+      <Script
+        id="blog-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogJsonLd),
+        }}
+      />
       <Nav />
       <main className="md:container">{children}</main>
       <Footer />
