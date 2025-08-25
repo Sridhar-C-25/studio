@@ -6,8 +6,9 @@ import { AuthProvider } from "@/context/auth-context";
 import Script from "next/script"; // ✅ import Next.js Script
 
 export const metadata: Metadata = {
-  title: "Apex Editor",
-  description: "The ultimate blog management dashboard.",
+  title: "Code A Program Blog",
+  description:
+    "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
 };
 
 export default function RootLayout({
