@@ -39,6 +39,7 @@ export const metadata: Metadata = {
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://www.codeaprogram.tech/#organization",
   name: "Code A Program",
   alternateName: "@codeaprogram",
   url: "https://www.codeaprogram.tech",
@@ -94,6 +95,7 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://www.codeaprogram.tech/#website",
   name: "Code A Program",
   alternateName: "Code A Program Blog",
   url: "https://www.codeaprogram.tech",
@@ -124,6 +126,7 @@ const websiteJsonLd = {
 const blogJsonLd = {
   "@context": "https://schema.org",
   "@type": "Blog",
+  "@id": "https://www.codeaprogram.tech/#blog",
   name: "Code A Program Blog",
   url: "https://www.codeaprogram.tech/blogs",
   description:
