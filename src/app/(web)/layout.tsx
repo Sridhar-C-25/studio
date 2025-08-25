@@ -103,6 +103,7 @@ const websiteJsonLd = {
     "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
   publisher: {
     "@type": "Organization",
+    "@id": "https://www.codeaprogram.tech/#organization",
     name: "Code A Program",
     logo: {
       "@type": "ImageObject",
@@ -111,6 +112,7 @@ const websiteJsonLd = {
   },
   mainEntity: {
     "@type": "Blog",
+    "@id": "https://www.codeaprogram.tech/#blog",
     name: "Code A Program Blog",
     description: "Modern web development tutorials and coding guides",
     url: "https://www.codeaprogram.tech/blogs",
@@ -133,6 +135,7 @@ const blogJsonLd = {
     "Expert tutorials and guides on modern web development technologies including Next.js, React, Tailwind CSS, and more",
   publisher: {
     "@type": "Organization",
+    "@id": "https://www.codeaprogram.tech/#organization",
     name: "Code A Program",
     logo: {
       "@type": "ImageObject",
