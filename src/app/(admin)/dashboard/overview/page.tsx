@@ -20,9 +20,9 @@ export default async function OverviewPage() {
   const publishedCount = posts.filter(post => post.status === 'Published').length;
   const draftCount = posts.filter(post => post.status === 'Draft').length;
 
-  const categoryPostCounts = categories.map(category => {
+  const categoryPostCounts = categories.map((category, index) => {
     const count = posts.filter(post => post.category?.some(cat => cat.id === category.id)).length;
-    return { name: category.name, postCount: count, fill: `hsl(var(--chart-${(categories.indexOf(category) % 5) + 1}))` };
+    return { name: category.name, postCount: count, fill: `hsl(var(--chart-${(index % 5) + 1}))` };
   }).filter(cat => cat.postCount > 0);
 
 
@@ -61,21 +61,7 @@ export default async function OverviewPage() {
       </div>
 
        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Post Distribution by Category</CardTitle>
-              <CardDescription>A breakdown of your posts by category.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {categoryPostCounts.length > 0 ? (
-                <CategoryChart data={categoryPostCounts} />
-              ) : (
-                <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-                  No posts with categories to display.
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <CategoryChart data={categoryPostCounts} />
         </div>
     </div>
   );
