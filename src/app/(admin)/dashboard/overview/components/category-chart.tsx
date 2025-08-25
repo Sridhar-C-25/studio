@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Pie, PieChart, Cell } from "recharts";
+import { Pie, PieChart, Cell, Tooltip } from "recharts";
 
 import {
   ChartContainer,
@@ -18,17 +18,20 @@ interface CategoryChartProps {
 export function CategoryChart({ data }: CategoryChartProps) {
   const chartData = data.map((item) => ({ ...item, category: item.name }));
 
-  const config = chartData.reduce((acc, item) => {
+  const chartConfig = chartData.reduce((acc, item) => {
     acc[item.name] = { label: item.name, color: item.fill };
     return acc;
   }, {} as any);
 
   return (
-    <ChartContainer config={config} className="mx-auto aspect-square h-[300px]">
+    <ChartContainer
+      config={chartConfig}
+      className="mx-auto aspect-square h-[300px]"
+    >
       <PieChart>
         <ChartTooltip
           cursor={false}
-          content={<ChartTooltipContent hideLabel nameKey="postCount" />}
+          content={<ChartTooltipContent nameKey="postCount" hideLabel />}
         />
         <Pie
           data={chartData}
@@ -36,9 +39,11 @@ export function CategoryChart({ data }: CategoryChartProps) {
           nameKey="name"
           innerRadius={60}
           strokeWidth={5}
+          labelLine={false}
+          paddingAngle={5}
         >
-          {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.fill} />
+          {chartData.map((entry) => (
+            <Cell key={`cell-${entry.name}`} fill={entry.fill} />
           ))}
         </Pie>
         <ChartLegend
