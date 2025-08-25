@@ -45,9 +45,8 @@ export default async function BlogLayout({
               </p>
             </div>
           )}
-
           {totalPages > 1 && (
-            <div className="mt-12">
+            <div className="mt-8">
               <Pagination currentPage={currentPage} totalPages={totalPages} />
             </div>
           )}
