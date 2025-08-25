@@ -105,14 +105,14 @@ export default function NotFound() {
                   <Zap className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">
-                  Next.js Tutorials
+                  Tailwind CSS Tutorials
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Learn modern React development with our comprehensive Next.js
-                  guides
+                  Learn modern Tailwind CSS development with our comprehensive
+                  react.js guides
                 </p>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="/blogs/category/6898c6c80020e964f754">
+                  <Link href="/blogs/category/tailwind-css">
                     Explore Tutorials
                   </Link>
                 </Button>
@@ -129,9 +129,7 @@ export default function NotFound() {
                   Build beautiful UIs with our React and Tailwind CSS components
                 </p>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="/blogs/category/6898c46e001db6909b42">
-                    View Components
-                  </Link>
+                  <Link href="/blogs/category/react-js">View Components</Link>
                 </Button>
               </CardContent>
             </Card>
