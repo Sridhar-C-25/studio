@@ -1,4 +1,7 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import BlogLayout from "./_components/BlogLayout";
+import { PlayCircle } from "lucide-react";
 
 export default function Page({
   searchParams,
@@ -22,6 +25,18 @@ export default function Page({
             Next.js, React, Tailwind CSS, and more. Level up your coding skills
             with Code A Program.
           </p>
+          <div className="flex gap-4 justify-center">
+            <Link href="/youtube">
+              <Button size="lg">
+                <PlayCircle className="mr-2" /> Watch Videos
+              </Button>
+            </Link>
+            <Link href="/blogs">
+              <Button size="lg" variant="outline">
+                Browse Articles
+              </Button>
+            </Link>
+          </div>
         </div>
         <div className="relative mx-auto max-w-5xl">
           <div className="rounded-xl overflow-hidden shadow-2xl border border-border/40 bg-gradient-to-b from-background to-muted/20"></div>
