@@ -129,10 +129,16 @@ export default function Nav() {
             Blogs
           </Link>
           <Link
-            href="/about"
+            href="/blogs/category/react-js"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            About
+            React js
+          </Link>
+          <Link
+            href="/blogs/category/tailwind-css"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Tailwind CSS
           </Link>
           <Link
             href="/contact"
@@ -187,11 +193,18 @@ export default function Nav() {
               Blogs
             </Link>
             <Link
-              href="/about"
+              href="/blogs/category/react-js"
               className="py-2 text-sm font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              About
+              React js
+            </Link>
+            <Link
+              href="/blogs/category/tailwind-css"
+              className="py-2 text-sm font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tailwind CSS
             </Link>
             <Link
               href="/contact"
