@@ -1,5 +1,5 @@
 import { getAdminClient } from "@/lib/appwrite";
-import { mapDocumentToBlogPost } from "@/lib/helper";
+import { mapDocumentToBlogPost, mapDocumentToCategory } from "@/lib/helper";
 import { NextRequest, NextResponse } from "next/server";
 import { Query } from "node-appwrite";
 
