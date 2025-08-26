@@ -2,7 +2,6 @@
 
 import type { BlogPost, Category } from "@/types";
 import { cookies } from "next/headers";
-import { getAdminClient } from "./appwrite";
 import { Query } from "node-appwrite";
 
 export async function uploadFile(
@@ -263,4 +262,22 @@ export async function deletePost(id: string): Promise<void> {
     console.error("Error deleting post:", error);
     throw error;
   }
+}
+
+export async function searchPosts(query: string): Promise<BlogPost[]> {
+    try {
+        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/search?q=${encodeURIComponent(query)}`;
+        const response = await fetch(url, { cache: "no-store" });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to fetch search results for query "${query}": ${errorText}`);
+            throw new Error(`Failed to fetch search results: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error searching posts:", error);
+        return [];
+    }
 }

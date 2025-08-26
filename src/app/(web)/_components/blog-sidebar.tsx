@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import type { BlogPost, Category } from "@/types";
 import Image from "next/image";
+import { SearchBar } from "./search-bar";
 
 interface BlogSidebarProps {
   allPosts: BlogPost[];
@@ -32,6 +33,15 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
 
   return (
     <div className="space-y-6 h-full">
+      {/* Search Bar */}
+       <Card>
+        <CardHeader>
+          <h3 className="text-lg font-semibold">Search</h3>
+        </CardHeader>
+        <CardContent>
+          <SearchBar />
+        </CardContent>
+      </Card>
       {/* Follow Us Section */}
       <Card>
         <CardHeader>
@@ -105,7 +115,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
                 <h4 className="text-sm font-medium line-clamp-2 mb-1 hover:text-primary">
                   <Link href={`/blogs/${post.slug}`}>{post.title}</Link>
                 </h4>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {new Date(post.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
