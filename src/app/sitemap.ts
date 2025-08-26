@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "yearly" as const,
         priority: 0.5,
       },
-       {
+      {
         url: `${baseUrl}/terms-conditions`,
         lastModified: new Date(),
         changeFrequency: "yearly" as const,
@@ -69,7 +69,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: "weekly" as const,
         priority: 0.7,
-      }
+      },
+      {
+        url: `${baseUrl}/search?q=`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      },
     ];
 
     return [...staticUrls, ...postUrls, ...categoryUrls];
