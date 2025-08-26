@@ -4,6 +4,7 @@ interface Video {
   id: { videoId: string };
   snippet: {
     title: string;
+    description: string;
     thumbnails: { medium: { url: string } };
     publishedAt: string;
   };
@@ -38,20 +39,23 @@ export default async function VideoGrid() {
             target="_blank"
             rel="noopener noreferrer"
             title={video.snippet.title}
-            className="block bg-muted/50 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
+            className="block bg-muted/50 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200 h-full flex flex-col"
           >
             <Image
               width={300}
-              height={300}
+              height={168}
               src={video.snippet.thumbnails.medium.url}
               alt={video.snippet.title}
               className="w-full aspect-video object-cover"
             />
-            <div className="p-4">
+            <div className="p-4 flex flex-col flex-grow">
               <h2 className="font-semibold text-lg mb-2 line-clamp-2">
                 {video.snippet.title}
               </h2>
-              <div className="flex items-center justify-between">
+               <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-grow">
+                {video.snippet.description}
+              </p>
+              <div className="flex items-center justify-between mt-auto">
                 <p className="text-xs text-muted-foreground mb-1">
                   {new Date(video.snippet.publishedAt).toLocaleDateString()}
                 </p>

@@ -27,9 +27,14 @@ export const metadata: Metadata = {
 export default function YoutubePage() {
   return (
     <section className="max-w-7xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-bold mb-8 text-center">
-        Popular YouTube Videos
-      </h1>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Our YouTube Video Library
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          Welcome to the official video library for Code A Program! Here you'll find all my hands-on coding tutorials on topics like React, Next.js, and Tailwind CSS. Don't forget to subscribe on YouTube for the latest updates!
+        </p>
+      </div>
       <VideoGrid />
     </section>
   );

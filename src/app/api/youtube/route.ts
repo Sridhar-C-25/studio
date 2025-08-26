@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 interface YouTubeSearchItem {
   id: { videoId: string };
-  snippet: unknown;
+  snippet: {
+    description: string;
+  };
 }
 interface YouTubeSearchResponse {
   items: YouTubeSearchItem[];
