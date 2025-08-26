@@ -15,7 +15,7 @@ const protectedRoutesWithMethods = [
   },
   {
     path: "/api/upload",
-    methods: ["POST"],
+    methods: ["POST", "DELETE"],
   },
 ];
 export async function middleware(req: NextRequest) {
@@ -44,36 +44,29 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (protectedRoutesWithMethods.some((route) => route.path === pathname)) {
+  const protectedRoute = protectedRoutesWithMethods.find(route => pathname.startsWith(route.path));
+  if (protectedRoute) {
     const method = req.method;
-    if (
-      protectedRoutesWithMethods
-        .find((route) => route.path === pathname)
-        ?.methods.includes(method) === false
-    ) {
-      return NextResponse.next();
-    }
-
-    try {
-      const session = req.headers.get("appwrite-session")!;
-      const { teams } = await getSessionClient(session);
-      const memberships = await teams.list();
-      const isAdmin = memberships.teams.some(
-        (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
-      );
-      console.log(isAdmin, "588888");
-      if (!isAdmin) {
+    if (protectedRoute.methods.includes(method)) {
+       try {
+        const session = req.headers.get("appwrite-session")!;
+        const { teams } = await getSessionClient(session);
+        const memberships = await teams.list();
+        const isAdmin = memberships.teams.some(
+          (team) => team.$id === process.env.APPWRITE_ADMIN_TEAM_ID
+        );
+        if (!isAdmin) {
+          return NextResponse.json(
+            { error: "Forbidden: You are not authorized to perform this action" },
+            { status: 403 }
+          );
+        }
+      } catch (err) {
         return NextResponse.json(
           { error: "Forbidden: You are not authorized to perform this action" },
           { status: 403 }
         );
       }
-    } catch (err) {
-      console.log("54444444444444", err);
-      return NextResponse.json(
-        { error: "Forbidden: You are not authorized to perform this action" },
-        { status: 403 }
-      );
     }
   }
 
