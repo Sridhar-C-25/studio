@@ -3,6 +3,14 @@ import { BlogPostCard } from "../_components/blog-post-card";
 import { BlogSidebar } from "../_components/blog-sidebar";
 import type { Category } from "@/types";
 import { Pagination } from "@/components/ui/pagination";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default async function BlogsPage({
   searchParams,
@@ -24,6 +32,17 @@ export default async function BlogsPage({
 
   return (
     <div className="container mx-auto md:px-4 px-1 py-8">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Blogs</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-4">

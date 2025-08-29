@@ -5,6 +5,14 @@ import {
   InstagramFilledIcon,
   ArrowRightIcon,
 } from "../_components/icon";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 // metadata
 export const metadata = {
@@ -48,6 +56,17 @@ export const metadata = {
 export default function About() {
   return (
     <section className="max-w-screen-xl md:min-h-[calc(100vh-18rem)] mx-auto py-16 px-5">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>About</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flex flex-col gap-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">

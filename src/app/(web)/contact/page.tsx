@@ -6,6 +6,14 @@ import {
   InstagramFilledIcon,
 } from "../_components/icon";
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
   title: "Contact Us | Code A Program",
@@ -29,6 +37,17 @@ export const metadata: Metadata = {
 export default function Contact() {
   return (
     <section className="max-w-screen-lg mx-auto py-16 px-5 md:min-h-[calc(100vh-18rem)]">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Contact</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="text-center space-y-6">
         <h1 className="text-4xl md:text-5xl font-bold">Get In Touch</h1>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">

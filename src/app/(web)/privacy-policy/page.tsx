@@ -1,4 +1,12 @@
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 // metadata
 export const metadata = {
@@ -24,6 +32,17 @@ export const metadata = {
 export default function PrivacyPolicy() {
   return (
     <section className="max-w-screen-md mx-auto py-16 px-5 space-y-8">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Privacy Policy</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="text-center">
         <h1 className="text-4xl font-bold">Privacy Policy</h1>
         <p className="text-muted-foreground mt-2">

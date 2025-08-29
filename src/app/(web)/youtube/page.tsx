@@ -1,5 +1,13 @@
 import { Metadata } from "next";
 import VideoGrid from "./VideoGrid";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
   title: "YouTube Videos | Code A Program",
@@ -27,6 +35,17 @@ export const metadata: Metadata = {
 export default function YoutubePage() {
   return (
     <section className="max-w-7xl mx-auto py-12 px-4">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>YouTube</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Our YouTube Video Library
