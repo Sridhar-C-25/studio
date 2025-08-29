@@ -10,10 +10,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Pagination } from "@/components/ui/pagination";
 
 interface CategoryBlogPageProps {
   params: {
     id: string;
+  };
+  searchParams?: {
+    page?: string;
   };
 }
 
@@ -36,6 +40,7 @@ export async function generateMetadata({
 
 export default async function CategoryBlogPage({
   params,
+  searchParams,
 }: CategoryBlogPageProps) {
   const category = await getCategory(params.id);
 
@@ -48,6 +53,15 @@ export default async function CategoryBlogPage({
     (post) =>
       post.status === "Published" &&
       post.category.some((cat) => cat.id === params.id)
+  );
+
+  const currentPage = Number(searchParams?.page) || 1;
+  const postsPerPage = 6;
+  const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
+
+  const paginatedPosts = publishedPosts.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage
   );
 
   return (
@@ -73,9 +87,9 @@ export default async function CategoryBlogPage({
       <p className="text-muted-foreground mb-8">
         Found {publishedPosts.length} posts in this category.
       </p>
-      {publishedPosts.length > 0 ? (
+      {paginatedPosts.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {publishedPosts.map((post) => (
+          {paginatedPosts.map((post) => (
             <BlogPostCard key={post.id} post={post} />
           ))}
         </div>
@@ -85,6 +99,11 @@ export default async function CategoryBlogPage({
           <p className="text-muted-foreground">
             There are no posts in this category yet. Check back later!
           </p>
+        </div>
+      )}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       )}
     </div>
