@@ -2,6 +2,14 @@ import { getPosts, getCategory } from "@/lib/data";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BlogPostCard } from "../../../_components/blog-post-card";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface CategoryBlogPageProps {
   params: {
@@ -44,6 +52,21 @@ export default async function CategoryBlogPage({
 
   return (
     <div className="container mx-auto md:px-4 px-1 py-8">
+      <Breadcrumb className="mb-8">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/blogs">Blogs</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{category.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h1 className="text-4xl font-bold font-headline mb-2">
         Posts in: {category.name}
       </h1>
