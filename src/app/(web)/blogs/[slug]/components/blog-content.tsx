@@ -28,6 +28,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogPost } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { makeSlug } from "@/lib/helper";
 
 interface BlogContentProps {
   post: BlogPost;
@@ -71,9 +72,7 @@ const SocialShareButtons = ({ title, url }: { title: string; url: string }) => {
       </Button>
       <Button variant="outline" size="icon" asChild>
         <a
-          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${encodeURIComponent(
-            title
-          )}`}
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -328,9 +327,11 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {postKeywords.map((keyword) => (
-                  <Badge key={keyword} variant="outline">
-                    {keyword}
-                  </Badge>
+                  <Link key={keyword} href={`/tag/${makeSlug(keyword)}`}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted">
+                      {keyword}
+                    </Badge>
+                  </Link>
                 ))}
               </div>
             </div>
