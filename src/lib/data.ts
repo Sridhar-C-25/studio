@@ -140,14 +140,10 @@ export async function deleteCategory(id: string): Promise<void> {
   }
 }
 
-export async function getPosts(categoryId?: string): Promise<BlogPost[]> {
+export async function getPosts(): Promise<BlogPost[]> {
   try {
-    const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`);
-    if (categoryId) {
-        url.searchParams.append("categoryId", categoryId);
-    }
     const response = await fetch(
-      url.toString(),
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
       {
         cache: "no-store",
       }
