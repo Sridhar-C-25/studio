@@ -100,10 +100,9 @@ export function BlogEditorForm({
     initialData?.banner_image || null
   );
   
-  // New states for tag suggestions
-  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   const [selectedTagCategory, setSelectedTagCategory] = useState<string>("");
   const [categoryBasedTags, setCategoryBasedTags] = useState<string[]>([]);
+  const [tagLoading, setTagLoading] = useState(false);
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
@@ -131,26 +130,30 @@ export function BlogEditorForm({
   const keywordsValue = form.watch("keywords");
 
   useEffect(() => {
-    // Fetch all posts on component mount
-    const fetchPosts = async () => {
-      const posts = await getPosts();
-      setAllPosts(posts);
-    };
-    fetchPosts();
-  }, []);
+    const fetchTagsForCategory = async () => {
+      if (selectedTagCategory) {
+        setTagLoading(true);
+        try {
+          const relatedPosts = await getPosts(selectedTagCategory);
+          const tags = relatedPosts.flatMap(post => post.keywords?.split(',').map(k => k.trim()) || []);
+          const uniqueTags = [...new Set(tags)].filter(Boolean);
+          setCategoryBasedTags(uniqueTags);
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Error fetching tags",
+                description: "Could not fetch tags for the selected category."
+            })
+        } finally {
+            setTagLoading(false);
+        }
 
-  useEffect(() => {
-    if (selectedTagCategory) {
-      const relatedPosts = allPosts.filter(post => 
-        post.category.some(cat => cat.id === selectedTagCategory)
-      );
-      const tags = relatedPosts.flatMap(post => post.keywords?.split(',').map(k => k.trim()) || []);
-      const uniqueTags = [...new Set(tags)].filter(Boolean);
-      setCategoryBasedTags(uniqueTags);
-    } else {
-      setCategoryBasedTags([]);
-    }
-  }, [selectedTagCategory, allPosts]);
+      } else {
+        setCategoryBasedTags([]);
+      }
+    };
+    fetchTagsForCategory();
+  }, [selectedTagCategory, toast]);
 
   const onSubmit = async (
     data: BlogEditorFormValues,
@@ -571,7 +574,11 @@ export function BlogEditorForm({
                       ))}
                     </SelectContent>
                   </Select>
-                   {categoryBasedTags.length > 0 && (
+                   {tagLoading ? (
+                        <div className="flex items-center justify-center p-4">
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        </div>
+                   ) : categoryBasedTags.length > 0 && (
                     <div className="flex flex-wrap gap-2 rounded-md border p-2">
                       {categoryBasedTags.map((keyword, i) => (
                         <Badge
