@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -11,7 +11,6 @@ import {
   Wand2,
   Check,
   ChevronsUpDown,
-  Image as ImageIcon,
   Upload,
 } from "lucide-react";
 import Image from "next/image";
@@ -48,6 +47,13 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogPost, Category } from "@/types";
@@ -56,7 +62,7 @@ import { suggestRelatedKeywords } from "@/ai/flows/suggest-related-keywords";
 import { suggestDescription } from "@/ai/flows/suggest-description";
 import { Textarea } from "./ui/textarea";
 import { TiptapEditor } from "./tiptap-editor";
-import { createPost, updatePost, uploadFile, getFilePreview } from "@/lib/data";
+import { createPost, updatePost, uploadFile, getPosts } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -84,38 +90,65 @@ export function BlogEditorForm({
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [aiLoading, setAiLoading] = useState<"titles" | "keywords" | "description" | "none">(
-    "none"
-  );
+  const [aiLoading, setAiLoading] = useState<
+    "titles" | "keywords" | "description" | "none"
+  >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
-  const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.banner_image || null
   );
+  
+  // New states for tag suggestions
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  const [selectedTagCategory, setSelectedTagCategory] = useState<string>("");
+  const [categoryBasedTags, setCategoryBasedTags] = useState<string[]>([]);
 
   const form = useForm<BlogEditorFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      ...initialData,
-      banner_image: undefined,
-      keywords: initialData?.keywords || "",
-      description: initialData?.description || "",
-    } || {
-      title: "",
-      content: "",
-      description: "",
-      category: [],
-      adsenseTag: "",
-      banner_image: undefined,
-      src_link: null,
-      keywords: "",
-    },
+    defaultValues:
+      {
+        ...initialData,
+        banner_image: undefined,
+        keywords: initialData?.keywords || "",
+        description: initialData?.description || "",
+      } || {
+        title: "",
+        content: "",
+        description: "",
+        category: [],
+        adsenseTag: "",
+        banner_image: undefined,
+        src_link: null,
+        keywords: "",
+      },
   });
 
   const contentValue = form.watch("content");
   const titleValue = form.watch("title");
   const selectedCategories = form.watch("category");
+
+  useEffect(() => {
+    // Fetch all posts on component mount
+    const fetchPosts = async () => {
+      const posts = await getPosts();
+      setAllPosts(posts);
+    };
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    if (selectedTagCategory) {
+      const relatedPosts = allPosts.filter(post => 
+        post.category.some(cat => cat.id === selectedTagCategory)
+      );
+      const tags = relatedPosts.flatMap(post => post.keywords?.split(',').map(k => k.trim()) || []);
+      const uniqueTags = [...new Set(tags)].filter(Boolean);
+      setCategoryBasedTags(uniqueTags);
+    } else {
+      setCategoryBasedTags([]);
+    }
+  }, [selectedTagCategory, allPosts]);
 
   const onSubmit = async (
     data: BlogEditorFormValues,
@@ -220,12 +253,13 @@ export function BlogEditorForm({
       return;
     }
     setAiLoading("keywords");
-    setRelatedKeywords([]);
     try {
       const result = await suggestRelatedKeywords({
         blogContent: contentValue,
       });
-      setRelatedKeywords(result.keywords);
+      const currentKeywords = form.getValues("keywords") || "";
+      const newKeywords = [...new Set([...currentKeywords.split(','), ...result.keywords])].filter(Boolean).join(', ');
+      form.setValue("keywords", newKeywords, { shouldValidate: true });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -237,12 +271,13 @@ export function BlogEditorForm({
     }
   };
 
-    const handleSuggestDescription = async () => {
+  const handleSuggestDescription = async () => {
     if (!contentValue || !titleValue) {
       toast({
         variant: "destructive",
         title: "Content or title is empty",
-        description: "Please write title and content before suggesting a description.",
+        description:
+          "Please write title and content before suggesting a description.",
       });
       return;
     }
@@ -252,7 +287,9 @@ export function BlogEditorForm({
         blogContent: contentValue,
         title: titleValue,
       });
-      form.setValue("description", result.description, { shouldValidate: true });
+      form.setValue("description", result.description, {
+        shouldValidate: true,
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -290,10 +327,11 @@ export function BlogEditorForm({
 
   const handleKeywordClick = (keyword: string) => {
     const currentKeywords = form.getValues("keywords") || "";
-    const newKeywords = currentKeywords
-      ? `${currentKeywords}, ${keyword}`
-      : keyword;
-    form.setValue("keywords", newKeywords, { shouldValidate: true });
+    const keywordsArray = currentKeywords.split(",").map(k => k.trim()).filter(Boolean);
+    if (!keywordsArray.includes(keyword)) {
+      const newKeywords = [...keywordsArray, keyword].join(", ");
+      form.setValue("keywords", newKeywords, { shouldValidate: true });
+    }
   };
 
   return (
@@ -328,7 +366,7 @@ export function BlogEditorForm({
                       <FormItem>
                         <FormLabel>Meta Description</FormLabel>
                         <FormControl>
-                           <Textarea
+                          <Textarea
                             placeholder="A short, compelling description for SEO (max 160 characters)."
                             {...field}
                           />
@@ -442,25 +480,7 @@ export function BlogEditorForm({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="keywords"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Keywords</FormLabel>
-                      <FormDescription>
-                        Comma-separated keywords for SEO.
-                      </FormDescription>
-                      <FormControl>
-                        <Input
-                          placeholder="e.g., nextjs, react, tailwind"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
                 <FormField
                   control={form.control}
                   name="category"
@@ -526,6 +546,63 @@ export function BlogEditorForm({
                     </FormItem>
                   )}
                 />
+                
+                {/* Tag suggestion selector */}
+                <div className="space-y-2">
+                  <FormLabel>Suggest Tags From Category</FormLabel>
+                  <Select
+                    onValueChange={setSelectedTagCategory}
+                    disabled={!selectedCategories || selectedCategories.length === 0}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category to see tags" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories
+                        .filter(cat => selectedCategories.includes(cat.id))
+                        .map(cat => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                   {categoryBasedTags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 rounded-md border p-2">
+                      {categoryBasedTags.map((keyword, i) => (
+                        <Badge
+                          key={i}
+                          variant="secondary"
+                          className="cursor-pointer"
+                          onClick={() => handleKeywordClick(keyword)}
+                        >
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="keywords"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Keywords</FormLabel>
+                      <FormDescription>
+                        Comma-separated keywords for SEO.
+                      </FormDescription>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g., nextjs, react, tailwind"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="adsenseTag"
@@ -588,14 +665,14 @@ export function BlogEditorForm({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BrainCircuit className="h-5 w-5 text-accent" />
+                  <BrainCircuit className="h-5 w-5" />
                   AI Content Tools
                 </CardTitle>
                 <CardDescription>Enhance your content with AI.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                   <Button
+                  <Button
                     type="button"
                     variant="outline"
                     className="w-full"
@@ -658,20 +735,6 @@ export function BlogEditorForm({
                     )}
                     Suggest Related Keywords
                   </Button>
-                  {relatedKeywords.length > 0 && (
-                    <div className="flex flex-wrap gap-2 rounded-md border p-2">
-                      {relatedKeywords.map((keyword, i) => (
-                        <Badge
-                          key={i}
-                          variant="secondary"
-                          className="cursor-pointer"
-                          onClick={() => handleKeywordClick(keyword)}
-                        >
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
