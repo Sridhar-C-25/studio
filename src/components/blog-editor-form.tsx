@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -127,6 +128,7 @@ export function BlogEditorForm({
   const contentValue = form.watch("content");
   const titleValue = form.watch("title");
   const selectedCategories = form.watch("category");
+  const keywordsValue = form.watch("keywords");
 
   useEffect(() => {
     // Fetch all posts on component mount
@@ -326,13 +328,15 @@ export function BlogEditorForm({
   };
 
   const handleKeywordClick = (keyword: string) => {
-    const currentKeywords = form.getValues("keywords") || "";
+    const currentKeywords = keywordsValue || "";
     const keywordsArray = currentKeywords.split(",").map(k => k.trim()).filter(Boolean);
     if (!keywordsArray.includes(keyword)) {
       const newKeywords = [...keywordsArray, keyword].join(", ");
       form.setValue("keywords", newKeywords, { shouldValidate: true });
     }
   };
+
+  const currentKeywordsArray = (keywordsValue || "").split(',').map(k => k.trim()).filter(Boolean);
 
   return (
     <Form {...form}>
@@ -572,7 +576,7 @@ export function BlogEditorForm({
                       {categoryBasedTags.map((keyword, i) => (
                         <Badge
                           key={i}
-                          variant="secondary"
+                          variant={currentKeywordsArray.includes(keyword) ? "default" : "secondary"}
                           className="cursor-pointer"
                           onClick={() => handleKeywordClick(keyword)}
                         >
