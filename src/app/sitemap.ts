@@ -26,19 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.7,
     }));
-    
+
     // Tag URLs
     const allKeywords = publishedPosts.flatMap(
       (post) => post.keywords?.split(",").map((k) => k.trim()) || []
     );
     const uniqueKeywords = [...new Set(allKeywords)];
-    const tagUrls = uniqueKeywords.map((tag) => ({
-      url: `${baseUrl}/tag/${makeSlug(tag)}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.6,
-    }));
-
 
     // Static page URLs
     const staticUrls = [
@@ -84,15 +77,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly" as const,
         priority: 0.7,
       },
-      {
-        url: `${baseUrl}/search?q=`,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-      },
     ];
 
-    return [...staticUrls, ...postUrls, ...categoryUrls, ...tagUrls];
+    return [...staticUrls, ...postUrls, ...categoryUrls];
   } catch (error) {
     console.error("Error generating sitemap:", error);
 
