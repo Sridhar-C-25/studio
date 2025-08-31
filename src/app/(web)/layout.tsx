@@ -159,6 +159,39 @@ const blogJsonLd = {
   ],
 };
 
+// Breadcrumb JSON-LD
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": "https://www.codeaprogram.tech/#breadcrumb",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.codeaprogram.tech",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: "https://www.codeaprogram.tech/blogs",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "React.js",
+      item: "https://www.codeaprogram.tech/blogs/category/react-js",
+    },
+    {
+      "@type": "ListItem",
+      position: 4,
+      name: "Tailwind CSS",
+      item: "https://www.codeaprogram.tech/blogs/category/tailwind-css",
+    },
+  ],
+};
+
 export default function WebLayout({ children }: PropsWithChildren) {
   return (
     <>
@@ -218,6 +251,15 @@ export default function WebLayout({ children }: PropsWithChildren) {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(blogJsonLd),
+        }}
+      />
+      {/* Breadcrumb JSON-LD */}
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
       <Nav />
