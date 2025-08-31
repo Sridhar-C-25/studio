@@ -24,6 +24,8 @@ export interface Language {
 export const supportedLanguages: Language[] = [
   { value: "javascript", label: "JavaScript" },
   { value: "typescript", label: "TypeScript" },
+  { value: "jsx", label: "JSX" },
+  { value: "tsx", label: "TSX" },
   { value: "python", label: "Python" },
   { value: "html", label: "HTML" },
   { value: "css", label: "CSS" },
@@ -34,8 +36,7 @@ export const supportedLanguages: Language[] = [
   { value: "csharp", label: "C#" },
   { value: "cpp", label: "C++" },
   { value: "c", label: "C" },
-  { value: "xml", label: "jsx" },
-  { value: "xml", label: "tsx" },
+  { value: "xml", label: "XML" },
 ];
 
 // Initialize lowlight with all languages
@@ -44,6 +45,8 @@ const lowlight = createLowlight();
 // Register all languages
 lowlight.register("javascript", javascript);
 lowlight.register("typescript", typescript);
+lowlight.register("jsx", javascript); // JSX uses JavaScript syntax with JSX extensions
+lowlight.register("tsx", typescript); // TSX uses TypeScript syntax with JSX extensions
 lowlight.register("python", python);
 lowlight.register("html", html);
 lowlight.register("css", css);
@@ -54,8 +57,7 @@ lowlight.register("java", java);
 lowlight.register("csharp", csharp);
 lowlight.register("cpp", cpp);
 lowlight.register("c", c);
-lowlight.register("jsx", xml);
-lowlight.register("tsx", xml);
+lowlight.register("xml", xml);
 
 // Syntax highlighter service
 export class SyntaxHighlighterService {
@@ -82,6 +84,11 @@ export class SyntaxHighlighterService {
         return this.escapeHtml(code);
       }
 
+      // Special handling for JSX/TSX
+      if (language === "jsx" || language === "tsx") {
+        return this.highlightJsxTsx(code, language);
+      }
+
       const result = lowlight.highlight(language, code);
       return this.convertToHtml(result);
     } catch (error) {
@@ -94,7 +101,47 @@ export class SyntaxHighlighterService {
     }
   }
 
-  // Convert lowlight result to HTML string
+  // Special handling for JSX/TSX syntax highlighting
+  private highlightJsxTsx(code: string, language: string): string {
+    try {
+      // Use the base language (javascript for jsx, typescript for tsx)
+      const baseLanguage = language === "jsx" ? "javascript" : "typescript";
+      const result = lowlight.highlight(baseLanguage, code);
+      let html = this.convertToHtml(result);
+
+      // Enhance JSX syntax highlighting
+      html = this.enhanceJsxSyntax(html);
+
+      return html;
+    } catch (error) {
+      // Fallback to base language highlighting
+      const baseLanguage = language === "jsx" ? "javascript" : "typescript";
+      try {
+        const result = lowlight.highlight(baseLanguage, code);
+        return this.convertToHtml(result);
+      } catch {
+        return this.escapeHtml(code);
+      }
+    }
+  }
+
+  // Enhance JSX syntax highlighting with additional patterns
+  private enhanceJsxSyntax(html: string): string {
+    // Highlight JSX tags and attributes better
+    html = html.replace(
+      /(&lt;\/?)(\w+)/g,
+      '$1<span class="hljs-name">$2</span>'
+    );
+
+    // Highlight JSX attribute names
+    html = html.replace(/(\w+)(=)/g, '<span class="hljs-attr">$1</span>$2');
+
+    // Highlight JSX expressions in curly braces
+    html = html.replace(/(\{[^}]*\})/g, '<span class="hljs-subst">$1</span>');
+
+    return html;
+  }
+
   private convertToHtml(node: any): string {
     if (node.type === "text") {
       return this.escapeHtml(node.value);

@@ -90,6 +90,19 @@
   font-weight: bold;
 }
 
+/* JSX/TSX specific highlighting */
+.hljs-name {
+  color: #7ee787; /* Green for JSX tag names */
+}
+
+.hljs-attr {
+  color: #79c0ff; /* Blue for JSX attributes */
+}
+
+.hljs-subst {
+  color: #ffa657; /* Orange for JSX expressions in {} */
+}
+
 /* TipTap specific styling */
 .ProseMirror pre {
   background: #0d1117;
