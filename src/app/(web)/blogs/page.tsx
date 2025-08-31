@@ -11,6 +11,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Metadata } from "next";
+import Script from "next/script";
+
+// Define metadata for the blogs page
+export const metadata: Metadata = {
+  title: "Blog | Code A Program",
+  description:
+    "Explore our collection of articles about React.js, Tailwind CSS, Next.js, JavaScript, HTML, CSS and modern web development techniques and best practices.",
+  alternates: {
+    canonical: "https://www.codeaprogram.tech/blogs",
+  },
+};
 
 export default async function BlogsPage({
   searchParams,
@@ -29,8 +41,73 @@ export default async function BlogsPage({
     currentPage * postsPerPage
   );
 
+  // Structured data for blog listing page
+  const blogListingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": "https://www.codeaprogram.tech/blogs#webpage",
+    url: `https://www.codeaprogram.tech/blogs${
+      currentPage > 1 ? `?page=${currentPage}` : ""
+    }`,
+    name: "Blog | Firebase Studio",
+    description:
+      "Explore our collection of articles about Firebase, Next.js, and modern web development techniques and best practices.",
+    isPartOf: {
+      "@id": "https://www.codeaprogram.tech/#website",
+    },
+    breadcrumb: {
+      "@id": "https://www.codeaprogram.tech/blogs#breadcrumb",
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: paginatedPosts.map((post, index) => ({
+        "@type": "ListItem",
+        position: (currentPage - 1) * postsPerPage + index + 1,
+        name: post.title,
+        url: `https://www.codeaprogram.tech/blogs/${post.slug}`,
+      })),
+    },
+    inLanguage: "en-US",
+  };
+
   return (
     <div className="container mx-auto md:px-4 px-1 py-8">
+      {/* Add structured data for blog listing */}
+      <Script
+        id="blog-listing-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogListingJsonLd),
+        }}
+      />
+
+      {/* Add breadcrumb structured data */}
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "@id": "https://www.codeaprogram.tech/blogs#breadcrumb",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://www.codeaprogram.tech",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blog",
+                item: "https://www.codeaprogram.tech/blogs",
+              },
+            ],
+          }),
+        }}
+      />
+
       <Breadcrumb className="mb-8">
         <BreadcrumbList>
           <BreadcrumbItem>
