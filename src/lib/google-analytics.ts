@@ -6,7 +6,6 @@ const analyticsDataClient = new BetaAnalyticsDataClient({
     private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
   },
 });
-
 export async function getPopularPosts() {
   const [response] = await analyticsDataClient.runReport({
     property: `properties/${process.env.GA_PROPERTY_ID}`, // safer than NEXT_PUBLIC
