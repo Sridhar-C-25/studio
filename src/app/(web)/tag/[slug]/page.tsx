@@ -46,9 +46,15 @@ export default async function TagBlogPage({
   params,
   searchParams,
 }: TagBlogPageProps) {
-  const publishedPosts = await getPosts();
+  const allPosts = await getPosts();
+  const publishedPosts = allPosts.filter((post) =>
+    post.keywords
+      ?.split(",")
+      .map((k) => makeSlug(k.trim()))
+      .includes(params.slug)
+  );
 
-  const tagName = publishedPosts
+  const tagName = allPosts
     .flatMap((post) => post.keywords?.split(",").map((k) => k.trim()) || [])
     .find((tag) => makeSlug(tag) === params.slug);
 
