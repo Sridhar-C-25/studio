@@ -271,3 +271,38 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Selection color for code blocks */
+.shiki ::selection,
+.shiki-code ::selection,
+.ProseMirror .shiki-code-block ::selection,
+.tiptap pre ::selection,
+.prose pre ::selection,
+.tiptap code ::selection,
+.prose code ::selection {
+  background-color: #264f78;
+  color: #fff;
+}
+
+.shiki ::-moz-selection,
+.shiki-code ::-moz-selection,
+.ProseMirror .shiki-code-block ::-moz-selection,
+.tiptap pre ::-moz-selection,
+.prose pre ::-moz-selection,
+.tiptap code ::-moz-selection,
+.prose code ::-moz-selection {
+  background-color: #264f78;
+  color: #fff;
+}
+
+/* Light theme selection styles */
+.light .shiki ::selection,
+.light .shiki-code ::selection,
+.light .ProseMirror .shiki-code-block ::selection,
+.light .tiptap pre ::selection,
+.light .prose pre ::selection,
+.light .tiptap code ::selection,
+.light .prose code ::selection {
+  background-color: #add6ff;
+  color: #24292f;
+}

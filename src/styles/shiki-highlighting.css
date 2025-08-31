@@ -85,12 +85,14 @@
 .shiki-container .shiki-code ::selection,
 .ProseMirror .shiki-code-block ::selection {
   background: #264f78;
+  color: #fff;
 }
 
 .shiki-container .shiki ::-moz-selection,
 .shiki-container .shiki-code ::-moz-selection,
 .ProseMirror .shiki-code-block ::-moz-selection {
   background: #264f78;
+  color: #fff;
 }
 
 /* Copy button styling */
@@ -136,6 +138,21 @@
 .light .ProseMirror .shiki-code-block {
   background: #ffffff;
   border-color: #d0d7de;
+  color: #24292f;
+}
+
+/* Light theme selection color */
+.light .shiki-container .shiki ::selection,
+.light .shiki-container .shiki-code ::selection,
+.light .ProseMirror .shiki-code-block ::selection {
+  background: #add6ff;
+  color: #24292f;
+}
+
+.light .shiki-container .shiki ::-moz-selection,
+.light .shiki-container .shiki-code ::-moz-selection,
+.light .ProseMirror .shiki-code-block ::-moz-selection {
+  background: #add6ff;
   color: #24292f;
 }
 
