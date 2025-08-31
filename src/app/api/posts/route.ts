@@ -59,7 +59,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const [postsResponse, categoriesResponse] = await Promise.all([
       databases.listDocuments(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!
+        process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+        [
+          Query.equal("status", "Published"),
+          Query.select([
+            "category.*",
+            "title",
+            "banner_image",
+            "slug",
+            "keywords",
+          ]),
+        ]
       ),
       databases.listDocuments(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,

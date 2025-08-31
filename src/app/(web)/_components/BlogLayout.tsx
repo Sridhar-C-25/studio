@@ -9,9 +9,8 @@ export default async function BlogLayout({
 }: {
   searchParams?: { page?: string };
 }) {
-  const allPosts = await getPosts();
+  const publishedPosts = await getPosts();
   const categories: Category[] = await getCategories();
-  const publishedPosts = allPosts.filter((post) => post.status === "Published");
 
   const currentPage = Number(searchParams?.page) || 1;
   const postsPerPage = 6;
@@ -38,7 +37,7 @@ export default async function BlogLayout({
               ))}
             </div>
           ) : (
-             <div className="text-center py-20">
+            <div className="text-center py-20">
               <h2 className="text-2xl font-bold mb-4">No posts yet!</h2>
               <p className="text-muted-foreground">
                 Check back later for new articles.
@@ -54,7 +53,7 @@ export default async function BlogLayout({
 
         {/* Sidebar */}
         <div className="lg:col-span-2">
-          <BlogSidebar allPosts={allPosts} categories={categories} />
+          <BlogSidebar allPosts={publishedPosts} categories={categories} />
         </div>
       </div>
     </div>

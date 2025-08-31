@@ -17,7 +17,7 @@ interface BlogSidebarProps {
 }
 
 export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
-  const publishedPosts = allPosts.filter((post) => post.status === "Published");
+  const publishedPosts = allPosts;
 
   const popularPosts = publishedPosts.slice(0, 5);
 
@@ -34,7 +34,7 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
   return (
     <div className="space-y-6 h-full">
       {/* Search Bar */}
-       <Card>
+      <Card>
         <CardHeader>
           <h3 className="text-lg font-semibold">Search</h3>
         </CardHeader>

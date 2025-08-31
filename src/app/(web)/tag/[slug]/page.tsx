@@ -46,17 +46,9 @@ export default async function TagBlogPage({
   params,
   searchParams,
 }: TagBlogPageProps) {
-  const allPosts = await getPosts();
-  const publishedPosts = allPosts.filter(
-    (post) =>
-      post.status === "Published" &&
-      post.keywords
-        ?.split(",")
-        .map((k) => makeSlug(k.trim()))
-        .includes(params.slug)
-  );
+  const publishedPosts = await getPosts();
 
-  const tagName = allPosts
+  const tagName = publishedPosts
     .flatMap((post) => post.keywords?.split(",").map((k) => k.trim()) || [])
     .find((tag) => makeSlug(tag) === params.slug);
 
@@ -90,9 +82,7 @@ export default async function TagBlogPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-4xl font-bold font-headline mb-2">
-        Tag: {tagName}
-      </h1>
+      <h1 className="text-4xl font-bold font-headline mb-2">Tag: {tagName}</h1>
       <p className="text-muted-foreground mb-8">
         Found {publishedPosts.length} posts with this tag.
       </p>

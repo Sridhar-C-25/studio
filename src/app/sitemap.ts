@@ -7,8 +7,7 @@ const baseUrl =
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const posts = await getPosts();
-    const publishedPosts = posts.filter((post) => post.status === "Published");
+    const publishedPosts = await getPosts();
 
     // Blog post URLs
     const postUrls = publishedPosts.map((post) => ({

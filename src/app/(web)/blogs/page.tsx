@@ -17,9 +17,8 @@ export default async function BlogsPage({
 }: {
   searchParams: { page?: string };
 }) {
-  const allPosts = await getPosts();
+  const publishedPosts = await getPosts();
   const categories: Category[] = await getCategories();
-  const publishedPosts = allPosts.filter((post) => post.status === "Published");
 
   const currentPage = Number(searchParams?.page) || 1;
   const postsPerPage = 6;
@@ -80,7 +79,7 @@ export default async function BlogsPage({
 
         {/* Sidebar */}
         <div className="lg:col-span-2 mt-20">
-          <BlogSidebar allPosts={allPosts} categories={categories} />
+          <BlogSidebar allPosts={publishedPosts} categories={categories} />
         </div>
       </div>
     </div>
