@@ -387,7 +387,7 @@ export function BlogEditorForm({
                                   src={imagePreview}
                                   alt="Preview"
                                   layout="fill"
-                                  objectFit="cover"
+                                  style={{ objectFit: "cover" }}
                                   className="rounded-lg"
                                 />
                               </div>

@@ -100,13 +100,13 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           codeNode.children[0]?.type === "text"
         ) {
           const language =
-            codeNode.attribs.class?.replace("language-", "") || "plaintext";
+            domNode.attribs?.["data-language"] ||
+            codeNode.attribs.class?.replace("language-", "") ||
+            "plaintext";
           const code = codeNode.children[0].data;
 
           return (
-            <CodeBlockRenderer language={language}>
-              {code}
-            </CodeBlockRenderer>
+            <CodeBlockRenderer language={language}>{code}</CodeBlockRenderer>
           );
         }
       }
@@ -232,7 +232,7 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
               src={post.banner_image || "https://placehold.co/1200x600.png"}
               alt={post.title}
               layout="fill"
-              objectFit="contain"
+              style={{ objectFit: "cover" }}
               data-ai-hint="tech concept"
             />
           </div>
@@ -274,7 +274,10 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
               <div className="flex flex-wrap gap-2">
                 {postKeywords.map((keyword) => (
                   <Link key={keyword} href={`/tag/${makeSlug(keyword)}`}>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted">
+                    <Badge
+                      variant="outline"
+                      className="cursor-pointer hover:bg-muted"
+                    >
                       {keyword}
                     </Badge>
                   </Link>

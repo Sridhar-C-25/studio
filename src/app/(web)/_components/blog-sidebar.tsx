@@ -103,7 +103,7 @@ export async function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
                   src={post.banner_image || "https://placehold.co/100x100.png"}
                   alt={post.title}
                   layout="fill"
-                  objectFit="cover"
+                  style={{ objectFit: "cover" }}
                   data-ai-hint="tech abstract"
                 />
                 <span className="absolute bottom-1 right-1 text-xs text-white bg-black/50 px-1 rounded">
