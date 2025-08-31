@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import parse, { Element, HTMLReactParserOptions } from "html-react-parser";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { vs2015 as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import {
   ArrowLeft,
   Check,
@@ -29,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { BlogPost } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { makeSlug } from "@/lib/helper";
+import { CodeBlockRenderer } from "@/components/code-block-renderer";
 
 interface BlogContentProps {
   post: BlogPost;
@@ -105,9 +104,9 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           const code = codeNode.children[0].data;
 
           return (
-            <CodeBlockWithCopyButton language={language}>
+            <CodeBlockRenderer language={language}>
               {code}
-            </CodeBlockWithCopyButton>
+            </CodeBlockRenderer>
           );
         }
       }
@@ -121,59 +120,6 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
       }
     },
   };
-
-  function CodeBlockWithCopyButton({
-    children,
-    language,
-  }: {
-    children: React.ReactNode;
-    language?: string;
-  }) {
-    const { toast } = useToast();
-    const [copied, setCopied] = useState(false);
-    const code = String(children).replace(/\n$/, "");
-
-    const handleCopy = () => {
-      navigator.clipboard.writeText(code).then(
-        () => {
-          setCopied(true);
-          toast({ title: "Copied!", description: "Code copied to clipboard." });
-          setTimeout(() => setCopied(false), 2000);
-        },
-        (err) => {
-          toast({
-            variant: "destructive",
-            title: "Copy Failed",
-            description: "Could not copy code to clipboard.",
-          });
-        }
-      );
-    };
-
-    return (
-      <div className="relative">
-        <SyntaxHighlighter
-          language={language}
-          style={syntaxTheme}
-          showLineNumbers
-        >
-          {code}
-        </SyntaxHighlighter>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 h-7 w-7 text-gray-300 hover:bg-gray-700 hover:text-white"
-          onClick={handleCopy}
-        >
-          {copied ? (
-            <Check className="h-4 w-4 text-green-500" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-    );
-  }
 
   const DownloadSourceCard = ({ post }: { post: BlogPost }) => {
     const { toast } = useToast();

@@ -1,0 +1,167 @@
+/* Unified GitHub Dark Theme for Code Syntax Highlighting */
+/* This theme ensures consistency between TipTap editor and preview */
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+  color: #e6edf3;
+  background: #0d1117;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #ff7b72;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #79c0ff;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: #a5d6ff;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #d2a8ff;
+  font-weight: bold;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #ffa657;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #7ee787;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #a5d6ff;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #79c0ff;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #ffa657;
+}
+
+.hljs-meta {
+  color: #8b949e;
+}
+
+.hljs-deletion {
+  color: #ff7b72;
+  background: transparent;
+}
+
+.hljs-addition {
+  color: #7ee787;
+  background: transparent;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* TipTap specific styling */
+.ProseMirror pre {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-family: "SF Mono", Monaco, "Roboto Mono", Menlo, Consolas, "Ubuntu Mono",
+    monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* Code block language indicator */
+.ProseMirror pre:before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Ensure consistent font rendering */
+code,
+pre,
+.hljs {
+  font-family: "SF Mono", Monaco, "Roboto Mono", Menlo, Consolas, "Ubuntu Mono",
+    monospace;
+  font-variant-ligatures: none;
+}
+
+/* Selection styling */
+.hljs::selection,
+.hljs span::selection {
+  background: #264f78;
+}
+
+/* Line numbers (if needed) */
+.hljs-ln-numbers {
+  text-align: right;
+  color: #6e7681;
+  border-right: 1px solid #30363d;
+  padding-right: 0.5rem;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.hljs-ln-code {
+  padding-left: 0.5rem;
+}
+
+/* Focus states for accessibility */
+.code-block-container:focus-within {
+  outline: 2px solid #0969da;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ProseMirror pre {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+}

@@ -1,3 +1,6 @@
+/* Import unified syntax highlighting styles */
+@import "../styles/syntax-highlighting.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,14 +103,12 @@ body {
 
 .tiptap pre,
 .prose pre {
-  background: #2d2d2d !important;
+  background: #0d1117 !important;
   color: #c9d1d9;
   max-height: 660px;
   font-family: theme("fontFamily.code");
   padding: 1rem;
   border-radius: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   overflow-x: auto;
 }
 
@@ -333,4 +334,70 @@ body {
 
 .prose pre {
   position: relative;
+}
+
+/* Custom Scrollbar Styling */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+  border-radius: 0;
+  margin: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+  border: 1px solid #21262d;
+  margin: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0d1117;
+}
+
+/* Remove any scrollbar margin/padding */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  scrollbar-gutter: stable;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #30363d #0d1117;
+}
+
+/* Code block specific scrollbar */
+.tiptap pre::-webkit-scrollbar,
+.prose pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.tiptap pre::-webkit-scrollbar-track,
+.prose pre::-webkit-scrollbar-track {
+  background: #161b22;
+  border-radius: 3px;
+}
+
+.tiptap pre::-webkit-scrollbar-thumb,
+.prose pre::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 3px;
+}
+
+.tiptap pre::-webkit-scrollbar-thumb:hover,
+.prose pre::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
 }
