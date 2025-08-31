@@ -23,7 +23,7 @@
 .ProseMirror .shiki-code-block {
   /* background: #0d1117; */
   border: 1px solid #30363d;
-  border-radius: 6px;
+  /* border-radius: 6px; */
   padding: 0.75rem 1rem;
   font-family: "SF Mono", Monaco, "Roboto Mono", Menlo, Consolas, "Ubuntu Mono",
     monospace;
@@ -61,6 +61,11 @@
   letter-spacing: 0.05em;
   z-index: 1;
   pointer-events: none;
+}
+
+/* Light theme language indicator */
+.light .ProseMirror .shiki-code-block[data-language]:before {
+  color: #57606a;
 }
 
 /* Shiki theme overrides for consistency */
@@ -214,4 +219,11 @@
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
   z-index: 1;
+}
+
+/* Light theme language label styling */
+.light .shiki-container .shiki-language {
+  background: rgba(255, 255, 255, 0.8);
+  color: #24292f;
+  border: 1px solid #d0d7de;
 }

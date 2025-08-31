@@ -97,7 +97,7 @@ body {
   background-color: hsl(var(--muted));
   color: hsl(var(--muted-foreground));
   padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
+  /* border-radius: 0.25rem; */
   font-family: theme("fontFamily.code");
 }
 
@@ -107,8 +107,8 @@ body {
   /* color: #c9d1d9; */
   max-height: 660px;
   font-family: theme("fontFamily.code");
-  padding: 1rem;
-  border-radius: 0.5rem;
+  /* padding: 1rem; */
+  /* border-radius: 0.5rem; */
   overflow-x: auto;
   @apply dark:bg-[#0d1117] bg-slate-100;
 }
@@ -119,6 +119,7 @@ body {
   background: none !important;
   font-size: 0.9rem;
   padding: 0;
+  padding-bottom: 10px;
 }
 
 .tiptap a,

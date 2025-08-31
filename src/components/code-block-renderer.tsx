@@ -84,17 +84,17 @@ export function ShikiCodeBlockRenderer({
   return (
     <div className={`relative group shiki-container ${className}`}>
       {/* Code Block Container */}
-      <div className="relative  rounded-lg border border-gray-800 overflow-hidden">
+      <div className="relative rounded-lg dark:border-gray-800 border-gray-200 border overflow-hidden">
         {/* Header with language label and copy button */}
         {language && language !== "plaintext" && (
-          <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-gray-800">
-            <span className="text-xs text-gray-300 font-mono">
+          <div className="flex items-center justify-between px-4 py-2 dark:bg-[#161b22] bg-slate-200 dark:border-gray-800 border-gray-200 border-b">
+            <span className="text-xs dark:text-gray-300 text-gray-600 font-mono">
               {shikiHighlighter.getLanguageLabel(language)}
             </span>
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 opacity-70 hover:opacity-100 text-gray-300 hover:text-white"
+              className="h-6 w-6 opacity-70 hover:opacity-100 dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-white"
               onClick={handleCopy}
             >
               {copied ? (
@@ -108,7 +108,7 @@ export function ShikiCodeBlockRenderer({
 
         {/* Code Content */}
         <div className="relative">
-          <pre className="p-4 overflow-x-auto text-sm leading-relaxed">
+          <pre className="px-4 pt-4  overflow-x-auto text-sm leading-relaxed">
             {isLoading ? (
               <code className="shiki-code text-gray-300">{code}</code>
             ) : (
@@ -124,7 +124,7 @@ export function ShikiCodeBlockRenderer({
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"
+              className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity dark:bg-gray-800 bg-gray-200 dark:hover:bg-gray-700 hover:bg-gray-300 dark:text-gray-300 text-gray-600 dark:hover:text-white hover:text-gray-900"
               onClick={handleCopy}
             >
               {copied ? (
