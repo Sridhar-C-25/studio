@@ -68,6 +68,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             "banner_image",
             "slug",
             "keywords",
+            "status",
           ]),
         ]
       ),
