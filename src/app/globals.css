@@ -1,5 +1,5 @@
-/* Import unified syntax highlighting styles */
-@import "../styles/syntax-highlighting.css";
+/* Import Shiki syntax highlighting styles */
+@import "../styles/shiki-highlighting.css";
 
 @tailwind base;
 @tailwind components;

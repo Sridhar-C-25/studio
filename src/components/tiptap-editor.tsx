@@ -17,14 +17,14 @@ import {
   Image as ImageIcon,
   Youtube,
 } from "lucide-react";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Image from "@tiptap/extension-image";
 import YoutubeExtension from "@tiptap/extension-youtube";
+import { ShikiCodeBlockExtension } from "@/extensions/tiptap-shiki-extension";
 import {
-  syntaxHighlighter,
+  shikiHighlighter,
   supportedLanguages,
-} from "@/lib/syntax-highlighter";
-import "@/styles/syntax-highlighting.css";
+} from "@/lib/shiki-highlighter";
+import "@/styles/shiki-highlighting.css";
 
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
@@ -213,14 +213,15 @@ export const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        codeBlock: false, // Using CodeBlockLowlight instead
+        codeBlock: false, // Using Shiki CodeBlock instead
       }),
       Image,
       YoutubeExtension.configure({
         nocookie: true,
       }),
-      CodeBlockLowlight.configure({
-        lowlight: syntaxHighlighter.getLowlight(),
+      ShikiCodeBlockExtension.configure({
+        defaultLanguage: "plaintext",
+        highlighter: shikiHighlighter,
       }),
     ],
     content,
