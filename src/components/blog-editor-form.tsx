@@ -84,9 +84,9 @@ export function BlogEditorForm({
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [aiLoading, setAiLoading] = useState<"titles" | "keywords" | "description" | "none">(
-    "none"
-  );
+  const [aiLoading, setAiLoading] = useState<
+    "titles" | "keywords" | "description" | "none"
+  >("none");
   const [titleVariants, setTitleVariants] = useState<string[]>([]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
@@ -237,12 +237,13 @@ export function BlogEditorForm({
     }
   };
 
-    const handleSuggestDescription = async () => {
+  const handleSuggestDescription = async () => {
     if (!contentValue || !titleValue) {
       toast({
         variant: "destructive",
         title: "Content or title is empty",
-        description: "Please write title and content before suggesting a description.",
+        description:
+          "Please write title and content before suggesting a description.",
       });
       return;
     }
@@ -252,7 +253,9 @@ export function BlogEditorForm({
         blogContent: contentValue,
         title: titleValue,
       });
-      form.setValue("description", result.description, { shouldValidate: true });
+      form.setValue("description", result.description, {
+        shouldValidate: true,
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -328,7 +331,7 @@ export function BlogEditorForm({
                       <FormItem>
                         <FormLabel>Meta Description</FormLabel>
                         <FormControl>
-                           <Textarea
+                          <Textarea
                             placeholder="A short, compelling description for SEO (max 160 characters)."
                             {...field}
                           />
@@ -384,7 +387,7 @@ export function BlogEditorForm({
                                   src={imagePreview}
                                   alt="Preview"
                                   layout="fill"
-                                  objectFit="cover"
+                                  style={{ objectFit: "cover" }}
                                   className="rounded-lg"
                                 />
                               </div>
@@ -595,7 +598,7 @@ export function BlogEditorForm({
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                   <Button
+                  <Button
                     type="button"
                     variant="outline"
                     className="w-full"

@@ -55,7 +55,7 @@ export async function getPopularPosts() {
         numericFilter: {
           operation: "GREATER_THAN",
           value: {
-            int64Value: "5",
+            int64Value: "10",
           },
         },
       },
