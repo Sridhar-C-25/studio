@@ -3,12 +3,18 @@ import { Button } from "@/components/ui/button";
 import BlogLayout from "./_components/BlogLayout";
 import { PlayCircle } from "lucide-react";
 import { YouTubeFilledIcon } from "./_components/icon";
+import { getPopularPosts } from "@/lib/google-analytics";
 
 export default function Page({
   searchParams,
 }: {
   searchParams?: { page?: string };
 }) {
+  getPopularPosts()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((er) => console.log(er));
   return (
     <section
       className="w-full py-20 md:py-32 lg:py-40 overflow-hidden"
@@ -46,7 +52,6 @@ export default function Page({
               <Link href="/blogs">Browse Articles</Link>
             </Button>
           </div>
-
         </div>
         <div className="relative mx-auto max-w-5xl">
           <div className="rounded-xl overflow-hidden shadow-2xl border border-border/40 bg-gradient-to-b from-background to-muted/20"></div>

@@ -10,16 +10,15 @@ import Link from "next/link";
 import type { BlogPost, Category } from "@/types";
 import Image from "next/image";
 import { SearchBar } from "./search-bar";
+import { getPopularPosts } from "@/lib/data";
 
 interface BlogSidebarProps {
   allPosts: BlogPost[];
   categories: Category[];
 }
 
-export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
-  const publishedPosts = allPosts;
-
-  const popularPosts = publishedPosts.slice(0, 5);
+export async function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
+  const popularPosts = await getPopularPosts();
 
   const categoriesWithCount = categories.map((category) => {
     const postCount = allPosts.filter((post) =>
@@ -125,14 +124,14 @@ export function BlogSidebar({ allPosts, categories }: BlogSidebarProps) {
               </div>
             </div>
           ))}
-          <div className="flex justify-between pt-2">
+          {/* <div className="flex justify-between pt-2">
             <Button variant="outline" size="sm" disabled>
               ←
             </Button>
             <Button variant="outline" size="sm">
               →
             </Button>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 

@@ -155,6 +155,21 @@ export async function getPosts(): Promise<BlogPost[]> {
     return [];
   }
 }
+export async function getPopularPosts(): Promise<BlogPost[]> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/popular`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch posts");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
+}
 
 export async function getPost(id: string): Promise<BlogPost | null> {
   try {
