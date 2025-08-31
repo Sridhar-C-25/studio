@@ -97,19 +97,20 @@ body {
   background-color: hsl(var(--muted));
   color: hsl(var(--muted-foreground));
   padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
+  /* border-radius: 0.25rem; */
   font-family: theme("fontFamily.code");
 }
 
 .tiptap pre,
 .prose pre {
-  background: #0d1117 !important;
-  color: #c9d1d9;
+  /* background: #0d1117 !important; */
+  /* color: #c9d1d9; */
   max-height: 660px;
   font-family: theme("fontFamily.code");
-  padding: 1rem;
-  border-radius: 0.5rem;
+  /* padding: 1rem; */
+  /* border-radius: 0.5rem; */
   overflow-x: auto;
+  @apply dark:bg-[#0d1117] bg-slate-100;
 }
 
 .tiptap pre code,
@@ -118,6 +119,7 @@ body {
   background: none !important;
   font-size: 0.9rem;
   padding: 0;
+  padding-bottom: 10px;
 }
 
 .tiptap a,
@@ -142,78 +144,6 @@ body {
   aspect-ratio: 16 / 9;
   border-radius: 0.5rem;
 }
-
-/* @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222.2 47.4% 11.2%;
-    --sidebar-primary: 231 48% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96.1%;
-    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 231 48% 48%;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 0 0% 3.9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 231 48% 52%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 231 48% 52%;
-  }
-} */
 
 :root {
   --background: 0 0% 99.2157%;
@@ -336,68 +266,44 @@ body {
   position: relative;
 }
 
-/* Custom Scrollbar Styling */
-/* Webkit browsers (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0d1117;
-  border-radius: 0;
-  margin: 0;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #30363d;
-  border-radius: 4px;
-  border: 1px solid #21262d;
-  margin: 0;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
-}
-
-::-webkit-scrollbar-corner {
-  background: #0d1117;
-}
-
 /* Remove any scrollbar margin/padding */
 html,
 body {
   margin: 0;
   padding: 0;
-  scrollbar-gutter: stable;
 }
 
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #30363d #0d1117;
+/* Selection color for code blocks */
+.shiki ::selection,
+.shiki-code ::selection,
+.ProseMirror .shiki-code-block ::selection,
+.tiptap pre ::selection,
+.prose pre ::selection,
+.tiptap code ::selection,
+.prose code ::selection {
+  background-color: #264f78;
+  color: #fff;
 }
 
-/* Code block specific scrollbar */
-.tiptap pre::-webkit-scrollbar,
-.prose pre::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.shiki ::-moz-selection,
+.shiki-code ::-moz-selection,
+.ProseMirror .shiki-code-block ::-moz-selection,
+.tiptap pre ::-moz-selection,
+.prose pre ::-moz-selection,
+.tiptap code ::-moz-selection,
+.prose code ::-moz-selection {
+  background-color: #264f78;
+  color: #fff;
 }
 
-.tiptap pre::-webkit-scrollbar-track,
-.prose pre::-webkit-scrollbar-track {
-  background: #161b22;
-  border-radius: 3px;
-}
-
-.tiptap pre::-webkit-scrollbar-thumb,
-.prose pre::-webkit-scrollbar-thumb {
-  background: #30363d;
-  border-radius: 3px;
-}
-
-.tiptap pre::-webkit-scrollbar-thumb:hover,
-.prose pre::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
+/* Light theme selection styles */
+.light .shiki ::selection,
+.light .shiki-code ::selection,
+.light .ProseMirror .shiki-code-block ::selection,
+.light .tiptap pre ::selection,
+.light .prose pre ::selection,
+.light .tiptap code ::selection,
+.light .prose code ::selection {
+  background-color: #add6ff;
+  color: #24292f;
 }

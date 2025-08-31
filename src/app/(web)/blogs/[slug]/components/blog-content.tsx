@@ -28,6 +28,7 @@ import type { BlogPost } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { makeSlug } from "@/lib/helper";
 import { CodeBlockRenderer } from "@/components/code-block-renderer";
+import { useTheme } from "next-themes";
 
 interface BlogContentProps {
   post: BlogPost;
@@ -87,7 +88,8 @@ const SocialShareButtons = ({ title, url }: { title: string; url: string }) => {
 
 export function BlogContent({ post, isPreview = false }: BlogContentProps) {
   const pathname = usePathname();
-
+  const { theme } = useTheme();
+  console.log(theme, "themetheme");
   const parserOptions: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.tagName === "pre") {
@@ -106,7 +108,12 @@ export function BlogContent({ post, isPreview = false }: BlogContentProps) {
           const code = codeNode.children[0].data;
 
           return (
-            <CodeBlockRenderer language={language}>{code}</CodeBlockRenderer>
+            <CodeBlockRenderer
+              language={language}
+              theme={theme === "light" ? "github-light" : "github-dark"}
+            >
+              {code}
+            </CodeBlockRenderer>
           );
         }
       }
