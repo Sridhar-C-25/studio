@@ -265,19 +265,43 @@ export async function deletePost(id: string): Promise<void> {
 }
 
 export async function searchPosts(query: string): Promise<BlogPost[]> {
-    try {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/search?q=${encodeURIComponent(query)}`;
-        const response = await fetch(url, { cache: "no-store" });
+  try {
+    const url = `${
+      process.env.NEXT_PUBLIC_BASE_URL
+    }/api/posts/search?q=${encodeURIComponent(query)}`;
+    const response = await fetch(url, { cache: "no-store" });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Failed to fetch search results for query "${query}": ${errorText}`);
-            throw new Error(`Failed to fetch search results: ${response.statusText}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Error searching posts:", error);
-        return [];
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        `Failed to fetch search results for query "${query}": ${errorText}`
+      );
+      throw new Error(`Failed to fetch search results: ${response.statusText}`);
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error searching posts:", error);
+    return [];
+  }
+}
+
+// get tag by post
+
+export async function getTagByPosts(tag: string): Promise<string[]> {
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL
+      }/api/posts/tags?tag=${encodeURIComponent(tag)}`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch tag by post");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching tag by post:", error);
+    return [];
+  }
 }

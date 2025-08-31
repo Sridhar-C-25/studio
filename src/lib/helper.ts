@@ -48,3 +48,8 @@ export function makeSlug(title: string) {
     .replace(/\s+/g, "-") // collapse whitespace to dashes
     .replace(/\-+/g, "-"); // collapse multiple dashes
 }
+
+// remove slug
+export function removeSlug(title: string) {
+  return title.replace(/-[a-z0-9]+$/, "");
+}
