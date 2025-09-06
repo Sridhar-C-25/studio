@@ -35,6 +35,9 @@ export async function generateMetadata({
   return {
     title: `Posts in ${category.name} | Blog`,
     description: `Browse all blog posts in the ${category.name} category.`,
+    alternates: {
+      canonical: `https://www.codeaprogram.tech/blogs/category/${category.id}`,
+    },
   };
 }
 
