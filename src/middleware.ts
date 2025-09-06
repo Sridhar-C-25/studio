@@ -18,6 +18,7 @@ const protectedRoutesWithMethods = [
     methods: ["POST", "DELETE"],
   },
 ];
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const user = await getCurrentUser();
