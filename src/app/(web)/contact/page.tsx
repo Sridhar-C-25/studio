@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Code A Program",
+  title: "Contact Us",
   description:
     "Get in touch with Code A Program. We welcome your questions, feedback, and collaboration inquiries. Contact us via email or connect on social media.",
   keywords: [

@@ -15,7 +15,7 @@ import { Metadata } from "next";
 import { SearchBar } from "./(web)/_components/search-bar";
 
 export const metadata: Metadata = {
-  title: "404 - Page Not Found | Code A Program",
+  title: "404 - Page Not Found ",
   description:
     "The page you're looking for doesn't exist. Explore our tutorials, blogs, and resources instead.",
 };

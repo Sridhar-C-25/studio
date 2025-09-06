@@ -10,7 +10,7 @@ import {
 
 // metadata
 export const metadata = {
-  title: "Privacy Policy | Code A Program - Web Development Blog & Tutorials",
+  title: "Privacy Policy  - Web Development Blog & Tutorials",
   description:
     "Learn about the privacy policy of Code A Program. We are committed to protecting your personal information and your right to privacy.",
   keywords: [

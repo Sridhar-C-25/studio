@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
-  title: "YouTube Videos | Code A Program",
+  title: "YouTube Videos",
   description:
     "Watch the latest YouTube videos from Code A Program. Tutorials, guides, and more for web development.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "react js tailwindcss youtube tutorial",
   ],
   openGraph: {
-    title: "YouTube Videos | Code A Program",
+    title: "YouTube Videos ",
     description:
       "Watch the latest YouTube videos from Code A Program. Tutorials, guides, and more for web development.",
     url: "https://www.codeaprogram.tech/youtube",
@@ -51,7 +51,10 @@ export default function YoutubePage() {
           Our YouTube Video Library
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Welcome to the official video library for Code A Program! Here you'll find all my hands-on coding tutorials on topics like React, Next.js, and Tailwind CSS. Don't forget to subscribe on YouTube for the latest updates!
+          Welcome to the official video library for Code A Program! Here you'll
+          find all my hands-on coding tutorials on topics like React, Next.js,
+          and Tailwind CSS. Don't forget to subscribe on YouTube for the latest
+          updates!
         </p>
       </div>
       <VideoGrid />

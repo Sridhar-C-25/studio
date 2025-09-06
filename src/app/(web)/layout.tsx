@@ -5,10 +5,12 @@ import Footer from "./_components/Footer";
 import Nav from "./_components/Nav";
 
 export const metadata: Metadata = {
-  title: "Code A Program: Your Hub for Modern Web Dev",
+  title: {
+    default: "Code A Program: Your Hub for Modern Web Dev",
+    template: "%s | Code A Programm",
+  },
   description:
     "Code A Program is a blog dedicated to providing valuable and informative content about modern web development technologies such as Next.js, React, Tailwind CSS, JavaScript, HTML, CSS, and advanced web development practices.",
-  // Removed keywords as they're deprecated for SEO
   metadataBase: new URL("https://www.codeaprogram.tech"),
   authors: [{ name: "Code A Program", url: "https://codeaprogram.com" }],
   openGraph: {
@@ -34,6 +36,12 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // Adding theme color for better mobile experience
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  keywords: ["React js Tailwind CSS components", "React js UI Components"],
 };
 // Organization JSON-LD structured data
 const organizationJsonLd = {
@@ -60,19 +68,13 @@ const organizationJsonLd = {
   foundingDate: "2025",
   knowsAbout: [
     "Web Development",
-    "Next.js",
-    "React.js",
-    "Vue.js",
-    "Tailwind CSS",
-    "TypeScript",
-    "JavaScript",
-    "Node.js",
-    "Express.js",
-    "HTML5",
-    "CSS3",
-    "Frontend Development",
-    "Backend Development",
-    "Modern Web Development Practices",
+    "Next.js UI Components",
+    "React.js Tailwind CSS components",
+    "Tailwind CSS UI components",
+    "React js Tailwind CSS Web Components",
+    "Html, CSS UI design",
+    "JavaScript projects with free source code",
+    "React.js Blogs",
   ],
   sameAs: [
     "https://www.youtube.com/@codeaprogram",
@@ -114,7 +116,8 @@ const websiteJsonLd = {
     "@type": "Blog",
     "@id": "https://www.codeaprogram.tech/#blog",
     name: "Code A Program Blog",
-    description: "Modern web development tutorials and coding guides",
+    description:
+      "Modern web development tutorials and coding guides for beginners. React js Tailwind CSS components, React.js UI components, and more.",
     url: "https://www.codeaprogram.tech/blogs",
     publisher: {
       "@type": "Organization",

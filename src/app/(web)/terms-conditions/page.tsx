@@ -10,7 +10,7 @@ import {
 
 // metadata
 export const metadata = {
-  title: "Terms & Conditions | Code A Program",
+  title: "Terms & Conditions",
   description:
     "Read the terms and conditions for using the Code A Program website. By accessing our site, you agree to these terms.",
   keywords: ["terms and conditions", "legal", "Code A Program terms"],

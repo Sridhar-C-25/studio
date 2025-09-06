@@ -16,7 +16,7 @@ import Script from "next/script";
 
 // Define metadata for the blogs page
 export const metadata: Metadata = {
-  title: "Blog | Code A Program",
+  title: "Blog",
   description:
     "Explore our collection of articles about React.js, Tailwind CSS, Next.js, JavaScript, HTML, CSS and modern web development techniques and best practices.",
   alternates: {

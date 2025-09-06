@@ -16,7 +16,7 @@ import {
 
 // metadata
 export const metadata = {
-  title: "About | Code A Program - Web Development Blog & Tutorials",
+  title: "About - Web Development Blog & Tutorials",
   description:
     "Learn web development with Code A Program. Expert tutorials on Next.js, React.js, Vue.js, Tailwind CSS, TypeScript, and modern web technologies. Free source code and video tutorials.",
   keywords: [
