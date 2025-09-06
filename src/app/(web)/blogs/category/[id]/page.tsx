@@ -51,8 +51,12 @@ export default async function CategoryBlogPage({
     notFound();
   }
 
-  const publishedPosts = await getPosts();
-
+  const allPosts = await getPosts();
+  const publishedPosts = allPosts.filter(
+    (post) =>
+      post.status === "Published" &&
+      post.category.some((cat) => cat.id === params.id)
+  );
   const currentPage = Number(searchParams?.page) || 1;
   const postsPerPage = 6;
   const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
